@@ -1,45 +1,98 @@
 # Traffic Pekerjaan KSP — Dashboard AIO-KSP
 
-Dashboard traffic pekerjaan yang menampilkan status, beban, dan aktivitas tugas
-dari workspace ClickUp **AIO-KSP** (list "List", ID `901817330442`), bergaya
+Dashboard traffic pekerjaan untuk **AL-WILDAN ISLAMIC SCHOOL HOLDING / AISCHO**:
+menampilkan status, tren, heatmap, dan beban tugas dari workspace ClickUp
+**AIO-KSP** (list "List", ID `901817330442`), bergaya
 [PaceUI Logs Analytics](https://paceui.com/preview/templates/ultimate-dashboard/dashboards/logs),
-dengan branding AL-WILDAN / AISCHO.
+dengan **login Better Auth (SQLite)** — akun admin & atasan (view-only).
+
+## Fitur
+
+- **Stat cards** — total tugas, penyelesaian, terlambat, sedang dikerjakan, jatuh tempo 7 hari.
+- **Traffic Aktivitas** — grafik update & penyelesaian per minggu (13/8/4 minggu) + tooltip kursor.
+- **Heatmap Aktivitas Mingguan** — intensitas per hari × blok jam (WIB).
+- **Distribusi Status** — donut interaktif (Selesai / Dikerjakan / Belum / Terlambat).
+- **Live Feed & Aktivitas Terbaru** — kejadian terkini + pencarian live.
+- **Beban per Workstream & Kapasitas/Risiko** — distribusi beban, tooltip saat hover.
+- **Panel "Progress Launch"** — progres proyek dibaca otomatis dari `../PROGRESS.md`
+  (`GET /api/progress`); ubah `.md` → panel ikut berubah tanpa ubah kode.
+- **Real-time** — auto-refresh 30 detik + `GET /api/stream` (SSE) dipicu webhook ClickUp.
+- **Login Better Auth** — email + password, sesi cookie httpOnly, registrasi publik dimatikan.
+- **Panel Admin & Role** — Admin membuat/mengatur/menghapus akun; **Atasan/Viewer**
+  hanya melihat (tidak bisa klik tugas, tanpa panel admin).
 
 ## Isi folder
 
 ```
 ksp-dashboard/
 ├── public/
-│   └── index.html      # Halaman dashboard (statis, berjalan sendiri tanpa server)
+│   ├── index.html      # Dashboard (dikunci login saat dijalankan via server)
+│   ├── login.html      # Halaman login (Better Auth, tema putih PaceUI)
+│   └── ...
 ├── server/
-│   ├── server.js        # Backend Express — sinkron live ke ClickUp API
+│   ├── server.js        # Express + Better Auth + sinkron ClickUp + rate-limit login
+│   ├── auth.js          # Konfigurasi Better Auth (SQLite, single-admin)
+│   ├── seed-admin.js    # Buat akun admin KSP (otomatis di container, sekali jalan)
 │   ├── package.json
 │   └── .env.example
-├── Dockerfile           # Image produksi (Node serve index.html + API)
-├── docker-compose.yml   # Deploy di VPS, bind 127.0.0.1:3100
+├── Dockerfile           # Image produksi (build toolchain utk better-sqlite3)
+├── docker-compose.yml   # Deploy di VPS, bind 127.0.0.1:3100, volume auth.db + PROGRESS.md
+├── deploy-vps.sh        # rsync → VPS → docker compose up (opsional cloudflared)
 └── .env.prod.example    # Template konfigurasi produksi
 ```
 
-`public/index.html` bisa dibuka langsung sebagai file statis (memakai data
-snapshot 25 Sep 2026 yang sudah ditanam di dalamnya). Begitu di-deploy di
-belakang server Express (`server/server.js`), halaman yang **sama persis**
-otomatis mengambil data live dari `/api/dashboard-data` — tidak perlu ubah
-apa pun di file HTML.
+`public/index.html` bisa dibuka langsung sebagai file statis untuk **pratinjau**
+(snapshot 25 Sep 2026). Di balik server, halaman yang sama memakai data live
+dari `/api/dashboard-data` — tanpa mengubah HTML.
 
 ## Menjalankan lokal
 
 ```bash
 cd server
 cp .env.example .env
-# isi CLICKUP_TOKEN dengan Personal API Token dari ClickUp
-# (Settings → Apps → API Token, diawali "pk_")
+# isi: CLICKUP_TOKEN, BETTER_AUTH_SECRET (openssl rand -base64 32),
+#      ADMIN_EMAIL, ADMIN_PASSWORD (min 8)
 npm install
+
+# 1. Buat tabel auth di SQLite
+npx @better-auth/cli migrate
+
+# 2. Buat akun admin KSP (sekali saja)
+npm run seed
+
+# 3. Jalankan
 npm start
 ```
 
-Buka `http://localhost:3000` — dashboard akan menampilkan data live dari
-ClickUp, refresh otomatis tiap 5 menit (bisa diubah lewat `REFRESH_MINUTES`
-di `.env`).
+Buka `http://localhost:3000` → otomatis diarahkan ke halaman **login**. Masuk
+dengan `ADMIN_EMAIL` / `ADMIN_PASSWORD`, dashboard tampil dengan data live
+(pratinjau static bila belum bisa akses ClickUp).
+
+> **Keamanan:** registrasi publik diblokir — hanya akun admin pertama dan akun
+> yang dibuat lewat **Panel Admin** yang bisa login. Login di-rate-limit
+> (5 percobaan gagal / 15 menit per IP).
+
+## Role & akun untuk atasan (view-only)
+
+Login sebagai admin → buka **Panel Admin** di bagian bawah dashboard (atau menu
+sidebar):
+
+- **Buat akun** — isi nama, email, kata sandi, role:
+  - **Admin** — akses penuh, termasuk panel admin.
+  - **Atasan / Viewer** — hanya melihat dashboard. Tidak bisa mengklik tugas,
+    tidak ada panel admin. Cocok untuk pimpinan.
+- Ubah role / hapus akun langsung dari tabel.
+
+## Real-time
+
+1. **Auto-refresh (default)** — browser menarik data tiap 30 detik; server
+   menyegarkan cache ClickUp tiap `REFRESH_MINUTES`.
+2. **Webhook ClickUp (opsional, instan)** — set `CLICKUP_WEBHOOK_SECRET` di
+   `.env`, daftarkan webhook di ClickUp (`endpoint: https://<domains>/api/clickup-webhook`,
+   `events: taskCreated|taskUpdated|taskStatusUpdated|taskDeleted`, `secret` sama),
+   server verifikasi `X-Signature`, refresh, lalu push ke browser via SSE.
+
+> Webhook butuh domain publik HTTPS. Bila belum ada, andalkan auto-refresh 30 dtk.
 
 ## Deploy ke VPS (Docker — mengikuti pola HR 3.0)
 
@@ -52,79 +105,52 @@ rsync -avz --exclude 'node_modules' --exclude 'server/node_modules' \
   --exclude '.env' --exclude '.DS_Store' \
   ksp-dashboard/ ubuntu@43.156.130.183:~/ksp-dashboard/
 
-# 2. Di VPS — siapkan konfigurasi & jalankan
+# 2. Di VPS — siapkan konfigurasi & jalankan (migrate + seed otomatis tiap start)
 cd ~/ksp-dashboard
 cp .env.prod.example .env && chmod 600 .env
-nano .env                      # isi CLICKUP_TOKEN (pk_...)
+nano .env                      # isi CLICKUP_TOKEN, BETTER_AUTH_SECRET, ADMIN_*
 docker compose up -d --build
 sleep 10
 curl http://127.0.0.1:3100/api/health
 docker compose logs --tail 15 ksp-dashboard
 ```
 
+`CMD` container menjalankan `migrate → seed-admin → server` otomatis dan
+idempotent; DB auth persist di volume `ksp-auth-data` (`/app/data/auth.db`).
+
 ### DNS + Caddy (go-live)
 
 1. Cloudflare → DNS: record **A** `ksp` → `43.156.130.183`, **Proxied ON**.
-2. Di VPS, arahkan Caddy ke port container:
+2. Caddy pasang reverse proxy ke container:
 
-```bash
-sudo nano /etc/caddy/Caddyfile
-# tambahkan:
-# ksp.office-alwildan.id {
-#     reverse_proxy 127.0.0.1:3100
-# }
-sudo systemctl reload caddy
+```
+ksp.office-alwildan.id {
+    reverse_proxy 127.0.0.1:3100
+}
 ```
 
-3. Verifikasi `https://ksp.office-alwildan.id` (gembok hijau). Bila SSL/TLS
-   Cloudflare di-set **Full (strict)**, Caddy akan menerbitkan sertifikat
-   otomatis.
+3. Verifikasi `https://ksp.office-alwildan.id`. **Penting di produksi:** nilai
+   `BETTER_AUTH_URL` & `TRUSTED_ORIGINS` harus `https://ksp.office-alwildan.id`
+   agar cookie sesi & proteksi CSRF benar. Backup volume `ksp-auth-data`.
 
-Update aplikasi di kemudian hari:
-
-```bash
-cd ~/ksp-dashboard
-rsync ...                        # kirim ulang dari Mac
-docker compose up -d --build     # rebuild & restart
-```
-
+Update aplikasi: `rsync ... ; docker compose up -d --build`.
 
 ## Menghubungkan ke landing page KSP
 
-Dashboard ini adalah halaman web mandiri (`index.html` + API). Dua cara
-menyematkannya di landing page KSP:
-
-- **Tautan langsung** — tombol/menu "Traffic Pekerjaan" di landing page yang
-  mengarah ke `https://ksp.office-alwildan.id`.
-- **Iframe** — server sengaja tidak mengirim header `X-Frame-Options`, jadi
-  embed cross-origin diperbolehkan:
-  `<iframe src="https://ksp.office-alwildan.id" style="width:100%;height:100vh;border:0"></iframe>`.
+- **Tautan langsung** — tombol "Traffic Pekerjaan" → `https://ksp.office-alwildan.id`
+  (pengunjung diminta login dulu).
+- **Iframe** — hanya bila perlu; login tetap berlaku di dalam iframe.
 
 ## Menyesuaikan sumber data
 
-- Default menyinkronkan **satu list** (`List`, di space `AIO-KSP`). Untuk
-  menggabungkan list lain di workspace KSP (mis. `ALL IN ONE` atau
-  `UPSKILLING & UPGRADING KSP` di space `KSP_WS`), tambahkan pemanggilan
-  `clickupFetchAllTasks` per list ID di `server.js` dan gabungkan hasilnya
-  sebelum `buildDashboardData`.
-- Pengelompokan "Workstream" otomatis diambil dari tag ClickUp pertama pada
-  tugas, atau dari teks sebelum tanda `:` di judul tugas (pola penamaan yang
-  sudah dipakai di AIO-KSP, mis. `HRIS-KSP : ...`, `MKT : CP SEPT 2026 ...`).
+- Default menyinkronkan satu list (`List` di space `AIO-KSP`). Untuk
+  menggabungkan list lain, tambahkan `clickupFetchAllTasks(listId)` per list di
+  `server.js` lalu gabungkan sebelum `buildDashboardData`.
+- Workstream diambil dari tag ClickUp pertama atau teks sebelum `:` pada judul
+  tugas (pola penamaan AIO-KSP).
 
-## Data snapshot di dalam index.html
+## Snapshot fallback
 
-Snapshot yang ditanam di `public/index.html` (variabel `SNAPSHOT`) adalah
-agregat nyata dari 374 tugas di list AIO-KSP per 25 September 2026:
-
-| Metrik | Nilai |
-|---|---|
-| Total tugas | 374 |
-| Selesai | 169 (45,2%) |
-| Sedang dikerjakan | 20 |
-| Belum mulai | 185 |
-| Terlambat (overdue) | 102 |
-| Jatuh tempo 7 hari ke depan | 23 |
-
-Setelah server live berjalan, angka-angka ini otomatis digantikan data real
-time dari ClickUp — snapshot hanya dipakai sebagai fallback bila API belum
-terhubung.
+Tanpa server, `index.html` memakai snapshot nyata per 25 Sep 2026: **374 tugas**
+— 169 selesai, 20 dikerjakan, 185 belum, 102 terlambat, 23 jatuh tempo 7 hari.
+Setelah server live, seluruh angka diganti data real-time ClickUp.

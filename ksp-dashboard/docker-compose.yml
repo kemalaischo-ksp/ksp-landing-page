@@ -1,5 +1,7 @@
-# Dashboard Traffic Pekerjaan KSP — Express (serve index.html + API ClickUp).
-# Pakai: cp .env.prod.example .env && chmod 600 .env && docker compose up -d --build
+# Traffic Pekerjaan KSP — Express + Better Auth (SQLite) + API ClickUp.
+# Pakai: cp .env.prod.example .env && chmod 600 .env
+#        lalu isi CLICKUP_TOKEN, BETTER_AUTH_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD
+#        dan `docker compose up -d --build`
 services:
   ksp-dashboard:
     build: .
@@ -7,8 +9,25 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:3100:3100"
+    volumes:
+      # PROGRESS.md tetap sumber tunggal di host; di-mount read-only ke container.
+      - ../PROGRESS.md:/app/PROGRESS.md:ro
+      # Database auth (SQLite) persisten — berisi akun & sesi. Backup folder ini.
+      - ksp-auth-data:/app/data
     environment:
       - PORT=3100
       - CLICKUP_TOKEN=${CLICKUP_TOKEN}
       - CLICKUP_LIST_ID=${CLICKUP_LIST_ID:-901817330442}
       - REFRESH_MINUTES=${REFRESH_MINUTES:-5}
+      - CLICKUP_WEBHOOK_SECRET=${CLICKUP_WEBHOOK_SECRET:-}
+      - PROGRESS_FILE=/app/PROGRESS.md
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-https://ksp.office-alwildan.id}
+      - TRUSTED_ORIGINS=${BETTER_AUTH_URL:-https://ksp.office-alwildan.id}
+      - AUTH_DB_PATH=/app/data/auth.db
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - ADMIN_NAME=${ADMIN_NAME:-KSP}
+
+volumes:
+  ksp-auth-data:

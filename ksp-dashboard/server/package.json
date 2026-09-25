@@ -1,13 +1,19 @@
 {
   "name": "ksp-dashboard-server",
-  "version": "1.0.0",
-  "description": "Backend sinkronisasi ClickUp untuk dashboard Traffic Pekerjaan KSP (AIO-KSP)",
+  "version": "1.1.0",
+  "description": "Backend Traffic Pekerjaan KSP (AIO-KSP) — sinkron ClickUp + login Better Auth (SQLite)",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "migrate": "npx @better-auth/cli migrate",
+    "seed": "node seed-admin.js"
   },
   "dependencies": {
+    "@better-auth/cli": "^1.2.7",
+    "better-auth": "^1.2.7",
+    "better-sqlite3": "^11.8.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2"
   },

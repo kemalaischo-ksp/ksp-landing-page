@@ -5,3 +5,6 @@
 *.log
 .DS_Store
 node_modules/
+# Database auth SQLite (berisi akun & sesi) — jangan pernah di-commit
+server/auth.db
+server/*.db

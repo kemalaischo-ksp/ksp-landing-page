@@ -1,51 +1,129 @@
 /**
- * Traffic Pekerjaan KSP — backend sinkronisasi ClickUp
+ * Traffic Pekerjaan KSP — backend Express + Better Auth
  * -----------------------------------------------------
- * Server Express ringan untuk di-deploy di VPS KSP.
- * - Menarik data tugas dari ClickUp API (workspace AIO-KSP)
- *   menggunakan personal API token.
- * - Menghitung agregat (status, overdue, tren mingguan,
- *   beban per workstream, aktivitas terbaru).
- * - Menyajikan hasilnya di endpoint GET /api/dashboard-data,
- *   yang otomatis dipakai oleh public/index.html jika tersedia.
- * - Cache in-memory dengan refresh berkala (default 5 menit)
- *   agar tidak membebani rate limit ClickUp API.
+ * - Login single-admin via Better Auth (SQLite). Registrasi publik diblokir.
+ * - Dashboard (index.html) & endpoint /api/dashboard-data dikunci di balik sesi login.
+ * - Menarik data tugas live dari ClickUp API (workspace AIO-KSP), cache berkala.
  *
- * Menjalankan:
- *   1. cp .env.example .env   lalu isi CLICKUP_TOKEN & CLICKUP_LIST_ID
+ * Menjalankan pertama kali:
+ *   1. cp .env.example .env    lalu isi CLICKUP_TOKEN, BETTER_AUTH_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD
  *   2. npm install
- *   3. npm start               (default port 3000)
- *
- * Deploy di VPS (mengikuti pola Docker yang sudah dipakai KSP
- * untuk SIPRES/SIM-HR): lihat README.md di folder ini.
+ *   3. npx @better-auth/cli migrate   (buat tabel auth di SQLite)
+ *   4. node seed-admin.js             (buat akun admin KSP — sekali saja)
+ *   5. npm start
  */
+import 'dotenv/config';
+import express from 'express';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { toNodeHandler, fromNodeHeaders } from 'better-auth/node';
+import { auth } from './auth.js';
 
-const express = require('express');
-const path = require('path');
-require('dotenv').config();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PUB = path.join(__dirname, '..', 'public');
 
 const app = express();
+// Berjalan di belakang reverse proxy (Caddy/cloudflared/Nginx) di VPS —
+// agar req.secure & cookie sesi benar saat akses via HTTPS.
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 const CLICKUP_TOKEN = process.env.CLICKUP_TOKEN || '';
-const CLICKUP_LIST_ID = process.env.CLICKUP_LIST_ID || '901817330442'; // list "List" di space AIO-KSP
+const CLICKUP_LIST_ID = process.env.CLICKUP_LIST_ID || '901817330442';
 const REFRESH_MS = Number(process.env.REFRESH_MINUTES || 5) * 60 * 1000;
-const RETRY_MS = 30 * 1000; // jeda minimum antar percobaan saat gagal, cegah hammer API
+const WEBHOOK_SECRET = process.env.CLICKUP_WEBHOOK_SECRET || '';
+// Sumber tunggal progres proyek (panel Progress Launch). Default: PROGRESS.md
+// di folder induk ksp-dashboard/. Di Docker di-override lewat PROGRESS_FILE.
+const PROGRESS_FILE = process.env.PROGRESS_FILE || path.join(__dirname, '..', '..', 'PROGRESS.md');
 
-// Berjalan di belakang reverse proxy (Caddy/Nginx) di VPS
-app.set('trust proxy', 1);
+/* ---------- SSE (real-time push ke browser) ---------- */
+const sseClients = new Set();
+function broadcast(event) {
+  for (const c of sseClients) {
+    try { c.write(`event: ${event}\ndata: {}\n\n`); } catch (e) { /* client pergi */ }
+  }
+}
 
-// Header keamanan dasar. X-Frame-Options sengaja tidak di-set agar dashboard
-// tetap bisa disematkan sebagai iframe di landing page KSP.
-app.use((req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+/* ---------------- AUTH WIRING (urutan penting) ---------------- */
+
+// Rate-limit percobaan login (5 gagal / 15 menit per IP).
+const SIGNIN_MAX_TRIES = 5;
+const SIGNIN_WINDOW_MS = 15 * 60 * 1000;
+const signInTries = new Map(); // ip -> { count, resetAt }
+
+function trackSignIn(req, res, next) {
+  if (!req._signInTrack) return next();
+  res.on('finish', () => {
+    const w = req._signInTrack;
+    if (res.statusCode >= 200 && res.statusCode < 400) w.count = 0; // sukses → reset
+    else w.count += 1;                                              // gagal → +1
+  });
   next();
+}
+
+function rateLimitSignIn(req, res, next) {
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress || '0.0.0.0';
+  const now = Date.now();
+  let w = signInTries.get(ip);
+  if (!w || w.resetAt < now) { w = { count: 0, resetAt: now + SIGNIN_WINDOW_MS }; signInTries.set(ip, w); }
+  if (w.count >= SIGNIN_MAX_TRIES) {
+    return res.status(429).json({ error: 'Rate limited', message: `Terlalu banyak percobaan. Coba lagi dalam ${Math.ceil((w.resetAt - now) / 1000)} detik.` });
+  }
+  req._signInTrack = w;
+  next();
+}
+
+// 1) Blokir registrasi publik — hanya akun hasil seed-admin.js yang boleh ada.
+app.all(/^\/api\/auth\/sign-up/, (req, res) =>
+  res.status(403).json({ error: 'Registrasi publik dinonaktifkan.' }));
+
+// 2) Handler Better Auth (harus SEBELUM express.json()).
+//    Login menempuh rate-limit khusus; endpoint auth lain tetap normal.
+app.post('/api/auth/sign-in/email', rateLimitSignIn, trackSignIn, toNodeHandler(auth));
+app.all(/^\/api\/auth\/sign-in\/(?!email)/, toNodeHandler(auth));
+app.all(/^\/api\/auth\//, toNodeHandler(auth));
+
+// 3) Webhook ClickUp — butuh body MENTAH untuk verifikasi tanda tangan (sebelum express.json()).
+app.post('/api/clickup-webhook', express.raw({ type: '*/*' }), async (req, res) => {
+  if (WEBHOOK_SECRET) {
+    const sig = req.get('X-Signature') || '';
+    const expected = crypto.createHmac('sha256', WEBHOOK_SECRET).update(req.body).digest('hex');
+    if (sig !== expected) return res.status(401).send('invalid signature');
+  }
+  res.sendStatus(200); // balas cepat ke ClickUp
+  await refreshCache();
+  broadcast('update'); // dorong ke semua browser yang terbuka
 });
 
-app.use(express.static(path.join(__dirname, '..', 'public')));
+// 4) Body parser untuk route selanjutnya.
+app.use(express.json());
+
+// Guard sesi.
+async function requireAuth(req, res, next) {
+  try {
+    const s = await auth.api.getSession({ headers: fromNodeHeaders(req.headers) });
+    if (!s) {
+      if (req.path.startsWith('/api/')) return res.status(401).json({ error: 'unauthorized' });
+      return res.redirect('/login.html');
+    }
+    req.user = s.user;
+    next();
+  } catch (e) {
+    console.error('[auth] error:', e.message);
+    res.status(500).json({ error: 'auth error' });
+  }
+}
+
+// Guard admin.
+function requireAdmin(req, res, next) {
+  if (req.user?.role !== 'admin') return res.status(403).json({ error: 'Butuh hak admin.' });
+  next();
+}
+
+/* ---------------- CLICKUP SYNC ---------------- */
 
 let cache = { data: null, fetchedAt: 0 };
-let lastAttempt = 0;
 
 async function clickupFetchAllTasks(listId) {
   if (!CLICKUP_TOKEN) throw new Error('CLICKUP_TOKEN belum diisi di .env');
@@ -57,17 +135,16 @@ async function clickupFetchAllTasks(listId) {
     if (!res.ok) throw new Error(`ClickUp API error ${res.status}: ${await res.text()}`);
     const json = await res.json();
     tasks.push(...json.tasks);
-    // ClickUp v2 returns up to 100 tasks/page; a short page means we're done.
-    if (json.tasks.length < 100) break;
+    if (json.tasks.length < 100) break; // halaman pendek = selesai
     page += 1;
-    if (page > 20) break; // safety cap
+    if (page > 20) break;
   }
   return tasks;
 }
 
 function isoWeekStart(d) {
   const date = new Date(d);
-  const day = (date.getDay() + 6) % 7; // Mon=0
+  const day = (date.getDay() + 6) % 7;
   date.setDate(date.getDate() - day);
   date.setHours(0, 0, 0, 0);
   return date;
@@ -85,48 +162,37 @@ function buildDashboardData(tasks, listName) {
   const sevenDays = now + 7 * 24 * 3600 * 1000;
   const dueNext7d = openTasks.filter(t => t.due_date && Number(t.due_date) > now && Number(t.due_date) <= sevenDays).length;
 
-  // Weekly activity trend (last 13 weeks) from date_updated / date_closed
+  // Tren mingguan (13 minggu terakhir)
   const weeks = [];
   const start = isoWeekStart(now - 12 * 7 * 24 * 3600 * 1000);
   for (let i = 0; i < 13; i++) {
-    const wStart = new Date(start);
-    wStart.setDate(wStart.getDate() + i * 7);
-    const wEnd = new Date(wStart);
-    wEnd.setDate(wEnd.getDate() + 7);
+    const wStart = new Date(start); wStart.setDate(wStart.getDate() + i * 7);
+    const wEnd = new Date(wStart); wEnd.setDate(wEnd.getDate() + 7);
     const label = wStart.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
-    const updates = tasks.filter(t => {
-      const u = Number(t.date_updated);
-      return u >= wStart.getTime() && u < wEnd.getTime();
-    }).length;
-    const done = tasks.filter(t => {
-      const c = Number(t.date_closed);
-      return c && c >= wStart.getTime() && c < wEnd.getTime();
-    }).length;
+    const updates = tasks.filter(t => { const u = Number(t.date_updated); return u >= wStart.getTime() && u < wEnd.getTime(); }).length;
+    const done = tasks.filter(t => { const c = Number(t.date_closed); return c && c >= wStart.getTime() && c < wEnd.getTime(); }).length;
     weeks.push({ w: label, updates, done });
   }
 
-  // Weekly heatmap: updates by day-of-week (Mon..Sun) x 3-hour block (8 cols), WIB (UTC+7)
+  // Heatmap: update per hari (Sen..Ahad) x blok 3 jam (8 kolom), WIB (UTC+7)
   const heat = Array.from({ length: 7 }, () => new Array(8).fill(0));
   for (const t of tasks) {
     const u = Number(t.date_updated);
     if (!u) continue;
-    const wib = new Date(u + 7 * 3600 * 1000); // shift to WIB, then read UTC fields
-    const dow = (wib.getUTCDay() + 6) % 7;      // Mon=0 .. Sun=6
-    const block = Math.floor(wib.getUTCHours() / 3); // 0..7
+    const wib = new Date(u + 7 * 3600 * 1000);
+    const dow = (wib.getUTCDay() + 6) % 7;
+    const block = Math.floor(wib.getUTCHours() / 3);
     heat[dow][block] += 1;
   }
 
-  // Workstream grouping: use text before " : " or first tag, fallback "Lainnya"
+  // Beban per workstream: tag pertama, atau teks sebelum ":" di judul
   const groups = {};
   for (const t of tasks) {
     let key = (t.tags && t.tags[0]?.name) || (t.name.includes(':') ? t.name.split(':')[0].trim() : null) || 'Lainnya';
     key = key.slice(0, 40);
     groups[key] = (groups[key] || 0) + 1;
   }
-  const workstreams = Object.entries(groups)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
-    .map(([name, count]) => ({ name, count })); // colors assigned by the frontend
+  const workstreams = Object.entries(groups).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([name, count]) => ({ name, count }));
   const topSum = workstreams.reduce((s, w) => s + w.count, 0);
   if (total - topSum > 0) workstreams.push({ name: 'Lainnya', count: total - topSum });
 
@@ -134,48 +200,153 @@ function buildDashboardData(tasks, listName) {
     const status = t.status?.status?.toLowerCase() === 'complete' ? 'done'
       : t.status?.status?.toLowerCase() === 'in progress' ? 'progress' : 'todo';
     const mins = Math.round((now - Number(t.date_updated)) / 60000);
-    let time;
-    if (mins < 60) time = `${mins} menit lalu`;
-    else if (mins < 1440) time = `${Math.round(mins / 60)} jam lalu`;
-    else time = `${Math.round(mins / 1440)} hari lalu`;
+    const time = mins < 60 ? `${mins} menit lalu` : mins < 1440 ? `${Math.round(mins / 60)} jam lalu` : `${Math.round(mins / 1440)} hari lalu`;
     const cat = (t.tags && t.tags[0]?.name) || (t.name.includes(':') ? t.name.split(':')[0].trim() : 'Umum');
     return { cat, name: t.name, status, time, url: t.url };
   });
 
   return {
     generatedAt: new Date(now).toISOString(),
-    workspace: 'AIO-KSP',
-    list: listName || 'List',
+    workspace: 'AIO-KSP', list: listName || 'List',
     totals: { total, complete, inProgress, todo, overdue, dueNext7d },
-    weekly: weeks,
-    heat,
-    workstreams,
-    recent,
+    weekly: weeks, heat, workstreams, recent,
   };
 }
 
 async function refreshCache() {
-  lastAttempt = Date.now();
   try {
     const tasks = await clickupFetchAllTasks(CLICKUP_LIST_ID);
-    cache = { data: buildDashboardData(tasks, 'List'), fetchedAt: Date.now() };
+    const next = buildDashboardData(tasks, 'List');
+    const changed = !cache.data || cache.data.totals.total !== next.totals.total
+      || JSON.stringify(cache.data.recent) !== JSON.stringify(next.recent);
+    cache = { data: next, fetchedAt: Date.now() };
     console.log(`[ksp-dashboard] cache refreshed: ${tasks.length} tugas @ ${new Date().toISOString()}`);
+    if (changed) broadcast('update'); // dorong perubahan ke browser
   } catch (err) {
     console.error('[ksp-dashboard] gagal refresh dari ClickUp:', err.message);
   }
 }
 
-app.get('/api/dashboard-data', async (req, res) => {
-  const stale = !cache.data || Date.now() - cache.fetchedAt > REFRESH_MS;
-  const canRetry = Date.now() - lastAttempt > RETRY_MS;
-  if (stale && canRetry) {
-    await refreshCache();
-  }
+/* ---------------- ROUTES ---------------- */
+
+// Publik: halaman login.
+app.get('/login.html', (req, res) => res.sendFile(path.join(PUB, 'login.html')));
+
+// Data dashboard — DIKUNCI.
+app.get('/api/dashboard-data', requireAuth, async (req, res) => {
+  if (!cache.data || Date.now() - cache.fetchedAt > REFRESH_MS) await refreshCache();
   if (!cache.data) return res.status(503).json({ error: 'Data belum tersedia, cek CLICKUP_TOKEN di .env' });
   res.json(cache.data);
 });
 
-app.get('/api/health', (req, res) => res.json({ ok: true, cachedAt: cache.fetchedAt }));
+// Info user login (untuk sambutan + role di dashboard).
+app.get('/api/me', requireAuth, (req, res) =>
+  res.json({ email: req.user.email, name: req.user.name, role: req.user.role || 'viewer' }));
+
+// Stream real-time (Server-Sent Events) — DIKUNCI.
+app.get('/api/stream', requireAuth, (req, res) => {
+  res.set({ 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive', 'X-Accel-Buffering': 'no' });
+  res.flushHeaders?.();
+  res.write(': connected\n\n');
+  sseClients.add(res);
+  const ka = setInterval(() => { try { res.write(': ping\n\n'); } catch (e) {} }, 25000);
+  req.on('close', () => { clearInterval(ka); sseClients.delete(res); });
+});
+
+/* ---------- ADMIN API (role admin saja) ---------- */
+// Daftar akun.
+app.get('/api/admin/users', requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const out = await auth.api.listUsers({ query: { limit: 200 }, headers: fromNodeHeaders(req.headers) });
+    const users = (out.users || out || []).map(u => ({ id: u.id, name: u.name, email: u.email, role: u.role || 'viewer' }));
+    res.json(users);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Buat akun baru (Admin membuat akun untuk atasan/viewer atau admin lain).
+app.post('/api/admin/users', requireAuth, requireAdmin, async (req, res) => {
+  const { email, password, name, role } = req.body || {};
+  if (!email || !password || password.length < 8) return res.status(400).json({ error: 'Email & kata sandi (min. 8) wajib diisi.' });
+  try {
+    await auth.api.createUser({
+      body: { email, password, name: name || email, role: role === 'admin' ? 'admin' : 'viewer' },
+      headers: fromNodeHeaders(req.headers),
+    });
+    res.json({ ok: true });
+  } catch (e) { res.status(400).json({ error: e.message || 'Gagal membuat akun.' }); }
+});
+
+// Ubah role.
+app.patch('/api/admin/users/:id/role', requireAuth, requireAdmin, async (req, res) => {
+  const role = req.body?.role === 'admin' ? 'admin' : 'viewer';
+  try {
+    await auth.api.setRole({ body: { userId: req.params.id, role }, headers: fromNodeHeaders(req.headers) });
+    res.json({ ok: true });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+// Hapus akun.
+app.delete('/api/admin/users/:id', requireAuth, requireAdmin, async (req, res) => {
+  if (req.params.id === req.user.id) return res.status(400).json({ error: 'Tidak dapat menghapus akun sendiri.' });
+  try {
+    await auth.api.removeUser({ body: { userId: req.params.id }, headers: fromNodeHeaders(req.headers) });
+    res.json({ ok: true });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+app.get('/api/health', (req, res) => res.json({ ok: true, cachedAt: cache.fetchedAt, clients: sseClients.size }));
+
+// Progres proyek dibaca langsung dari PROGRESS.md (sumber tunggal).
+// Panel "Progress Launch" di index.html memakai endpoint ini.
+function parseProgressMd(md) {
+  const stages = [];
+  const re = /^\|\s*(\d+)\s*\|(.+?)\|(.+?)\|(.*?)\|\s*$/;
+  for (const line of md.split(/\r?\n/)) {
+    const m = line.match(re);
+    if (!m) continue;
+    const statusRaw = m[3].trim();
+    let statusKey = 'pending';
+    if (/selesai|done|✅/i.test(statusRaw)) statusKey = 'done';
+    else if (/berjalan|proses|progress|🔄/i.test(statusRaw)) statusKey = 'ongoing';
+    else if (/tunda|belum|pending|⏳/i.test(statusRaw)) statusKey = 'pending';
+    stages.push({
+      no: Number(m[1]),
+      stage: m[2].trim().replace(/`/g, ''),
+      status: statusRaw,
+      statusKey,
+      note: m[4].trim().replace(/`/g, ''),
+    });
+  }
+  return stages;
+}
+
+app.get('/api/progress', requireAuth, async (req, res) => {
+  try {
+    const md = await fs.promises.readFile(PROGRESS_FILE, 'utf8');
+    const stages = parseProgressMd(md);
+    const stat = await fs.promises.stat(PROGRESS_FILE).catch(() => null);
+    const summary = {
+      total: stages.length,
+      done: stages.filter(s => s.statusKey === 'done').length,
+      ongoing: stages.filter(s => s.statusKey === 'ongoing').length,
+      pending: stages.filter(s => s.statusKey === 'pending').length,
+    };
+    res.json({
+      updatedAt: stat ? stat.mtime.toISOString() : new Date().toISOString(),
+      source: PROGRESS_FILE,
+      summary,
+      stages,
+    });
+  } catch (err) {
+    res.status(404).json({ error: `PROGRESS.md tidak terbaca: ${err.message}` });
+  }
+});
+
+// Halaman dashboard — DIKUNCI.
+app.get(['/', '/index.html'], requireAuth, (req, res) => res.sendFile(path.join(PUB, 'index.html')));
+
+// Aset statis lain (tanpa index otomatis, agar index.html tidak lolos guard).
+app.use(express.static(PUB, { index: false }));
 
 app.listen(PORT, () => {
   console.log(`[ksp-dashboard] server berjalan di http://localhost:${PORT}`);

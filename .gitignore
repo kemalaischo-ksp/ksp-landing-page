@@ -1,3 +1,7 @@
 .DS_Store
 node_modules/
 *.log
+.last-progress
+# Duplikat referensi build external Claude & screenshot lokal (bukan bagian repo)
+UPDATE_CLAUDE/
+Screenshot*.png
