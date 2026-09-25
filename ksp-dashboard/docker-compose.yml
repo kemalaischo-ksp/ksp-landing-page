@@ -1,0 +1,14 @@
+# Dashboard Traffic Pekerjaan KSP — Express (serve index.html + API ClickUp).
+# Pakai: cp .env.prod.example .env && chmod 600 .env && docker compose up -d --build
+services:
+  ksp-dashboard:
+    build: .
+    container_name: ksp-dashboard
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3100:3100"
+    environment:
+      - PORT=3100
+      - CLICKUP_TOKEN=${CLICKUP_TOKEN}
+      - CLICKUP_LIST_ID=${CLICKUP_LIST_ID:-901817330442}
+      - REFRESH_MINUTES=${REFRESH_MINUTES:-5}

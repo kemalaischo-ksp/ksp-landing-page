@@ -1,0 +1,7 @@
+# Secret & artefak lokal
+.env
+.env.prod
+.env.local
+*.log
+.DS_Store
+node_modules/
