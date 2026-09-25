@@ -258,3 +258,28 @@ Agar setiap update otomatis tercatat, repo ini memakai:
 - Token ClickUp di `ksp-dashboard/server/.env` saat ini terdeteksi **invalid**
   (401 `Token invalid`, ECODE `OAUTH_025`) — regenerasi di ClickUp lalu
   perbarui sebelum sinkronisasi live dipakai lagi.
+
+### Update otomatis — 25 Sep 2026 20:42
+
+Commit baru:
+
+    **`f6dc0bc build: adopsi sistem Better Auth (external) sbg basis deploy — roles admin/viewer, real-time (SSE+webhook), panel admin, Progress Launch, Docker ready, rate-limit login, trust proxy`**
+
+File yang berubah:
+
+    - `.gitignore`
+    - `PROGRESS.md`
+    - `ksp-dashboard/.env.prod.example`
+    - `ksp-dashboard/.gitignore`
+    - `ksp-dashboard/Dockerfile`
+    - `ksp-dashboard/README.md`
+    - `ksp-dashboard/docker-compose.yml`
+    - `ksp-dashboard/public/index.html`
+    - `ksp-dashboard/public/login.html`
+    - `ksp-dashboard/server/.env.example`
+    - `ksp-dashboard/server/auth.js`
+    - `ksp-dashboard/server/package-lock.json`
+    - `ksp-dashboard/server/package.json`
+    - `ksp-dashboard/server/seed-admin.js`
+    - `ksp-dashboard/server/server.js`
+    - `log-progress.sh`
