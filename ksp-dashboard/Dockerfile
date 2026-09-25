@@ -24,4 +24,4 @@ EXPOSE 3100
 
 # Migrasi DB auth + seed admin otomatis di tiap start (idempotent),
 # lalu jalankan server. auth.db diarahkan ke AUTH_DB_PATH (volume compose).
-CMD ["sh", "-c", "npx @better-auth/cli migrate && node seed-admin.js && node server.js"]
+CMD ["sh", "-c", "npx @better-auth/cli migrate --yes && node seed-admin.js && node server.js"]
