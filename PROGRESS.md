@@ -497,3 +497,15 @@ Commit baru:
 File yang berubah:
 
     - `.gitignore`
+
+### Update otomatis — 27 Sep 2026 01:19
+
+Commit baru:
+
+    **`bb287ec security: harden backend — security headers (HSTS/CSP/XFO/Permissions), rate-limit API per IP, CSRF origin-check, body limit json/raw, disable x-powered-by`**
+
+File yang berubah:
+
+    - `PROGRESS.md`
+    - `ksp-dashboard/README.md`
+    - `ksp-dashboard/server/server.js`
