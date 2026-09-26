@@ -1727,7 +1727,7 @@ function renderTimeline(data){
     if(end<start)end=start+DAYMS;
     items.push({id:t.id,name:t.name,ws:(t.ws||'Lainnya').replace(/&amp;/g,'&'),status:t.status,url:t.url,start,end});
   }
-  if(!items.length){inner.innerHTML='<div class="tl-empty">Belum ada tugas dengan tanggal (mulai / jatuh tempo) untuk ditampilkan di timeline.</div>';return;}
+  if(!items.length){inner.innerHTML='<div class="tl-empty">'+(serverMode?'Belum ada tugas dengan tanggal (mulai / jatuh tempo) di ClickUp untuk ditampilkan di timeline.':'Timeline menampilkan jadwal tugas <b>live dari ClickUp</b>. Saat ini <b>mode pratinjau</b> (server belum terhubung ke ClickUp), jadi tanggal tugas belum tersedia. Akan tampil otomatis begitu token ClickUp aktif.')+'</div>';return;}
   let min=Math.min(...items.map(i=>i.start)), max=Math.max(...items.map(i=>i.end));
   // beri padding & pastikan hari ini masuk
   min=Math.min(min,now)-2*DAYMS; max=Math.max(max,now)+2*DAYMS;
@@ -1762,7 +1762,7 @@ function renderTimeline(data){
   // rows
   let rows='';
   const SC={done:'var(--good)',progress:'var(--warn)',overdue:'var(--bad)',todo:'var(--c1)'};
-  let count=0; const cap=350;
+  let count=0; const cap=600;
   for(const ws of wsNames){
     const arr=groups[ws].sort((a,b)=>a.start-b.start);
     rows+='<div class="tl-wsband"><span>'+esc(shortWs(ws))+'</span><span class="wc">'+arr.length+' tugas</span></div>';
