@@ -308,3 +308,24 @@ File yang berubah:
     - `ksp-dashboard/server/seed-admin.js`
     - `ksp-dashboard/server/server.js`
     - `log-progress.sh`
+
+### Update otomatis — 26 Sep 2026 20:52
+
+Commit baru:
+
+    **`ae133e0 feat: update external — Peta Tugas (Graph d3), Notifikasi, /api/version (poll 3 detik), webhook ClickUp register; backport Progress Launch, rate-limit login, trust proxy`**
+
+File yang berubah:
+
+    - `.gitignore`
+    - `PROGRESS.md`
+    - `ksp-dashboard/.env.prod.example`
+    - `ksp-dashboard/README.md`
+    - `ksp-dashboard/docker-compose.yml`
+    - `ksp-dashboard/public/index.html`
+    - `ksp-dashboard/server/.env.example`
+    - `ksp-dashboard/server/.gitignore`
+    - `ksp-dashboard/server/package-lock.json`
+    - `ksp-dashboard/server/package.json`
+    - `ksp-dashboard/server/register-webhook.js`
+    - `ksp-dashboard/server/server.js`
