@@ -257,6 +257,90 @@
   .prog-status{font-size:11px; font-weight:600; white-space:nowrap; padding-top:4px;}
   .prog-summary{margin-bottom:6px;}
 
+  /* ===== Rekap / tombol laporan ===== */
+  .rekap-btn{display:inline-flex; align-items:center; gap:6px; height:33px; padding:0 12px; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--ink-2); font-family:inherit; font-size:12.5px; font-weight:600; cursor:pointer;}
+  .rekap-btn:hover{background:var(--surface-2); color:var(--ink);}
+  .rekap-btn svg{width:15px; height:15px;}
+  .rpt-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:16px 18px 18px;}
+  .rpt-card{border:1px solid var(--border); border-radius:12px; padding:14px; display:flex; flex-direction:column; gap:8px; background:var(--surface-2);}
+  .rpt-card h4{margin:0; font-size:13px; font-weight:650;}
+  .rpt-card p{margin:0; font-size:11.5px; color:var(--ink-muted); line-height:1.5; flex:1;}
+  .rpt-card .btn{width:100%; justify-content:center;}
+  .rpt-rec{grid-column:1/-1; font-size:11.5px; color:var(--ink-muted); display:flex; gap:7px; align-items:flex-start; padding:0 18px 16px;}
+  .rpt-rec b{color:var(--ink-2);}
+  /* lembar laporan (offscreen, dirender ke PDF/JPG) */
+  .rpt-sheet{position:fixed; left:-99999px; top:0; width:1000px; background:#fff; color:#0b0b0d; padding:40px 44px; font-family:'Inter',sans-serif;}
+  .rpt-sheet *{box-sizing:border-box;}
+  .rs-head{display:flex; align-items:center; gap:14px; border-bottom:2px solid #111; padding-bottom:16px; margin-bottom:22px;}
+  .rs-mark{width:46px; height:46px; border-radius:11px; background:#111; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px;}
+  .rs-head h1{margin:0; font-size:22px; letter-spacing:-.02em;}
+  .rs-head .rs-meta{font-size:12.5px; color:#666; margin-top:3px;}
+  .rs-cards{display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:24px;}
+  .rs-c{border:1px solid #e6e6e8; border-radius:12px; padding:14px;}
+  .rs-c .l{font-size:12px; color:#666;}
+  .rs-c .v{font-size:26px; font-weight:700; margin-top:6px; letter-spacing:-.02em;}
+  .rs-sec{font-size:14px; font-weight:700; margin:22px 0 10px; padding-bottom:6px; border-bottom:1px solid #eee;}
+  table.rs-t{width:100%; border-collapse:collapse; font-size:12px;}
+  table.rs-t th{text-align:left; color:#666; font-weight:600; padding:7px 8px; border-bottom:1px solid #eee; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em;}
+  table.rs-t td{padding:7px 8px; border-bottom:1px solid #f1f1f2; vertical-align:top;}
+  .rs-badge{display:inline-block; font-size:10.5px; font-weight:600; padding:2px 8px; border-radius:99px;}
+  .rs-foot{margin-top:26px; padding-top:14px; border-top:1px solid #eee; font-size:11px; color:#888; display:flex; justify-content:space-between;}
+  .rs-bar{height:9px; border-radius:99px; background:#eee; overflow:hidden;}
+  .rs-bar i{display:block; height:100%; border-radius:99px; background:#2E6CA4;}
+
+  /* ===== Bulk / checklist di modal tugas ===== */
+  .mt-check{flex:0 0 18px; width:18px; height:18px; margin-top:1px; border:1.6px solid var(--border-2); border-radius:5px; display:none; align-items:center; justify-content:center; cursor:pointer; color:#fff; background:var(--surface);}
+  body.role-admin .mt-check{display:inline-flex;}
+  .mt-check.on{background:var(--c1); border-color:var(--c1);}
+  .mt-check svg{width:12px; height:12px; opacity:0; stroke-width:3.2;}
+  .mt-check.on svg{opacity:1;}
+  .bulk-bar{display:none; align-items:center; gap:10px; padding:9px 14px; margin:0 0 -2px; background:var(--c1-soft); border-top:1px solid var(--border); border-bottom:1px solid var(--border); font-size:12px;}
+  .bulk-bar.show{display:flex;}
+  .bulk-bar b{font-weight:650; color:var(--c1);}
+  .bulk-bar .sp{flex:1;}
+  .bulk-bar button{border:0; font-family:inherit; font-size:12px; font-weight:600; border-radius:7px; padding:6px 11px; cursor:pointer;}
+  .bulk-apply{background:var(--c1); color:#fff; display:inline-flex; align-items:center; gap:6px;}
+  .bulk-apply:hover{background:var(--c1-strong,#255d94);}
+  .bulk-clear{background:var(--surface); color:var(--ink-2); border:1px solid var(--border)!important;}
+  .bulk-selall{background:var(--surface); color:var(--ink-2); border:1px solid var(--border)!important;}
+  .bulk-apply svg{width:13px;height:13px;}
+
+  /* ===== Timeline (Gantt) ===== */
+  .tl-head{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+  .tl-controls{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .tl-zoom{display:flex; background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:3px; gap:2px;}
+  .tl-zoom button{border:0; background:transparent; padding:4px 10px; border-radius:6px; font-size:11.5px; color:var(--ink-3); cursor:pointer; font-family:inherit; font-weight:500;}
+  .tl-zoom button.active{background:var(--surface); color:var(--ink); box-shadow:var(--shadow-sm);}
+  .tl-legend{display:flex; gap:12px; flex-wrap:wrap; font-size:11px; color:var(--ink-2);}
+  .tl-legend span{display:inline-flex; align-items:center; gap:5px;}
+  .tl-legend i{width:14px; height:8px; border-radius:3px;}
+  .tl-wrap{margin-top:12px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface);}
+  .tl-scroll{overflow-x:auto; overflow-y:hidden;}
+  .tl-inner{position:relative;}
+  .tl-axis{position:relative; height:34px; border-bottom:1px solid var(--border); background:var(--surface-2);}
+  .tl-tick{position:absolute; top:0; height:100%; border-left:1px solid var(--border); padding:5px 0 0 6px; font-size:10px; color:var(--ink-muted); white-space:nowrap;}
+  .tl-tick.month{border-left:1px solid var(--border-2);}
+  .tl-tick.month b{color:var(--ink-2); font-weight:600;}
+  .tl-today{position:absolute; top:0; bottom:0; width:2px; background:var(--bad); z-index:6; box-shadow:0 0 8px 1px color-mix(in srgb,var(--bad) 55%,transparent);}
+  .tl-today .tl-today-dot{position:absolute; top:-1px; left:-4px; width:10px; height:10px; border-radius:99px; background:var(--bad);}
+  .tl-rows{position:relative;}
+  .tl-wsband{display:flex; align-items:center; gap:8px; height:26px; padding:0 12px; background:var(--surface-3); border-bottom:1px solid var(--border); font-size:11px; font-weight:650; color:var(--ink-2); position:sticky; left:0;}
+  .tl-wsband .wc{font-weight:500; color:var(--ink-muted);}
+  .tl-row{position:relative; height:30px; border-bottom:1px solid var(--border);}
+  .tl-row:hover{background:var(--surface-2);}
+  .tl-bar{position:absolute; top:5px; height:20px; border-radius:6px; min-width:8px; display:flex; align-items:center; padding:0 8px; font-size:10.5px; font-weight:550; color:#fff; white-space:nowrap; overflow:hidden; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,.14); isolation:isolate;}
+  .tl-bar span{position:relative; z-index:2; overflow:hidden; text-overflow:ellipsis;}
+  /* aliran glowing dinamis di dalam bar */
+  .tl-bar::before{content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(100deg, transparent 20%, rgba(255,255,255,.55) 46%, rgba(255,255,255,.05) 60%, transparent 78%); background-size:220% 100%; transform:translateZ(0); animation:tlflow 2.8s linear infinite;}
+  @keyframes tlflow{0%{background-position:180% 0;}100%{background-position:-80% 0;}}
+  .tl-bar.done::before{animation-duration:6s; opacity:.5;}
+  .tl-bar.progress::before{animation-duration:1.8s;}
+  .tl-bar.overdue{box-shadow:0 0 0 1px color-mix(in srgb,var(--bad) 55%,transparent), 0 0 12px 1px color-mix(in srgb,var(--bad) 45%,transparent); animation:tlpulse 1.8s ease-in-out infinite;}
+  @keyframes tlpulse{0%,100%{box-shadow:0 0 0 1px color-mix(in srgb,var(--bad) 50%,transparent),0 0 8px 0 color-mix(in srgb,var(--bad) 30%,transparent);}50%{box-shadow:0 0 0 1px color-mix(in srgb,var(--bad) 70%,transparent),0 0 16px 3px color-mix(in srgb,var(--bad) 55%,transparent);}}
+  .tl-bar.tl-hi{outline:2px solid var(--ink); outline-offset:1px;}
+  .tl-empty{padding:34px; text-align:center; color:var(--ink-muted); font-size:12.5px;}
+  @media (prefers-reduced-motion: reduce){ .tl-bar::before{animation:none;} .tl-bar.overdue{animation:none;} }
+
   .foot{display:flex; justify-content:space-between; align-items:center; padding:14px 2px 2px; font-size:11.5px; color:var(--ink-muted); flex-wrap:wrap; gap:8px;}
   #chart-svg text{font-family:'Inter',sans-serif;}
   .preview-toggle{display:none; align-items:center; gap:6px; font-size:11px; color:var(--ink-3); background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:3px;}
@@ -417,6 +501,8 @@
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <div id="tip"></div>
 <div class="app">
@@ -428,6 +514,7 @@
       <a class="nav-item" href="#traffic"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg>Traffic Aktivitas</a>
       <a class="nav-item" href="#heat"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>Heatmap &amp; Status</a>
       <a class="nav-item" href="#graph"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="7" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="12" cy="12" r="2.4"/><path d="M6.6 7.2l3.7 3.4M17.5 8.3l-3.8 2.6M12 14v.6"/></svg>Peta Tugas (Graph)</a>
+      <a class="nav-item" href="#timeline"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h12M8 12h9M8 18h6M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>Timeline</a>
       <a class="nav-item" href="#activity"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Aktivitas Terbaru</a>
       <a class="nav-item" href="#progress"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Progress Launch</a>
       <a class="nav-item admin-only" href="#adminPanel"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6z"/><circle cx="12" cy="11" r="2.5"/></svg>Panel Admin</a>
@@ -445,6 +532,7 @@
       </div>
       <div class="topbar-right">
         <div class="preview-toggle" id="previewToggle"><button class="active" data-role="admin">Pratinjau: Admin</button><button data-role="viewer">Atasan (view)</button></div>
+        <button class="rekap-btn" id="rekapBtn" title="Buat rekap laporan (PDF / JPG)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/></svg>Rekap</button>
         <button class="icon-btn admin-only new-task-btn" id="newTaskBtn" title="Buat tugas baru di ClickUp">+</button>
         <div class="bell-wrap">
           <div class="icon-btn" id="bellBtn" title="Notifikasi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg><span class="badge-dot" id="notifBadge" hidden>0</span></div>
@@ -518,6 +606,27 @@
         </div>
       </div>
 
+      <div class="panel" id="timeline">
+        <div class="panel-head">
+          <div><h3>Timeline Tugas — ClickUp</h3><p>Rentang jadwal seluruh tugas (mulai → jatuh tempo), gaya Gantt dengan aliran dinamis pada bar aktif</p></div>
+        </div>
+        <div class="panel-body">
+          <div class="tl-head">
+            <div class="tl-legend">
+              <span><i style="background:var(--good)"></i>Selesai</span>
+              <span><i style="background:var(--warn)"></i>Dikerjakan</span>
+              <span><i style="background:var(--c1)"></i>Belum</span>
+              <span><i style="background:var(--bad)"></i>Terlambat</span>
+            </div>
+            <div class="tl-controls">
+              <div class="tl-zoom" id="tlZoom"><button data-px="6">Padat</button><button class="active" data-px="12">Normal</button><button data-px="26">Renggang</button></div>
+              <button class="btn btn-sm btn-ghost" id="tlToday">Hari ini</button>
+            </div>
+          </div>
+          <div class="tl-wrap"><div class="tl-scroll" id="tlScroll"><div class="tl-inner" id="tlInner"></div></div></div>
+        </div>
+      </div>
+
       <div class="panel" id="activity">
         <div class="panel-head"><div><h3>Aktivitas Terbaru</h3><p>Tugas dengan pembaruan paling akhir · <span id="rowCount"></span></p></div></div>
         <div class="table-wrap"><table><thead><tr><th>Workstream</th><th>Tugas</th><th>Status</th><th>Update</th><th>List</th></tr></thead><tbody id="activityBody"></tbody></table></div>
@@ -577,9 +686,42 @@
       <div class="modal-search"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="mSearch" type="text" placeholder="Saring di dalam daftar ini…" autocomplete="off"></div>
       <div class="modal-chips" id="mChips"></div>
     </div>
+    <div class="bulk-bar" id="bulkBar">
+      <button class="bulk-selall" id="bulkSelAll">Pilih semua</button>
+      <b id="bulkCount">0 dipilih</b>
+      <span class="sp"></span>
+      <button class="bulk-clear" id="bulkClear">Batal</button>
+      <button class="bulk-apply" id="bulkApply"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Ubah status…</button>
+    </div>
     <div class="modal-list" id="mList"></div>
   </div>
 </div>
+
+<div class="modal-scrim" id="reportModal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-head">
+      <div class="modal-title-row">
+        <div class="modal-ic" style="color:var(--c1); background:var(--c1-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+        <div class="modal-title"><b>Rekap Laporan</b><span>Untuk laporan ke atasan · sumber data ClickUp AIO-KSP</span></div>
+        <button class="modal-close" id="rptClose" title="Tutup (Esc)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+    </div>
+    <div class="rpt-grid">
+      <div class="rpt-card">
+        <h4>📄 Report Detail (PDF)</h4>
+        <p>Laporan lengkap: ringkasan, beban per workstream, dan daftar tugas terlambat. Rapi, ringan, siap kirim ke pimpinan. <b>Rekomendasi.</b></p>
+        <button class="btn" id="rptPdf">Download PDF</button>
+      </div>
+      <div class="rpt-card">
+        <h4>🖼️ Rekap Gambar (JPG)</h4>
+        <p>Satu halaman ringkas dalam format gambar — mudah ditempel di chat / WhatsApp grup.</p>
+        <button class="btn" id="rptJpg" style="background:var(--ink)">Download JPG</button>
+      </div>
+      <div class="rpt-rec"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 14px;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span><b>Rekomendasi:</b> pakai <b>PDF</b> untuk laporan resmi/arsip (teks tajam, multi-halaman). Pakai <b>JPG</b> untuk berbagi cepat. Rekap dibuat dari data yang sedang tampil (real-time ClickUp).</span></div>
+    </div>
+  </div>
+</div>
+<div class="rpt-sheet" id="reportSheet"></div>
 
 <div class="modal-scrim" id="createModal">
   <div class="modal" style="max-width:470px">
@@ -700,6 +842,7 @@ function render(data){
   drawDonut(data.totals);
   renderGraph(data);
   renderNotifications(data);
+  renderTimeline(data);
   const feed=data.recent.slice(0,6);
   document.getElementById('feedCount').textContent=`${data.recent.length} kejadian terbaru`;
   document.getElementById('feedList').innerHTML=feed.map(r=>{const dc=r.status==='done'?'var(--good)':r.status==='progress'?'var(--warn)':'var(--ink-muted)';return `<div class="feed-item"><span class="feed-dot" style="background:${dc}"></span><span class="feed-text"><b>${r.cat}</b> — ${r.name}</span><span class="feed-time">${r.time}</span></div>`;}).join('');
@@ -1179,13 +1322,13 @@ function openStatModal(key){
   openTaskModal({title:C.title,sub:'Klik tugas untuk buka di ClickUp',test:C.test,icon:C.icon,iconColor:C.c,iconBg:C.bg});
 }
 function openTaskModal(cfg){
-  MODAL={base:ALLTASKS.filter(cfg.test),statusFilter:'all',wsFocus:cfg.wsFocus||null,cfg:cfg};
+  MODAL={base:ALLTASKS.filter(cfg.test),statusFilter:'all',wsFocus:cfg.wsFocus||null,cfg:cfg,sel:new Set()};
   const ic=document.getElementById('mIc');
   ic.innerHTML=MICONS[cfg.icon]||MICONS.total; ic.style.color=cfg.iconColor||'var(--ink)'; ic.style.background=cfg.iconBg||'var(--surface-3)';
   document.getElementById('mTitle').textContent=cfg.title;
   document.getElementById('mSub').textContent=cfg.sub||'';
   document.getElementById('mSearch').value='';
-  renderModalChips(); renderModalList();
+  renderModalChips(); renderModalList(); updateBulkBar();
   scrim.classList.add('show');
   setTimeout(()=>document.getElementById('mSearch').focus(),60);
 }
@@ -1208,11 +1351,14 @@ function renderModalList(){
   const rank={overdue:0,progress:1,todo:2,done:3};
   list.sort((a,b)=>(rank[a.status]-rank[b.status])||((b.updated||0)-(a.updated||0)));
   const el=document.getElementById('mList');
-  if(!list.length){el.innerHTML='<div class="mt-empty">Tidak ada tugas pada filter ini.</div>';return;}
+  if(!list.length){el.innerHTML='<div class="mt-empty">Tidak ada tugas pada filter ini.</div>';MODAL.visible=[];updateBulkBar();return;}
   const viewer=document.body.classList.contains('role-viewer');
   const admin=document.body.classList.contains('role-admin');
   const cap=400;
-  el.innerHTML=list.slice(0,cap).map(t=>{
+  const shown=list.slice(0,cap);
+  MODAL.visible=shown.map(t=>t.id);
+  const chk='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5"/></svg>';
+  el.innerHTML=shown.map(t=>{
     const m=SMETA[t.status]||SMETA.todo;
     const meta=['<span class="mt-ws">'+esc(t.ws)+'</span>',m.label];
     if(t.dueSoon&&t.status!=='done')meta.push('⏳ ≤7 hari');
@@ -1220,12 +1366,64 @@ function renderModalList(){
     if(t.time)meta.push(esc(t.time));
     const nameEl=(t.url&&!viewer)?'<a class="mt-name" href="'+t.url+'" target="_blank" rel="noopener">'+hlName(t.name,pq)+'</a>':'<span class="mt-name">'+hlName(t.name,pq)+'</span>';
     const cur=t.cuStatus||statusName(t.status);
+    const box=admin?'<span class="mt-check '+(MODAL.sel.has(t.id)?'on':'')+'" data-chk="'+esc(t.id)+'" role="checkbox" aria-checked="'+(MODAL.sel.has(t.id)?'true':'false')+'">'+chk+'</span>':'';
     const stBtn=admin?'<button class="mt-statusbtn" data-id="'+esc(t.id)+'" data-cur="'+esc(cur)+'"><i style="background:'+statusColorFor(cur)+'"></i>'+esc((cur||'').toUpperCase())+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></button>':'';
     const openEl=(t.url&&!viewer&&!admin)?'<span class="mt-open"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg></span>':'';
-    return '<div class="mt-row"><span class="mt-status" style="background:'+m.color+'"></span><span class="mt-body">'+nameEl+'<span class="mt-meta">'+meta.join(' · ')+'</span></span>'+stBtn+openEl+'</div>';
+    return '<div class="mt-row">'+box+'<span class="mt-status" style="background:'+m.color+'"></span><span class="mt-body">'+nameEl+'<span class="mt-meta">'+meta.join(' · ')+'</span></span>'+stBtn+openEl+'</div>';
   }).join('')+(list.length>cap?'<div class="mt-empty">Menampilkan '+cap+' dari '+list.length+' tugas — persempit dengan pencarian.</div>':'');
   el.querySelectorAll('.mt-statusbtn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openStatusMenu(b,b.dataset.id,b.dataset.cur);}));
+  el.querySelectorAll('.mt-check').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();toggleSel(b.dataset.chk);}));
+  updateBulkBar();
 }
+/* ===== checklist / bulk status ===== */
+function toggleSel(id){ if(MODAL.sel.has(id))MODAL.sel.delete(id); else MODAL.sel.add(id); renderModalList(); }
+function updateBulkBar(){
+  const bar=document.getElementById('bulkBar'); if(!bar)return;
+  const admin=document.body.classList.contains('role-admin');
+  const n=MODAL.sel?MODAL.sel.size:0;
+  bar.classList.toggle('show',admin&&n>0);
+  if(n>0){
+    document.getElementById('bulkCount').textContent=n+' dipilih';
+    const vis=MODAL.visible||[];
+    const allSel=vis.length&&vis.every(id=>MODAL.sel.has(id));
+    document.getElementById('bulkSelAll').textContent=allSel?'Bersihkan pilihan':'Pilih semua';
+  }
+}
+function bulkSelectAll(){
+  const vis=MODAL.visible||[];
+  const allSel=vis.length&&vis.every(id=>MODAL.sel.has(id));
+  if(allSel)vis.forEach(id=>MODAL.sel.delete(id)); else vis.forEach(id=>MODAL.sel.add(id));
+  renderModalList();
+}
+function bulkClear(){ MODAL.sel.clear(); renderModalList(); }
+async function applyBulkStatus(statusNm){
+  const ids=[...MODAL.sel]; if(!ids.length)return;
+  if(!serverMode){toast('Mode pratinjau — jalankan di server untuk mengubah status.','warn');return;}
+  ids.forEach(id=>{const t=ALLTASKS.find(x=>x.id===id); if(t){t.cuStatus=statusNm;const n=statusNm.toLowerCase();t.status=(n==='complete')?'done':n.includes('progress')?'progress':(t.overdue?'overdue':'todo');if(n==='complete'){t.overdue=false;t.dueSoon=false;}}});
+  refreshOpenModal();
+  toast('Menyimpan '+ids.length+' tugas → '+statusNm.toUpperCase()+'…','',true);
+  try{
+    const r=await fetch('/api/tasks/status',{method:'PATCH',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({ids,status:statusNm})});
+    const j=await r.json().catch(()=>({}));
+    if(r.ok){toast((j.ok||ids.length)+' tugas → '+statusNm.toUpperCase()+' tersimpan'+(j.gagal?(' · '+j.gagal+' gagal'):'')+'.',j.gagal?'warn':'good');}
+    else{toast(j.error||'Gagal mengubah status massal.','bad');loadData(true);}
+  }catch(e){toast('Tidak dapat terhubung ke server.','bad');loadData(true);}
+  MODAL.sel.clear(); renderModalList();
+}
+function openBulkStatusMenu(btn){
+  closeStatusMenu();
+  const menu=document.createElement('div'); menu.className='status-menu';
+  menu.innerHTML='<div class="sm-h">Ubah '+MODAL.sel.size+' tugas ke</div>'+getStatuses().map(s=>'<button data-s="'+esc(s.status)+'"><i style="background:'+statusColorFor(s.status)+'"></i>'+esc((s.status||'').toUpperCase())+'</button>').join('');
+  document.body.appendChild(menu);
+  const r=btn.getBoundingClientRect(); const mw=menu.offsetWidth,mh=menu.offsetHeight;
+  let left=r.right-mw; let top=r.top-6-mh; if(top<8)top=r.bottom+6; if(left<8)left=8;
+  menu.style.left=Math.max(8,left)+'px'; menu.style.top=Math.max(8,top)+'px'; statusMenuEl=menu;
+  menu.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const s=b.dataset.s;closeStatusMenu();applyBulkStatus(s);}));
+  setTimeout(()=>{document.addEventListener('click',onDocStatusMenu,true);document.addEventListener('keydown',onEscStatusMenu,true);},0);
+}
+document.getElementById('bulkSelAll').addEventListener('click',bulkSelectAll);
+document.getElementById('bulkClear').addEventListener('click',bulkClear);
+document.getElementById('bulkApply').addEventListener('click',()=>{if(MODAL.sel.size)openBulkStatusMenu(document.getElementById('bulkApply'));});
 document.getElementById('mSearch').addEventListener('input',renderModalList);
 document.getElementById('mClose').addEventListener('click',closeModal);
 scrim.addEventListener('click',e=>{if(e.target===scrim)closeModal();});
@@ -1511,6 +1709,136 @@ async function loadProgress(){
     if(el) el.style.display='none'; // saat dibuka statis tanpa server
   }
 }
+
+/* ================= TIMELINE (Gantt) ================= */
+let TL_PX=12, TL_DATA=null;
+const DAYMS=864e5;
+function renderTimeline(data){
+  TL_DATA=data;
+  const inner=document.getElementById('tlInner'); if(!inner)return;
+  const src=(data&&data.tasks&&data.tasks.length)?data.tasks:ALLTASKS;
+  const now=Date.now();
+  const items=[];
+  for(const t of (src||[])){
+    let start=t.start||t.created||null, end=t.due||null;
+    if(!end&&!start)continue;
+    if(!start)start=end-2*DAYMS;
+    if(!end)end=start+2*DAYMS;
+    if(end<start)end=start+DAYMS;
+    items.push({id:t.id,name:t.name,ws:(t.ws||'Lainnya').replace(/&amp;/g,'&'),status:t.status,url:t.url,start,end});
+  }
+  if(!items.length){inner.innerHTML='<div class="tl-empty">Belum ada tugas dengan tanggal (mulai / jatuh tempo) untuk ditampilkan di timeline.</div>';return;}
+  let min=Math.min(...items.map(i=>i.start)), max=Math.max(...items.map(i=>i.end));
+  // beri padding & pastikan hari ini masuk
+  min=Math.min(min,now)-2*DAYMS; max=Math.max(max,now)+2*DAYMS;
+  const day0=new Date(min); day0.setHours(0,0,0,0);
+  const start0=day0.getTime();
+  const totalDays=Math.max(1,Math.ceil((max-start0)/DAYMS));
+  const px=TL_PX, width=Math.max(totalDays*px, 600);
+  const xOf=ms=>((ms-start0)/DAYMS)*px;
+  // groups by workstream
+  const groups={};
+  for(const i of items){(groups[i.ws]=groups[i.ws]||[]).push(i);}
+  const wsNames=Object.keys(groups).sort((a,b)=>groups[b].length-groups[a].length);
+  // axis
+  const perWeek=px<18;
+  let axis='';
+  const MON=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+  let lastMonth=-1;
+  for(let d=0; d<=totalDays; d++){
+    const date=new Date(start0+d*DAYMS);
+    const isMonthStart=date.getDate()===1;
+    if(perWeek && !(date.getDay()===1) && !isMonthStart) continue;
+    const left=d*px;
+    const mArc=(date.getMonth()!==lastMonth);
+    if(isMonthStart||mArc&&d===0){
+      axis+='<div class="tl-tick month" style="left:'+left+'px"><b>'+MON[date.getMonth()]+' '+date.getFullYear()+'</b></div>';
+      lastMonth=date.getMonth();
+    } else {
+      axis+='<div class="tl-tick" style="left:'+left+'px">'+date.getDate()+'</div>';
+    }
+  }
+  const todayLeft=xOf(now);
+  // rows
+  let rows='';
+  const SC={done:'var(--good)',progress:'var(--warn)',overdue:'var(--bad)',todo:'var(--c1)'};
+  let count=0; const cap=350;
+  for(const ws of wsNames){
+    const arr=groups[ws].sort((a,b)=>a.start-b.start);
+    rows+='<div class="tl-wsband"><span>'+esc(shortWs(ws))+'</span><span class="wc">'+arr.length+' tugas</span></div>';
+    for(const i of arr){
+      if(count++>cap){continue;}
+      const left=xOf(i.start), w=Math.max(8,xOf(i.end)-xOf(i.start));
+      const col=SC[i.status]||SC.todo;
+      const cls='tl-bar '+i.status;
+      const dd=new Date(i.end).toLocaleDateString('id-ID',{day:'2-digit',month:'short'});
+      const title=esc(i.name)+' — '+({done:'Selesai',progress:'Dikerjakan',overdue:'Terlambat',todo:'Belum'}[i.status]||'')+' · tempo '+dd;
+      rows+='<div class="tl-row"><div class="'+cls+'" data-url="'+esc(i.url||'')+'" style="left:'+left+'px;width:'+w+'px;background:'+col+'" title="'+title+'"><span>'+esc(i.name)+'</span></div></div>';
+    }
+  }
+  if(count>cap)rows+='<div class="tl-empty">Menampilkan '+cap+' dari '+items.length+' tugas berjadwal.</div>';
+  inner.style.width=width+'px';
+  inner.innerHTML='<div class="tl-axis">'+axis+'<div class="tl-today" style="left:'+todayLeft+'px"><span class="tl-today-dot"></span></div></div><div class="tl-rows">'+rows+'</div>';
+  inner.querySelectorAll('.tl-bar').forEach(b=>b.addEventListener('click',()=>{const u=b.dataset.url; if(u&&!document.body.classList.contains('role-viewer'))window.open(u,'_blank','noopener');}));
+  // auto scroll ke hari ini
+  const sc=document.getElementById('tlScroll'); if(sc)sc.scrollLeft=Math.max(0,todayLeft-sc.clientWidth*0.35);
+}
+document.getElementById('tlZoom').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('#tlZoom button').forEach(x=>x.classList.remove('active'));b.classList.add('active');TL_PX=Number(b.dataset.px)||12;if(TL_DATA)renderTimeline(TL_DATA);});
+document.getElementById('tlToday').addEventListener('click',()=>{const sc=document.getElementById('tlScroll');const t=document.querySelector('.tl-today');if(sc&&t)sc.scrollLeft=Math.max(0,parseFloat(t.style.left)-sc.clientWidth*0.35);});
+
+/* ================= REKAP LAPORAN (PDF / JPG) ================= */
+const reportModal=document.getElementById('reportModal');
+function openReport(){reportModal.classList.add('show');}
+function closeReport(){reportModal.classList.remove('show');}
+document.getElementById('rekapBtn').addEventListener('click',openReport);
+document.getElementById('rptClose').addEventListener('click',closeReport);
+reportModal.addEventListener('click',e=>{if(e.target===reportModal)closeReport();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&reportModal.classList.contains('show'))closeReport();});
+function buildReportSheet(){
+  const data=DATA||{}; const t=data.totals||{total:0,complete:0,inProgress:0,todo:0,overdue:0,dueNext7d:0};
+  const pct=t.total?Math.round((t.complete/t.total)*1000)/10:0;
+  const gen=new Date(data.generatedAt||Date.now()).toLocaleString('id-ID',{dateStyle:'long',timeStyle:'short'});
+  const wsRows=(data.workstreams||[]).map(w=>'<tr><td>'+esc(w.name.replace(/&amp;/g,'&'))+'</td><td style="text-align:right">'+w.count+'</td><td style="text-align:right">'+(t.total?Math.round(w.count/t.total*100):0)+'%</td></tr>').join('');
+  const overdue=(ALLTASKS||[]).filter(x=>x.overdue).slice(0,25);
+  const odRows=overdue.length?overdue.map(x=>'<tr><td>'+esc(x.name)+'</td><td>'+esc(shortWs(x.ws))+'</td><td style="white-space:nowrap">'+esc(x.time||'')+'</td></tr>').join(''):'<tr><td colspan="3" style="color:#888">Tidak ada tugas terlambat. 🎉</td></tr>';
+  const card=(l,v)=>'<div class="rs-c"><div class="l">'+l+'</div><div class="v">'+v+'</div></div>';
+  document.getElementById('reportSheet').innerHTML=
+    '<div class="rs-head"><div class="rs-mark">AW</div><div><h1>Rekap Traffic Pekerjaan — AIO-KSP</h1><div class="rs-meta">AL-WILDAN ISLAMIC SCHOOL HOLDING · AISCHO &nbsp;•&nbsp; Dibuat '+gen+' WIB &nbsp;•&nbsp; Sumber: ClickUp</div></div></div>'
+    +'<div class="rs-cards">'+card('Total Tugas',fmt(t.total))+card('Penyelesaian',pct+'%')+card('Terlambat',fmt(t.overdue))+card('Dikerjakan',fmt(t.inProgress))+card('Jatuh Tempo 7 Hari',fmt(t.dueNext7d))+'</div>'
+    +'<div class="rs-sec">Progres Keseluruhan</div><div class="rs-bar"><i style="width:'+pct+'%"></i></div><div style="font-size:11.5px;color:#666;margin-top:6px">'+fmt(t.complete)+' dari '+fmt(t.total)+' tugas selesai ('+pct+'%). Aktif: '+fmt((t.todo||0)+(t.inProgress||0))+' tugas.</div>'
+    +'<div class="rs-sec">Beban per Workstream</div><table class="rs-t"><thead><tr><th>Workstream</th><th style="text-align:right">Jumlah</th><th style="text-align:right">Porsi</th></tr></thead><tbody>'+wsRows+'</tbody></table>'
+    +'<div class="rs-sec">Tugas Terlambat (maks. 25)</div><table class="rs-t"><thead><tr><th>Tugas</th><th>Workstream</th><th>Terakhir</th></tr></thead><tbody>'+odRows+'</tbody></table>'
+    +'<div class="rs-foot"><span>Dashboard Traffic Pekerjaan KSP · ksp.office-alwildan.id</span><span>Halaman rekap otomatis</span></div>';
+}
+async function downloadReport(kind){
+  if(typeof html2canvas==='undefined'){toast('Pustaka laporan gagal dimuat (perlu internet).','bad');return;}
+  buildReportSheet();
+  toast('Menyiapkan '+kind.toUpperCase()+'…','',true);
+  const sheet=document.getElementById('reportSheet');
+  try{
+    const canvas=await html2canvas(sheet,{scale:2,backgroundColor:'#ffffff',useCORS:true,windowWidth:1000});
+    const stamp=new Date().toISOString().slice(0,10);
+    if(kind==='jpg'){
+      const a=document.createElement('a'); a.href=canvas.toDataURL('image/jpeg',0.95); a.download='Rekap-KSP-'+stamp+'.jpg'; a.click();
+      toast('Rekap JPG terunduh.','good');
+    }else{
+      const jspdf=window.jspdf&&window.jspdf.jsPDF; if(!jspdf){toast('Pustaka PDF gagal dimuat.','bad');return;}
+      const pdf=new jspdf({unit:'pt',format:'a4'});
+      const pw=pdf.internal.pageSize.getWidth(), ph=pdf.internal.pageSize.getHeight();
+      const img=canvas.toDataURL('image/jpeg',0.95);
+      const iw=pw, ih=canvas.height*(pw/canvas.width);
+      let left=ih, pos=0;
+      pdf.addImage(img,'JPEG',0,pos,iw,ih);
+      left-=ph;
+      while(left>0){ pos-=ph; pdf.addPage(); pdf.addImage(img,'JPEG',0,pos,iw,ih); left-=ph; }
+      pdf.save('Rekap-KSP-'+stamp+'.pdf');
+      toast('Rekap PDF terunduh.','good');
+    }
+    closeReport();
+  }catch(e){toast('Gagal membuat rekap: '+(e.message||e),'bad');}
+}
+document.getElementById('rptPdf').addEventListener('click',()=>downloadReport('pdf'));
+document.getElementById('rptJpg').addEventListener('click',()=>downloadReport('jpg'));
 
 loadData(false);
 loadProgress();

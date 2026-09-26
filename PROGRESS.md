@@ -29,6 +29,7 @@ untuk proyek **KSP Landing Page / Dashboard Traffic Pekerjaan KSP**.
 | 15 | Update terbaru (external): Graph, Notifikasi, webhook instan | ✅ Selesai | Di-merge ke `ksp-dashboard/` + backport Progress/rate-limit/trust proxy |
 | 16 | Update #2 (external): Tugas klikable, modal, filter workstream, search popup | ✅ Selesai | Merge `UPDATE/U#2/` + backport Progress/rate-limit/trust proxy |
 | 17 | Update #3 (external): Tulis ke ClickUp — ubah status & buat tugas | ✅ Selesai | Merge `UPDATE/U#3/` + backport Progress/rate-limit/trust proxy |
+| 18 | Fitur baru: Bulk edit status (checklist), Rekap PDF/JPG, Timeline (Gantt) | ✅ Selesai | Draft dulu di `U_DRAFT_OUTPUT UPD/` → timpa `ksp-dashboard/` |
 
 ---
 
@@ -297,6 +298,31 @@ Update eksternal terbaru dari folder `UPDATE/U#3/` di-merge ke `ksp-dashboard/`
   (`Butuh hak admin`); admin `POST /api/task` → 502 (token ClickUp masih
   invalid — rute sampai panggil ClickUp); `/api/progress` 200 (17 tahapan,
   14 done? — lihat tabel); login/`/api/me`/`/api/version` OK.
+
+### T18 — Fitur: Bulk edit, Rekap PDF/JPG, Timeline (Gantt) (SELESAI)
+
+Sesuai alur baru: **semua perubahan file dibuat dulu di `U_DRAFT_OUTPUT UPD/`**
+lalu ditimpa ke `ksp-dashboard/`. Tiga fitur ditambahkan:
+
+- **Bulk edit status (checklist)** — di modal tugas (admin) muncul checkbox per
+  baris + toolbar "Pilih semua / Ubah status…" untuk mengubah banyak tugas
+  sekaligus. Endpoint baru `PATCH /api/tasks/status` (body `{ids,status}`,
+  berurutan agar aman rate-limit, kembalikan ringkasan ok/gagal per-id).
+- **Rekap laporan (PDF & JPG)** — tombol **Rekap** di topbar → modal pilihan.
+  Rekomendasi: **PDF** (report detail: ringkasan, progres, beban per
+  workstream, daftar tugas terlambat; multi-halaman, teks tajam) untuk laporan
+  resmi; **JPG** untuk berbagi cepat. Dibuat dari lembar laporan berlogo
+  (offscreen) via `html2canvas` + `jsPDF` (CDN). File: `Rekap-KSP-YYYY-MM-DD`.
+- **Timeline (Gantt)** — panel baru gaya ClickUp Timeline: bar per tugas
+  (mulai→jatuh tempo) dikelompokkan per workstream, sumbu tanggal + garis
+  "hari ini", zoom Padat/Normal/Renggang, warna per status, dan **aliran
+  glowing dinamis** pada bar (shimmer bergerak; bar terlambat berpendar/pulse).
+  Backend menambah `start`/`created` pada tiap task utk rentang timeline.
+- Dependensi frontend via CDN: `html2canvas` 1.4.1, `jspdf` 2.5.1 (tetap tanpa
+  build tooling). Server tetap `express`+`better-auth`+`better-sqlite3`+`dotenv`.
+- **Verifikasi (Node 22)**: bulk tanpa login → 401; viewer → 403; ids kosong →
+  400; admin (token invalid) → 502 dengan detail gagal per-id; login/`/`/
+  `/api/progress` 200. Sintaks server & inline-JS lolos `node --check`.
 
 ---
 

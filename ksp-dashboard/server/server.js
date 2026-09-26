@@ -268,6 +268,8 @@ function buildDashboardData(tasks, listName) {
       cuStatus: t.status?.status || null,   // status asli di ClickUp (untuk dropdown)
       due, overdue: !!(due && !done && due <= now),
       dueSoon: !!(due && !done && due > now && due <= sevenDays),
+      start: Number(t.start_date) || null,          // untuk Timeline (Gantt)
+      created: Number(t.date_created) || null,      // fallback start di Timeline
       updated: Number(t.date_updated) || null, time: relTime(Number(t.date_updated)),
     };
   });
@@ -408,6 +410,28 @@ app.patch('/api/task/:id/status', requireAuth, requireAdmin, async (req, res) =>
     broadcast('update');
     res.json({ ok: true });
   } catch (e) { res.status(502).json({ error: e.message || 'Gagal mengubah status di ClickUp.' }); }
+});
+
+// Ubah status BANYAK tugas sekaligus (checklist / bulk edit) → ClickUp.
+// Body: { ids: [taskId,...], status: "IN PROGRESS" }. Kembalikan ringkasan per-id.
+app.patch('/api/tasks/status', requireAuth, requireAdmin, async (req, res) => {
+  const status = (req.body?.status || '').trim();
+  const ids = Array.isArray(req.body?.ids) ? req.body.ids.filter(Boolean).slice(0, 300) : [];
+  if (!status) return res.status(400).json({ error: 'Status wajib diisi.' });
+  if (!ids.length) return res.status(400).json({ error: 'Tidak ada tugas yang dipilih.' });
+  if (listStatuses && listStatuses.length && !listStatuses.some(s => s.status.toLowerCase() === status.toLowerCase())) {
+    return res.status(400).json({ error: `Status "${status}" tidak ada di List.` });
+  }
+  const results = { ok: [], fail: [] };
+  // Berurutan agar tidak menabrak rate-limit ClickUp.
+  for (const id of ids) {
+    try { await clickupUpdateTaskStatus(id, status); results.ok.push(id); }
+    catch (e) { results.fail.push({ id, error: e.message || 'gagal' }); }
+  }
+  await refreshCache();
+  broadcast('update');
+  const code = results.ok.length ? 200 : 502;
+  res.status(code).json({ ok: results.ok.length, gagal: results.fail.length, detail: results });
 });
 
 // Buat tugas baru di List → langsung ke ClickUp, lalu refresh & dorong ke semua browser.
