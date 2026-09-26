@@ -465,3 +465,13 @@ Commit baru:
 File yang berubah:
 
     - `ksp-dashboard/public/index.html`
+
+### Update otomatis — 27 Sep 2026 00:40
+
+Commit baru:
+
+    **`6116090 chore: gitignore U_FEATURE/ (folder screenshot referensi eksternal, bukan bagian repo)`**
+
+File yang berubah:
+
+    - `.gitignore`
