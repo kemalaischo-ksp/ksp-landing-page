@@ -394,3 +394,15 @@ Commit baru:
 File yang berubah:
 
     - `log-progress.sh`
+
+### Update otomatis — 26 Sep 2026 22:58
+
+Commit baru:
+
+    **`efee059 feat: update #3 — write API ke ClickUp (ubah status tugas, buat tugas baru) utk role admin, dropdown status, button tambah tugas; backport Progress Launch, rate-limit login, trust proxy`**
+
+File yang berubah:
+
+    - `PROGRESS.md`
+    - `ksp-dashboard/public/index.html`
+    - `ksp-dashboard/server/server.js`
