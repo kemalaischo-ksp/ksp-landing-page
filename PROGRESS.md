@@ -349,3 +349,15 @@ File yang berubah:
     - `ksp-dashboard/server/package.json`
     - `ksp-dashboard/server/register-webhook.js`
     - `ksp-dashboard/server/server.js`
+
+### Update otomatis — 26 Sep 2026 21:46
+
+Commit baru:
+
+    **`e9eabf6 feat: update #2 — daftar tugas klikable (data.tasks), modal detail tugas, filter workstream sidebar, pencarian popup; backport Progress Launch, rate-limit login, trust proxy`**
+
+File yang berubah:
+
+    - `PROGRESS.md`
+    - `ksp-dashboard/public/index.html`
+    - `ksp-dashboard/server/server.js`
