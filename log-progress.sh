@@ -28,15 +28,14 @@ if [ -n "$LAST" ] && [ "$LAST" = "$HEAD" ]; then exit 0; fi
 if [ -n "$LAST" ] && git merge-base --is-ancestor "$LAST" HEAD 2>/dev/null; then
   RANGE="${LAST}..HEAD"
 else
-  # Belum ada titik awal → catat isi commit kepala saja (safe)
-  RANGE="HEAD~0..HEAD"
-  RANGE_SPECIAL=1
+  # Titik tercatat bukan leluhur (mis. usai rebase) → catat commit HEAD saja.
+  RANGE="-1 HEAD"
 fi
 
-LOG="$(git log --no-decorate --format='%h %s' "$RANGE" 2>/dev/null)" || exit 0
+LOG="$(git log --no-decorate --format='%h %s' $RANGE 2>/dev/null)" || exit 0
 [ -n "$LOG" ] || exit 0
 
-if [ "${RANGE_SPECIAL:-0}" = "1" ]; then
+if [ "$RANGE" = "-1 HEAD" ]; then
   FILES="$(git show --pretty=format: --name-only HEAD 2>/dev/null | sed '/^$/d' | sed 's/^/    - `/' | sed 's/$/`/')"
 else
   FILES="$(git diff --name-only "$RANGE" 2>/dev/null | sed 's/^/    - `/' | sed 's/$/`/')"
