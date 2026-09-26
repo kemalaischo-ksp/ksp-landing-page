@@ -27,6 +27,7 @@ untuk proyek **KSP Landing Page / Dashboard Traffic Pekerjaan KSP**.
 | 13 | Review build external Claude vs build saat ini | ✅ Selesai | Keputusan: adopsi build external (Better Auth) sebagai basis deploy |
 | 14 | Adopsi sistem Better Auth (external) sebagai basis deploy | ✅ Selesai | Merge ke `ksp-dashboard/`, backport Progress panel + Docker + rate-limit |
 | 15 | Update terbaru (external): Graph, Notifikasi, webhook instan | ✅ Selesai | Di-merge ke `ksp-dashboard/` + backport Progress/rate-limit/trust proxy |
+| 16 | Update #2 (external): Tugas klikable, modal, filter workstream, search popup | ✅ Selesai | Merge `UPDATE/U#2/` + backport Progress/rate-limit/trust proxy |
 
 ---
 
@@ -254,6 +255,25 @@ basis deploy, dengan re-backport fitur sebelumnya:
   11 done); `/`→302 tanpa login; `/api/version`/`/api/progress` → 401 tanpa
   login; rate-limit 6× gagal → 429; `/api/dashboard-data` → 503 (token ClickUp
   masih invalid). `index.html` berisi gabungan graph+notif+version+progress.
+
+### T16 — Update #2 (Tugas klikable, Modal, Filter Workstream) (SELESAI)
+
+Update eksternal terbaru dari folder `UPDATE/U#2/` di-merge ke `ksp-dashboard/`
+(`public/index.html` + `server/server.js`), dengan re-backport fitur:
+
+- **Daftar tugas lengkap (`data.tasks`)** — backend kini mengirim semua tugas
+  ringkas (id, nama, workstream, status, due, overdue, dueSoon, reltime).
+- **Kartu statistik yang bisa diklik** — menampilkan daftar tugas terkait
+  (fallback dari graph bila tanpa `tasks`).
+- **Modal tugas** — klik tugas → detail + tautan langsung ke ClickUp.
+- **Filter per-workstream di sidebar** (`wsNav`) + hasil pencarian tersorot.
+- **Search popup** (`searchPop`, `spViewAll`) — pencarian global spesifik.
+- Backport dipertahankan: `trust proxy`, rate-limit login (5 gagal/15 mnt),
+  panel **Progress Launch** + `GET /api/progress` + `PROGRESS_FILE`.
+- **Verifikasi (Node 22)**: login `kemal@alwildan.id`→200; `/api/me` admin;
+  `/api/version` 200; `/api/progress` 200 (15 tahapan, 12 done, 3 pending);
+  `/`→302 tanpa login; API→401 tanpa login; `index.html` 200 berisi
+  tasks+modal+wsNav+searchPop+graph+notif+progress.
 
 ---
 

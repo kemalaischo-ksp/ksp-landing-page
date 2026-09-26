@@ -222,6 +222,20 @@ function buildDashboardData(tasks, listName) {
     time: relTime(Number(t.date_updated)), url: t.url,
   }));
 
+  // Daftar tugas lengkap (ringkas) — dipakai kartu statistik yang bisa diklik,
+  // filter per-workstream di sidebar, dan pencarian global spesifik.
+  const tasksList = tasks.map(t => {
+    const due = Number(t.due_date) || null;
+    const st = statusOf(t);
+    const done = t.status?.status?.toLowerCase() === 'complete';
+    return {
+      id: t.id, name: t.name, ws: wsOf(t), status: st, url: t.url,
+      due, overdue: !!(due && !done && due <= now),
+      dueSoon: !!(due && !done && due > now && due <= sevenDays),
+      updated: Number(t.date_updated) || null, time: relTime(Number(t.date_updated)),
+    };
+  });
+
   // Graph ala Obsidian: root -> workstream -> task
   const gnodes = [{ id: 'root', label: 'AIO-KSP', type: 'root' }];
   const gseen = new Set();
@@ -250,7 +264,7 @@ function buildDashboardData(tasks, listName) {
     generatedAt: new Date(now).toISOString(),
     workspace: 'AIO-KSP', list: listName || 'List',
     totals: { total, complete, inProgress, todo, overdue, dueNext7d },
-    weekly: weeks, heat, workstreams, recent, graph,
+    weekly: weeks, heat, workstreams, recent, graph, tasks: tasksList,
     notifications: notifications.slice(0, 30),
   };
 }
