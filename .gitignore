@@ -4,4 +4,5 @@ node_modules/
 .last-progress
 # Duplikat referensi build external Claude & screenshot lokal (bukan bagian repo)
 UPDATE_CLAUDE/
+UPDATE/
 Screenshot*.png

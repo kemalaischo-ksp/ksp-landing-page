@@ -13,10 +13,15 @@ dengan **login Better Auth (SQLite)** — akun admin & atasan (view-only).
 - **Heatmap Aktivitas Mingguan** — intensitas per hari × blok jam (WIB).
 - **Distribusi Status** — donut interaktif (Selesai / Dikerjakan / Belum / Terlambat).
 - **Live Feed & Aktivitas Terbaru** — kejadian terkini + pencarian live.
+- **Peta Tugas (Graph)** — graph interaktif ala Obsidian (root → workstream → tugas),
+  klik cabang untuk fokus, seret/zoom, hasil pencarian ikut tersorot (d3).
+- **Notifikasi** — lonceng real-time: tugas terlambat, jatuh tempo ≤7 hari,
+  baru selesai, tugas baru (data dari `/api/dashboard-data`).
 - **Beban per Workstream & Kapasitas/Risiko** — distribusi beban, tooltip saat hover.
 - **Panel "Progress Launch"** — progres proyek dibaca otomatis dari `../PROGRESS.md`
   (`GET /api/progress`); ubah `.md` → panel ikut berubah tanpa ubah kode.
-- **Real-time** — auto-refresh 30 detik + `GET /api/stream` (SSE) dipicu webhook ClickUp.
+- **Real-time** — auto-poll 3 dtk ke `/api/version` (murah) + SSE
+  `GET /api/stream` saat webhook ClickUp memicu refresh + auto-refresh 30 dtk.
 - **Login Better Auth** — email + password, sesi cookie httpOnly, registrasi publik dimatikan.
 - **Panel Admin & Role** — Admin membuat/mengatur/menghapus akun; **Atasan/Viewer**
   hanya melihat (tidak bisa klik tugas, tanpa panel admin).
@@ -33,6 +38,7 @@ ksp-dashboard/
 │   ├── server.js        # Express + Better Auth + sinkron ClickUp + rate-limit login
 │   ├── auth.js          # Konfigurasi Better Auth (SQLite, single-admin)
 │   ├── seed-admin.js    # Buat akun admin KSP (otomatis di container, sekali jalan)
+│   ├── register-webhook.js # Daftarkan webhook ClickUp utk update instan (sekali)
 │   ├── package.json
 │   └── .env.example
 ├── Dockerfile           # Image produksi (build toolchain utk better-sqlite3)
@@ -50,8 +56,8 @@ dari `/api/dashboard-data` — tanpa mengubah HTML.
 ```bash
 cd server
 cp .env.example .env
-# isi: CLICKUP_TOKEN, BETTER_AUTH_SECRET (openssl rand -base64 32),
-#      ADMIN_EMAIL, ADMIN_PASSWORD (min 8)
+# isi: CLICKUP_TOKEN, CLICKUP_TEAM_ID (opsional), BETTER_AUTH_SECRET (openssl rand -base64 32),
+#      ADMIN_EMAIL, ADMIN_PASSWORD (min 8); opsional CLICKUP_WEBHOOK_SECRET utk webhook
 npm install
 
 # 1. Buat tabel auth di SQLite
@@ -60,7 +66,10 @@ npx @better-auth/cli migrate
 # 2. Buat akun admin KSP (sekali saja)
 npm run seed
 
-# 3. Jalankan
+# 3. (Opsional) Daftarkan webhook utk update instan
+npm run register-webhook
+
+# 4. Jalankan
 npm start
 ```
 
@@ -85,14 +94,23 @@ sidebar):
 
 ## Real-time
 
-1. **Auto-refresh (default)** — browser menarik data tiap 30 detik; server
-   menyegarkan cache ClickUp tiap `REFRESH_MINUTES`.
-2. **Webhook ClickUp (opsional, instan)** — set `CLICKUP_WEBHOOK_SECRET` di
-   `.env`, daftarkan webhook di ClickUp (`endpoint: https://<domains>/api/clickup-webhook`,
-   `events: taskCreated|taskUpdated|taskStatusUpdated|taskDeleted`, `secret` sama),
-   server verifikasi `X-Signature`, refresh, lalu push ke browser via SSE.
+1. **Auto-refresh (default)** — browser mem-poll `/api/version` tiap 3 detik
+   (endpoint murah, tidak memanggil ClickUp); saat angka berubah, data ditarik
+   ulang. Cadangan: auto-refresh data tiap 30 detik. Server menyegarkan cache
+   ClickUp tiap `REFRESH_SECONDS` (min 10 dtk) atau `REFRESH_MINUTES` (bila
+   `REFRESH_SECONDS` kosong).
+2. **Webhook ClickUp (opsional, 1-3 dtk)** — isi `CLICKUP_WEBHOOK_SECRET`
+   (acak, mis. `openssl rand -hex 16`) lalu daftarkan sekali:
+   ```bash
+   cd server
+   npm run register-webhook   # butuh BETTER_AUTH_URL HTTPS publik
+   ```
+   Server verifikasi `X-Signature`, refresh cache, lalu push ke browser via SSE
+   (`GET /api/stream`).
 
-> Webhook butuh domain publik HTTPS. Bila belum ada, andalkan auto-refresh 30 dtk.
+> Webhook butuh domain publik HTTPS. Tanpa webhook, dashboard tetap update
+> otomatis via polling (1-3 dtk dibatasi refresh berkala, atau set
+> `REFRESH_SECONDS=10`).
 
 ## Deploy ke VPS (Docker — mengikuti pola HR 3.0)
 

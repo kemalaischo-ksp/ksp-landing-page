@@ -8,7 +8,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "migrate": "npx @better-auth/cli migrate",
-    "seed": "node seed-admin.js"
+    "seed": "node seed-admin.js",
+    "register-webhook": "node register-webhook.js"
   },
   "dependencies": {
     "@better-auth/cli": "^1.2.7",

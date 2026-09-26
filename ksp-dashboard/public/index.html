@@ -198,6 +198,54 @@
   body.role-viewer .search{display:none;}
   body.role-viewer .task-name{pointer-events:none; color:var(--ink-2);}
   body.role-viewer #adminPanel{display:none;}
+  body.role-viewer .notif-item{pointer-events:none;}
+
+  /* shared tooltip */
+  #tip{position:fixed; z-index:60; pointer-events:none; background:var(--ink); color:var(--surface); font-size:11.5px; line-height:1.5; padding:7px 10px; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,.18); opacity:0; transform:translateY(2px); transition:opacity .1s; max-width:220px;}
+  #tip.show{opacity:1; transform:translateY(0);}
+  #tip b{font-weight:650;}
+  #tip .tk{color:color-mix(in srgb,var(--surface) 55%,transparent);}
+
+  /* graph view (Obsidian-style) */
+  .graph-head{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+  .graph-controls{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .graph-legend{display:flex; gap:12px; flex-wrap:wrap; font-size:11px; color:var(--ink-2);}
+  .graph-legend span{display:inline-flex; align-items:center; gap:5px;}
+  .graph-legend i{width:9px; height:9px; border-radius:99px;}
+  .graph-canvas-wrap{position:relative; margin-top:10px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface-2);}
+  #graphCanvas{display:block; width:100%; height:440px; cursor:grab;}
+  #graphCanvas:active{cursor:grabbing;}
+  .graph-hint{position:absolute; left:12px; bottom:10px; font-size:10.5px; color:var(--ink-muted); background:color-mix(in srgb,var(--surface) 80%,transparent); padding:3px 8px; border-radius:6px; pointer-events:none;}
+  .graph-focus{position:absolute; top:10px; left:12px; font-size:11.5px; color:var(--ink-2); background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:5px 10px; display:none; align-items:center; gap:8px;}
+  .graph-focus.show{display:flex;}
+  .graph-focus b{color:var(--ink);}
+  .graph-focus button{border:0; background:var(--surface-3); color:var(--ink-2); font-family:inherit; font-size:11px; padding:2px 8px; border-radius:5px; cursor:pointer;}
+
+  /* notif bell dropdown */
+  .bell-wrap{position:relative;}
+  .notif-panel{position:absolute; top:42px; right:0; width:340px; max-width:calc(100vw - 32px); background:var(--surface); border:1px solid var(--border); border-radius:12px; box-shadow:0 12px 40px -8px rgba(9,9,11,.22); overflow:hidden; z-index:40; display:none;}
+  .notif-panel.show{display:block;}
+  .notif-head{display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid var(--border);}
+  .notif-head b{font-size:13px;}
+  .notif-head button{border:0; background:transparent; color:var(--c1); font-family:inherit; font-size:11.5px; cursor:pointer; font-weight:550;}
+  .notif-list{max-height:380px; overflow-y:auto;}
+  .notif-item{display:flex; gap:10px; padding:10px 14px; border-bottom:1px solid var(--border); text-decoration:none; align-items:flex-start;}
+  .notif-item:last-child{border-bottom:0;}
+  .notif-item:hover{background:var(--surface-2);}
+  .notif-item.unread{background:color-mix(in srgb,var(--c1) 5%,transparent);}
+  .notif-ic{width:26px; height:26px; border-radius:7px; flex:0 0 26px; display:flex; align-items:center; justify-content:center;}
+  .notif-ic svg{width:14px; height:14px;}
+  .ni-overdue{background:var(--bad-bg); color:var(--bad-ink);}
+  .ni-due{background:var(--warn-bg); color:var(--warn-ink);}
+  .ni-done{background:var(--good-bg); color:var(--good-ink);}
+  .ni-new{background:var(--c1-soft); color:var(--c1);}
+  .notif-body{min-width:0; flex:1;}
+  .notif-title{font-size:12px; color:var(--ink); line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .notif-meta{font-size:10.5px; color:var(--ink-muted); margin-top:3px; display:flex; gap:6px;}
+  .notif-empty{padding:26px 14px; text-align:center; color:var(--ink-muted); font-size:12px;}
+  .flash{animation:flash 1.1s ease-out;}
+  @keyframes flash{0%{background:color-mix(in srgb,var(--c1) 22%,transparent);}100%{background:transparent;}}
+  body.role-viewer #graphFilterNote{display:none;}
 
   /* progress proyek (PROGRESS.md) */
   .prog-row{display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--border);}
@@ -208,12 +256,6 @@
   .prog-main span{font-size:11.5px; color:var(--ink-muted);}
   .prog-status{font-size:11px; font-weight:600; white-space:nowrap; padding-top:4px;}
   .prog-summary{margin-bottom:6px;}
-
-  /* shared tooltip */
-  #tip{position:fixed; z-index:60; pointer-events:none; background:var(--ink); color:var(--surface); font-size:11.5px; line-height:1.5; padding:7px 10px; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,.18); opacity:0; transform:translateY(2px); transition:opacity .1s; max-width:220px;}
-  #tip.show{opacity:1; transform:translateY(0);}
-  #tip b{font-weight:650;}
-  #tip .tk{color:color-mix(in srgb,var(--surface) 55%,transparent);}
 
   .foot{display:flex; justify-content:space-between; align-items:center; padding:14px 2px 2px; font-size:11.5px; color:var(--ink-muted); flex-wrap:wrap; gap:8px;}
   #chart-svg text{font-family:'Inter',sans-serif;}
@@ -227,6 +269,7 @@
 </style>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 
 <div id="tip"></div>
 <div class="app">
@@ -237,6 +280,7 @@
       <a class="nav-item active" href="#top"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</a>
       <a class="nav-item" href="#traffic"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg>Traffic Aktivitas</a>
       <a class="nav-item" href="#heat"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>Heatmap &amp; Status</a>
+      <a class="nav-item" href="#graph"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="7" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="12" cy="12" r="2.4"/><path d="M6.6 7.2l3.7 3.4M17.5 8.3l-3.8 2.6M12 14v.6"/></svg>Peta Tugas (Graph)</a>
       <a class="nav-item" href="#activity"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Aktivitas Terbaru</a>
       <a class="nav-item" href="#progress"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Progress Launch</a>
       <a class="nav-item admin-only" href="#adminPanel"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6z"/><circle cx="12" cy="11" r="2.5"/></svg>Panel Admin</a>
@@ -256,7 +300,13 @@
       <div class="search"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="searchInput" type="text" placeholder="Cari tugas atau workstream…" autocomplete="off"></div>
       <div class="topbar-right">
         <div class="preview-toggle" id="previewToggle"><button class="active" data-role="admin">Pratinjau: Admin</button><button data-role="viewer">Atasan (view)</button></div>
-        <div class="icon-btn" title="Tugas terlambat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg><span class="badge-dot" id="overdueBadge">–</span></div>
+        <div class="bell-wrap">
+          <div class="icon-btn" id="bellBtn" title="Notifikasi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg><span class="badge-dot" id="notifBadge" hidden>0</span></div>
+          <div class="notif-panel" id="notifPanel">
+            <div class="notif-head"><b>Notifikasi</b><button id="markRead">Tandai semua dibaca</button></div>
+            <div class="notif-list" id="notifList"></div>
+          </div>
+        </div>
         <div style="display:flex; align-items:center; gap:9px;"><div class="avatar" id="avatar">KP</div><div class="who"><b id="whoName">Kemal Prabowo</b><span id="whoSub">KSP · AISCHO</span></div><span class="role-chip" id="roleChip">Admin</span></div>
         <div class="icon-btn" id="logoutBtn" title="Keluar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></div>
       </div>
@@ -300,14 +350,31 @@
         </div>
       </div>
 
+      <div class="panel" id="graph">
+        <div class="panel-body" style="padding-top:15px;">
+          <div class="graph-head">
+            <div><h3 style="margin:0; font-size:14px; font-weight:600;">Peta Tugas — Graph View</h3><p style="margin:3px 0 0; font-size:11.5px; color:var(--ink-muted);">Klik simpul cabang (workstream) untuk fokus. Seret untuk atur, scroll untuk zoom. <span id="graphFilterNote">Hasil pencarian ikut tersorot.</span></p></div>
+            <div class="graph-controls">
+              <div class="graph-legend">
+                <span><i style="background:var(--good)"></i>Selesai</span>
+                <span><i style="background:var(--warn)"></i>Dikerjakan</span>
+                <span><i style="background:var(--c1)"></i>Belum</span>
+                <span><i style="background:var(--bad)"></i>Terlambat</span>
+              </div>
+              <button class="btn btn-sm btn-ghost" id="graphReset">Reset</button>
+            </div>
+          </div>
+          <div class="graph-canvas-wrap">
+            <canvas id="graphCanvas"></canvas>
+            <div class="graph-focus" id="graphFocus"></div>
+            <div class="graph-hint">Hover simpul untuk detail · klik cabang untuk isolasi</div>
+          </div>
+        </div>
+      </div>
+
       <div class="panel" id="activity">
         <div class="panel-head"><div><h3>Aktivitas Terbaru</h3><p>Tugas dengan pembaruan paling akhir · <span id="rowCount"></span></p></div></div>
         <div class="table-wrap"><table><thead><tr><th>Workstream</th><th>Tugas</th><th>Status</th><th>Update</th><th>List</th></tr></thead><tbody id="activityBody"></tbody></table></div>
-      </div>
-
-      <div class="panel" id="progress">
-        <div class="panel-head"><div><h3>Progress Launch Proyek</h3><p id="progressSub">Dibaca otomatis dari PROGRESS.md</p></div><span class="pill pill-todo" id="progressPill">memuat…</span></div>
-        <div class="panel-body" id="progressBody"></div>
       </div>
 
       <div class="row-bottom">
@@ -340,6 +407,11 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="panel" id="progress">
+        <div class="panel-head"><div><h3>Progress Launch Proyek</h3><p id="progressSub">Dibaca otomatis dari PROGRESS.md</p></div><span class="pill pill-todo" id="progressPill">memuat…</span></div>
+        <div class="panel-body" id="progressBody"></div>
       </div>
 
       <div class="foot"><span>Dibangun untuk KSP · AL-WILDAN ISLAMIC SCHOOL HOLDING</span><span id="sourceLink">Sumber: ClickUp — Workspace AIO-KSP</span></div>
@@ -391,7 +463,6 @@ function render(data){
   const openTotal=t.todo+t.inProgress;
   const overduePct=openTotal?Math.round((t.overdue/openTotal)*100):0;
   document.getElementById('lastSync').textContent=new Date(data.generatedAt).toLocaleString('id-ID',{dateStyle:'long',timeStyle:'short'})+' WIB';
-  document.getElementById('overdueBadge').textContent=t.overdue>99?'99+':t.overdue;
   document.getElementById('sourceLink').textContent=`Sumber: ClickUp — Workspace ${data.workspace} / List "${data.list}"`;
   const aUp='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>';
   const aDn='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 7l10 10M17 17H9M17 17V9"/></svg>';
@@ -406,6 +477,8 @@ function render(data){
   drawChart(data.weekly);
   drawHeat(data.heat);
   drawDonut(data.totals);
+  renderGraph(data);
+  renderNotifications(data);
   const feed=data.recent.slice(0,6);
   document.getElementById('feedCount').textContent=`${data.recent.length} kejadian terbaru`;
   document.getElementById('feedList').innerHTML=feed.map(r=>{const dc=r.status==='done'?'var(--good)':r.status==='progress'?'var(--warn)':'var(--ink-muted)';return `<div class="feed-item"><span class="feed-dot" style="background:${dc}"></span><span class="feed-text"><b>${r.cat}</b> — ${r.name}</span><span class="feed-time">${r.time}</span></div>`;}).join('');
@@ -571,15 +644,24 @@ function setSync(state){
   else if(state==='refresh'){txt.textContent='Memperbarui…';}
   else{dot.style.background='var(--ink-muted)';txt.textContent='Mode pratinjau (snapshot)';}
 }
+let lastVersion=0, realtimeStarted=false;
 function startRealtime(){
-  // 1) SSE instan (jika server mendukung webhook ClickUp)
+  if(realtimeStarted) return; realtimeStarted=true;
+  // 1) SSE instan — didorong server saat webhook ClickUp memicu perubahan (1-3 dtk)
   try{
     const es=new EventSource('/api/stream',{withCredentials:true});
     es.addEventListener('update',()=>loadData(true));
-    es.onerror=()=>{}; // biarkan polling menjadi cadangan
+    es.onerror=()=>{}; // biarkan version-poll jadi cadangan
   }catch(e){}
-  // 2) auto-poll tiap 30 detik sebagai cadangan andal
-  setInterval(()=>loadData(true),30000);
+  // 2) version-poll tiap 3 detik — murah (tanpa panggil ClickUp), hanya reload bila berubah
+  setInterval(async()=>{
+    try{
+      const r=await fetch('/api/version',{cache:'no-store',credentials:'include'});
+      if(!r.ok) return;
+      const {v}=await r.json();
+      if(v && v!==lastVersion){ lastVersion=v; loadData(true); }
+    }catch(e){}
+  },3000);
 }
 
 async function loadData(isRefresh){
@@ -587,7 +669,7 @@ async function loadData(isRefresh){
   try{
     const res=await fetch('/api/dashboard-data',{cache:'no-store',credentials:'include'});
     if(res.status===401){window.location.href='/login.html';return;}
-    if(res.ok){ serverMode=true; DATA=await res.json(); render(DATA); if(!isRefresh){await fetchMe(); startRealtime();} setSync('live'); return; }
+    if(res.ok){ serverMode=true; DATA=await res.json(); lastVersion=DATA.v||lastVersion; render(DATA); if(isRefresh) flashLive(); if(!isRefresh){await fetchMe(); startRealtime();} setSync('live'); return; }
   }catch(e){}
   // fallback: statis (pratinjau)
   serverMode=false; DATA=SNAPSHOT; render(DATA); setSync('static');
@@ -600,6 +682,100 @@ async function loadData(isRefresh){
   ]);
 }
 document.querySelectorAll('#previewToggle button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#previewToggle button').forEach(x=>x.classList.remove('active'));b.classList.add('active');applyRole(b.dataset.role);}));
+
+function flashLive(){ const g=document.getElementById('statGrid'); if(!g)return; g.classList.remove('flash'); void g.offsetWidth; g.classList.add('flash'); }
+
+/* ================= NOTIFIKASI ================= */
+const NI={
+  overdue:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  due:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg>',
+  done:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>',
+  new:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'
+};
+const NLABEL={overdue:'Terlambat',due:'Jatuh tempo',done:'Selesai',new:'Tugas baru'};
+function relTs(ts){const m=Math.round((Date.now()-ts)/60000);if(m<1)return'baru saja';if(m<60)return m+' menit lalu';if(m<1440)return Math.round(m/60)+' jam lalu';return Math.round(m/1440)+' hari lalu';}
+function getNotifications(data){
+  if(data.notifications&&data.notifications.length) return data.notifications;
+  const now=Date.now(); const types=['overdue','overdue','due','done','new','new','due','done'];
+  return data.recent.map((r,i)=>({type:r.status==='done'?'done':types[i%types.length],title:r.name,cat:r.cat,ts:now-(i+1)*5400e3,url:r.url}));
+}
+let lastReadTs=0; try{lastReadTs=Number(localStorage.getItem('ksp_notif_read')||0);}catch(e){}
+function renderNotifications(data){
+  const items=getNotifications(data);
+  const unread=items.filter(n=>n.ts>lastReadTs).length;
+  const badge=document.getElementById('notifBadge');
+  if(unread>0){badge.hidden=false;badge.textContent=unread>99?'99+':unread;}else{badge.hidden=true;}
+  const list=document.getElementById('notifList');
+  if(!items.length){list.innerHTML='<div class="notif-empty">Belum ada notifikasi.</div>';return;}
+  list.innerHTML=items.map(n=>`<a class="notif-item ${n.ts>lastReadTs?'unread':''}" href="${n.url||'#'}" target="_blank" rel="noopener"><span class="notif-ic ni-${n.type}">${NI[n.type]||''}</span><span class="notif-body"><span class="notif-title">${n.title}</span><span class="notif-meta"><b>${NLABEL[n.type]||''}</b> · ${(n.cat||'').replace(/&amp;/g,'&')} · ${relTs(n.ts)}</span></span></a>`).join('');
+}
+document.getElementById('bellBtn').addEventListener('click',e=>{e.stopPropagation();document.getElementById('notifPanel').classList.toggle('show');});
+document.addEventListener('click',e=>{if(!e.target.closest('.bell-wrap'))document.getElementById('notifPanel').classList.remove('show');});
+document.getElementById('markRead').addEventListener('click',()=>{lastReadTs=Date.now();try{localStorage.setItem('ksp_notif_read',String(lastReadTs));}catch(e){}renderNotifications(DATA);});
+
+/* ================= GRAPH VIEW (Obsidian-style) ================= */
+const GRAPH={sim:null,nodes:[],links:[],by:new Map(),t:null,zoom:null,focus:null,hover:null,search:'',w:0,h:0,dpr:1};
+let _graphCache=null;
+function getGraph(data){
+  if(data.graph&&data.graph.nodes) return data.graph;
+  if(_graphCache) return _graphCache;
+  const nodes=[{id:'root',label:data.workspace,type:'root'}]; const links=[];
+  const ratios=[['done',data.totals.complete],['progress',data.totals.inProgress],['overdue',data.totals.overdue],['todo',Math.max(0,data.totals.todo-data.totals.overdue)]];
+  const pool=[]; ratios.forEach(([s,n])=>{for(let i=0;i<n;i++)pool.push(s);}); let pi=0; const pick=()=>pool[(pi++)%(pool.length||1)]||'todo';
+  data.workstreams.forEach((w,wi)=>{const wsId='ws:'+wi;nodes.push({id:wsId,label:w.name.replace(/&amp;/g,'&'),type:'ws'});links.push({source:'root',target:wsId});for(let i=0;i<w.count;i++){const id=wsId+':t'+i;nodes.push({id,label:w.name.replace(/&amp;/g,'&')+' #'+(i+1),type:'task',ws:wsId,status:pick()});links.push({source:wsId,target:id});}});
+  _graphCache={nodes,links}; return _graphCache;
+}
+function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888';}
+function nodeRadius(n){return n.type==='root'?9:n.type==='ws'?6:3;}
+function nodeColor(n){if(n.type==='root')return cssv('--ink');if(n.type==='ws')return cssv('--ink-3');return n.status==='done'?cssv('--good'):n.status==='progress'?cssv('--warn'):n.status==='overdue'?cssv('--bad'):cssv('--c1');}
+function sizeCanvas(c){const dpr=Math.min(2,window.devicePixelRatio||1);const r=c.getBoundingClientRect();GRAPH.w=r.width||800;GRAPH.h=r.height||440;GRAPH.dpr=dpr;c.width=GRAPH.w*dpr;c.height=GRAPH.h*dpr;}
+function toGraph(px,py){return GRAPH.t.invert([px,py]);}
+function findNode(px,py){const[gx,gy]=GRAPH.t.invert([px,py]);let best=null,bd=Infinity;for(const n of GRAPH.nodes){const dx=n.x-gx,dy=n.y-gy,d=dx*dx+dy*dy,rr=(nodeRadius(n)+5)**2;if(d<rr&&d<bd){bd=d;best=n;}}return best;}
+function nodeTip(n){if(n.type==='root')return '<b>'+n.label+'</b><br><span class="tk">Pusat workspace</span>';if(n.type==='ws'){const c=GRAPH.nodes.filter(x=>x.type==='task'&&x.ws===n.id).length;return '<b>'+n.label+'</b><br><span class="tk">'+c+' tugas · klik untuk fokus</span>';}const sl={done:'Selesai',progress:'Dikerjakan',overdue:'Terlambat',todo:'Belum mulai'};return '<b>'+n.label+'</b><br><span class="tk">'+(sl[n.status]||'')+'</span>';}
+function isActive(n,q){if(GRAPH.focus){if(n.id==='root'||n.id===GRAPH.focus)return true;if(n.type==='task'&&n.ws===GRAPH.focus)return true;return false;}if(q){return (n.label||'').toLowerCase().includes(q)||n.type!=='task';}return true;}
+function draw(){
+  const c=document.getElementById('graphCanvas'); if(!c||!GRAPH.sim)return;
+  const ctx=c.getContext('2d'); const {w,h,dpr,t}=GRAPH; const q=GRAPH.search.toLowerCase();
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h); ctx.translate(t.x,t.y); ctx.scale(t.k,t.k);
+  ctx.lineWidth=0.6;
+  GRAPH.links.forEach(l=>{const a=l.source,b=l.target;const on=isActive(a,q)&&isActive(b,q);ctx.strokeStyle=on?'rgba(120,130,150,0.28)':'rgba(120,130,150,0.05)';ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();});
+  GRAPH.nodes.forEach(n=>{const on=isActive(n,q);const hov=GRAPH.hover&&GRAPH.hover.id===n.id;ctx.globalAlpha=on?1:0.1;ctx.beginPath();ctx.arc(n.x,n.y,nodeRadius(n)*(hov?1.6:1),0,6.2832);ctx.fillStyle=nodeColor(n);ctx.fill();if(n.type!=='task'){ctx.lineWidth=1.2;ctx.strokeStyle=cssv('--surface');ctx.stroke();}ctx.globalAlpha=1;});
+  ctx.fillStyle=cssv('--ink-2'); ctx.font='600 10px Inter,sans-serif'; ctx.textAlign='center';
+  GRAPH.nodes.forEach(n=>{const hov=GRAPH.hover&&GRAPH.hover.id===n.id;if(n.type==='task'&&!hov)return;if(!isActive(n,q))return;const lbl=n.type==='task'?(n.label.length>26?n.label.slice(0,26)+'…':n.label):n.label;ctx.fillText(lbl,n.x,n.y-nodeRadius(n)-4);});
+  ctx.setTransform(1,0,0,1,0,0);
+}
+function setFocus(id){GRAPH.focus=id;const fb=document.getElementById('graphFocus');if(id){const ws=GRAPH.by.get(id);fb.classList.add('show');fb.innerHTML='Fokus: <b>'+(ws?ws.label:id)+'</b> <button id="clearFocus">tampilkan semua</button>';fb.querySelector('#clearFocus').onclick=()=>setFocus(null);}else fb.classList.remove('show');draw();}
+function initGraph(g,c){
+  GRAPH.nodes=g.nodes.map(d=>({...d})); GRAPH.links=g.links.map(d=>({...d}));
+  GRAPH.by=new Map(GRAPH.nodes.map(n=>[n.id,n])); GRAPH.t=d3.zoomIdentity; sizeCanvas(c);
+  GRAPH.sim=d3.forceSimulation(GRAPH.nodes)
+    .force('link',d3.forceLink(GRAPH.links).id(d=>d.id).distance(l=>l.source.type==='root'?70:24).strength(0.55))
+    .force('charge',d3.forceManyBody().strength(-24))
+    .force('center',d3.forceCenter(GRAPH.w/2,GRAPH.h/2))
+    .force('collide',d3.forceCollide().radius(d=>nodeRadius(d)+2))
+    .on('tick',draw);
+  const sel=d3.select(c);
+  sel.call(d3.drag().container(c).subject(ev=>findNode(ev.x,ev.y))
+    .on('start',ev=>{if(!ev.active)GRAPH.sim.alphaTarget(0.2).restart();if(ev.subject){ev.subject.fx=ev.subject.x;ev.subject.fy=ev.subject.y;}})
+    .on('drag',ev=>{if(ev.subject){const p=toGraph(ev.x,ev.y);ev.subject.fx=p[0];ev.subject.fy=p[1];}})
+    .on('end',ev=>{if(!ev.active)GRAPH.sim.alphaTarget(0);if(ev.subject){ev.subject.fx=null;ev.subject.fy=null;}}));
+  GRAPH.zoom=d3.zoom().scaleExtent([0.2,6]).on('zoom',ev=>{GRAPH.t=ev.transform;draw();});
+  sel.call(GRAPH.zoom);
+  c.onmousemove=ev=>{const r=c.getBoundingClientRect();const n=findNode(ev.clientX-r.left,ev.clientY-r.top);GRAPH.hover=n;c.style.cursor=n?(n.type==='task'?'pointer':'grab'):'grab';if(n)showTip(nodeTip(n),ev.clientX,ev.clientY);else hideTip();draw();};
+  c.onmouseleave=()=>{GRAPH.hover=null;hideTip();draw();};
+  c.onclick=ev=>{const r=c.getBoundingClientRect();const n=findNode(ev.clientX-r.left,ev.clientY-r.top);if(!n)return;if(n.type==='ws')setFocus(n.id);else if(n.type==='root')setFocus(null);else if(n.type==='task'&&n.url&&!document.body.classList.contains('role-viewer'))window.open(n.url,'_blank','noopener');};
+  GRAPH.sim.alpha(1).restart();
+}
+function renderGraph(data){
+  const canvas=document.getElementById('graphCanvas'); if(!canvas)return;
+  if(typeof d3==='undefined'||!window.d3){document.querySelector('.graph-canvas-wrap').innerHTML='<div style="padding:44px;text-align:center;color:var(--ink-muted);font-size:12px;">Graph memerlukan pustaka d3 (butuh koneksi internet ke CDN).</div>';return;}
+  const g=getGraph(data);
+  if(!GRAPH.sim||GRAPH.nodes.length!==g.nodes.length){initGraph(g,canvas);}
+  else{const m=new Map(g.nodes.map(n=>[n.id,n]));GRAPH.nodes.forEach(n=>{const u=m.get(n.id);if(u&&u.status)n.status=u.status;});draw();}
+}
+document.getElementById('searchInput').addEventListener('input',e=>{GRAPH.search=e.target.value.trim();if(GRAPH.sim)draw();});
+document.getElementById('graphReset').addEventListener('click',()=>{setFocus(null);GRAPH.search='';const inp=document.getElementById('searchInput');if(GRAPH.zoom){d3.select(document.getElementById('graphCanvas')).call(GRAPH.zoom.transform,d3.zoomIdentity);}GRAPH.t=d3.zoomIdentity;if(GRAPH.sim)GRAPH.sim.alpha(0.4).restart();});
+window.addEventListener('resize',()=>{const c=document.getElementById('graphCanvas');if(!c||!GRAPH.sim)return;sizeCanvas(c);GRAPH.sim.force('center',d3.forceCenter(GRAPH.w/2,GRAPH.h/2));GRAPH.sim.alpha(0.25).restart();});
 
 /* ---------- progress launch (PROGRESS.md) ---------- */
 const PROG_STYLE={

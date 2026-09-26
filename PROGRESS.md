@@ -26,6 +26,7 @@ untuk proyek **KSP Landing Page / Dashboard Traffic Pekerjaan KSP**.
 | 12 | Panel login "better auth" (simple & elegan) | ✅ Selesai | Login page + session cookie, proteksi seluruh dashboard |
 | 13 | Review build external Claude vs build saat ini | ✅ Selesai | Keputusan: adopsi build external (Better Auth) sebagai basis deploy |
 | 14 | Adopsi sistem Better Auth (external) sebagai basis deploy | ✅ Selesai | Merge ke `ksp-dashboard/`, backport Progress panel + Docker + rate-limit |
+| 15 | Update terbaru (external): Graph, Notifikasi, webhook instan | ✅ Selesai | Di-merge ke `ksp-dashboard/` + backport Progress/rate-limit/trust proxy |
 
 ---
 
@@ -229,6 +230,30 @@ Claude) yang di-merge ke dalam `ksp-dashboard/` sebagai basis:
   native karena binary node ter-tag `com.apple.provenance` (Data Protection
   macOS) → dipakai **Node 22 LTS** (nvm; prebuilt tersedia), selaras dengan
   `node:22-bookworm-slim` di Dockerfile.
+
+### T15 — Update terbaru (Graph, Notifikasi, Real-time) (SELESAI)
+
+Update eksternal terbaru di folder `UPDATE/` di-merge ke `ksp-dashboard/` sbg
+basis deploy, dengan re-backport fitur sebelumnya:
+
+- **Peta Tugas (Graph)** — grafik interaktif ala Obsidian (root → workstream →
+  tugas, d3 v7 CDN), klik cabang fokus, seret/zoom, sorotan hasil pencarian.
+- **Notifikasi** — lonceng: terlambat, jatuh tempo ≤7 hari, baru selesai,
+  tugas baru (`data.notifications`, partisi 30).
+- **Update instan + polling murah** — `GET /api/version` (browser poll 3 dtk,
+  tanpa panggil ClickUp), `stempel v` di cache, `REFRESH_SECONDS` (min 10 dtk),
+  dan **`register-webhook.js`** (`npm run register-webhook`) utk webhook
+  ClickUp 1-3 dtk → SSE `/api/stream`.
+- Backport dipertahankan: `trust proxy`, rate-limit login (5 gagal/15 mnt),
+  panel **Progress Launch** + `GET /api/progress` + `PROGRESS_FILE`.
+- Deploy di-update: `.env.prod.example` & `docker-compose.yml`
+  (`CLICKUP_TEAM_ID`, `REFRESH_SECONDS`, `CLICKUP_WEBHOOK_SECRET`); README
+  diperbarui.
+- **Verifikasi (Node 22)**: login admin `kemal@alwildan.id` → 200; `/api/me`
+  role admin; `/api/version` 200 `{"v":0}`; `/api/progress` 200 (14 tahapan,
+  11 done); `/`→302 tanpa login; `/api/version`/`/api/progress` → 401 tanpa
+  login; rate-limit 6× gagal → 429; `/api/dashboard-data` → 503 (token ClickUp
+  masih invalid). `index.html` berisi gabungan graph+notif+version+progress.
 
 ---
 

@@ -31,7 +31,11 @@ app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 const CLICKUP_TOKEN = process.env.CLICKUP_TOKEN || '';
 const CLICKUP_LIST_ID = process.env.CLICKUP_LIST_ID || '901817330442';
-const REFRESH_MS = Number(process.env.REFRESH_MINUTES || 5) * 60 * 1000;
+// Interval refresh cache dari ClickUp. REFRESH_SECONDS diprioritaskan (floor 10 dtk
+// utk lindungi rate-limit ClickUp). Untuk update INSTAN 1-3 dtk, pakai webhook.
+const REFRESH_MS = process.env.REFRESH_SECONDS
+  ? Math.max(10, Number(process.env.REFRESH_SECONDS)) * 1000
+  : Number(process.env.REFRESH_MINUTES || 5) * 60 * 1000;
 const WEBHOOK_SECRET = process.env.CLICKUP_WEBHOOK_SECRET || '';
 // Sumber tunggal progres proyek (panel Progress Launch). Default: PROGRESS.md
 // di folder induk ksp-dashboard/. Di Docker di-override lewat PROGRESS_FILE.
@@ -196,20 +200,58 @@ function buildDashboardData(tasks, listName) {
   const topSum = workstreams.reduce((s, w) => s + w.count, 0);
   if (total - topSum > 0) workstreams.push({ name: 'Lainnya', count: total - topSum });
 
-  const recent = tasks.slice(0, 12).map(t => {
-    const status = t.status?.status?.toLowerCase() === 'complete' ? 'done'
-      : t.status?.status?.toLowerCase() === 'in progress' ? 'progress' : 'todo';
-    const mins = Math.round((now - Number(t.date_updated)) / 60000);
-    const time = mins < 60 ? `${mins} menit lalu` : mins < 1440 ? `${Math.round(mins / 60)} jam lalu` : `${Math.round(mins / 1440)} hari lalu`;
-    const cat = (t.tags && t.tags[0]?.name) || (t.name.includes(':') ? t.name.split(':')[0].trim() : 'Umum');
-    return { cat, name: t.name, status, time, url: t.url };
-  });
+  const wsOf = t => ((t.tags && t.tags[0]?.name) || (t.name.includes(':') ? t.name.split(':')[0].trim() : 'Lainnya')).slice(0, 40);
+  const statusOf = t => {
+    const s = t.status?.status?.toLowerCase();
+    if (s === 'complete') return 'done';
+    if (s === 'in progress') return 'progress';
+    if (t.due_date && Number(t.due_date) <= now) return 'overdue';
+    return 'todo';
+  };
+  const relTime = ms => {
+    const mins = Math.round((now - ms) / 60000);
+    if (mins < 1) return 'baru saja';
+    if (mins < 60) return `${mins} menit lalu`;
+    if (mins < 1440) return `${Math.round(mins / 60)} jam lalu`;
+    return `${Math.round(mins / 1440)} hari lalu`;
+  };
+
+  const recent = tasks.slice(0, 12).map(t => ({
+    cat: wsOf(t), name: t.name, status: t.status?.status?.toLowerCase() === 'complete' ? 'done'
+      : t.status?.status?.toLowerCase() === 'in progress' ? 'progress' : 'todo',
+    time: relTime(Number(t.date_updated)), url: t.url,
+  }));
+
+  // Graph ala Obsidian: root -> workstream -> task
+  const gnodes = [{ id: 'root', label: 'AIO-KSP', type: 'root' }];
+  const gseen = new Set();
+  const glinks = [];
+  for (const t of tasks) {
+    const ws = wsOf(t), wsId = 'ws:' + ws;
+    if (!gseen.has(wsId)) { gseen.add(wsId); gnodes.push({ id: wsId, label: ws, type: 'ws' }); glinks.push({ source: 'root', target: wsId }); }
+    gnodes.push({ id: t.id, label: t.name, type: 'task', ws: wsId, status: statusOf(t), url: t.url });
+    glinks.push({ source: wsId, target: t.id });
+  }
+  const graph = { nodes: gnodes, links: glinks };
+
+  // Notifikasi: terlambat, jatuh tempo ≤7 hari, selesai baru, tugas baru
+  const notifications = [];
+  for (const t of tasks) {
+    const s = t.status?.status?.toLowerCase();
+    const due = Number(t.due_date), created = Number(t.date_created), closed = Number(t.date_closed), updated = Number(t.date_updated);
+    if (s !== 'complete' && due && due <= now) notifications.push({ type: 'overdue', title: t.name, cat: wsOf(t), ts: updated || due, url: t.url });
+    else if (s !== 'complete' && due && due > now && due <= sevenDays) notifications.push({ type: 'due', title: t.name, cat: wsOf(t), ts: due, url: t.url });
+    if (s === 'complete' && closed && now - closed < 3 * 864e5) notifications.push({ type: 'done', title: t.name, cat: wsOf(t), ts: closed, url: t.url });
+    if (created && now - created < 3 * 864e5) notifications.push({ type: 'new', title: t.name, cat: wsOf(t), ts: created, url: t.url });
+  }
+  notifications.sort((a, b) => b.ts - a.ts);
 
   return {
     generatedAt: new Date(now).toISOString(),
     workspace: 'AIO-KSP', list: listName || 'List',
     totals: { total, complete, inProgress, todo, overdue, dueNext7d },
-    weekly: weeks, heat, workstreams, recent,
+    weekly: weeks, heat, workstreams, recent, graph,
+    notifications: notifications.slice(0, 30),
   };
 }
 
@@ -218,8 +260,11 @@ async function refreshCache() {
     const tasks = await clickupFetchAllTasks(CLICKUP_LIST_ID);
     const next = buildDashboardData(tasks, 'List');
     const changed = !cache.data || cache.data.totals.total !== next.totals.total
-      || JSON.stringify(cache.data.recent) !== JSON.stringify(next.recent);
-    cache = { data: next, fetchedAt: Date.now() };
+      || JSON.stringify(cache.data.recent) !== JSON.stringify(next.recent)
+      || JSON.stringify(cache.data.notifications) !== JSON.stringify(next.notifications);
+    const ts = Date.now();
+    next.v = ts;                       // stempel versi (dipakai /api/version & browser)
+    cache = { data: next, fetchedAt: ts };
     console.log(`[ksp-dashboard] cache refreshed: ${tasks.length} tugas @ ${new Date().toISOString()}`);
     if (changed) broadcast('update'); // dorong perubahan ke browser
   } catch (err) {
@@ -242,6 +287,9 @@ app.get('/api/dashboard-data', requireAuth, async (req, res) => {
 // Info user login (untuk sambutan + role di dashboard).
 app.get('/api/me', requireAuth, (req, res) =>
   res.json({ email: req.user.email, name: req.user.name, role: req.user.role || 'viewer' }));
+
+// Cek versi data — MURAH (tanpa panggil ClickUp). Browser poll ini tiap 3 detik.
+app.get('/api/version', requireAuth, (req, res) => res.json({ v: cache.fetchedAt }));
 
 // Stream real-time (Server-Sent Events) — DIKUNCI.
 app.get('/api/stream', requireAuth, (req, res) => {
