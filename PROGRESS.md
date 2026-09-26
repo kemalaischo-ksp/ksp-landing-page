@@ -30,6 +30,7 @@ untuk proyek **KSP Landing Page / Dashboard Traffic Pekerjaan KSP**.
 | 16 | Update #2 (external): Tugas klikable, modal, filter workstream, search popup | ✅ Selesai | Merge `UPDATE/U#2/` + backport Progress/rate-limit/trust proxy |
 | 17 | Update #3 (external): Tulis ke ClickUp — ubah status & buat tugas | ✅ Selesai | Merge `UPDATE/U#3/` + backport Progress/rate-limit/trust proxy |
 | 18 | Fitur baru: Bulk edit status (checklist), Rekap PDF/JPG, Timeline (Gantt) | ✅ Selesai | Draft dulu di `U_DRAFT_OUTPUT UPD/` → timpa `ksp-dashboard/` |
+| 19 | Harden keamanan backend: headers, rate-limit API, CSRF, body limit | ✅ Selesai | Draft → timpa → uji curl lulus |
 
 ---
 
@@ -323,6 +324,27 @@ lalu ditimpa ke `ksp-dashboard/`. Tiga fitur ditambahkan:
 - **Verifikasi (Node 22)**: bulk tanpa login → 401; viewer → 403; ids kosong →
   400; admin (token invalid) → 502 dengan detail gagal per-id; login/`/`/
   `/api/progress` 200. Sintaks server & inline-JS lolos `node --check`.
+
+### T19 — Harden keamanan backend (SELESAI)
+
+Paska mengangai keamanan makin diimplementasi (draft → timpa → uji curl):
+
+- **Security headers** (blok itu ternyata dummy dari original -> kini mewajib):
+  `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN` +
+  `CSP frame-ancestors 'self'` (anti klikjacking), `Referrer-Policy`,
+  `Permissions-Policy` (cam/mic/geo blokir), `Strict-Transport-Security`
+  (HSTS 1 tahun), dan `app.disable('x-powered-by')` (tak lagi leperi version
+  Express).
+- **Rate limit generik per IP** utk seluruh `/api/*` (300 permintaan/60 detik)
+  — proteksi brute-force/abuse, di samping rate-limit login 5/15 menit.
+- **CSRF origin-check** — permintaan state-changing (POST/PATCH/PUT/DELETE)
+  di `/api/*` yang datang dengan `Origin` asing → 403; same-origin/trusted
+  (BETTER_AUTH_URL + TRUSTED_ORIGINS) → jalan; request server-to-server
+  (webhook/curl) tanpa Origin → jalan.
+- **Body limit** — `express.json({limit:'128kb'})` & webhook raw `512kb`
+  (anti payload override/DoS).
+- Uji: headers tersaji; POST /api/task dgn `Origin: https://evil.example` →
+  403; login same-origin → 200; dashboard-data ok.
 
 ---
 

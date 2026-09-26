@@ -157,7 +157,10 @@ Update aplikasi: `rsync ... ; docker compose up -d --build`.
 
 - **Tautan langsung** — tombol "Traffic Pekerjaan" → `https://ksp.office-alwildan.id`
   (pengunjung diminta login dulu).
-- **Iframe** — hanya bila perlu; login tetap berlaku di dalam iframe.
+- **Iframe** — dari masukan keamanan (T19) kini **diblokir default**
+  (`X-Frame-Options: SAMEORIGIN` + `CSP frame-ancestors 'self'`). Bila landing
+  page masih butuh embed, ubah `frame-ancestors 'self'` ke
+  `frame-ancestors 'self' https://<domain-landing>` di `server.js`.
 
 ## Menyesuaikan sumber data
 

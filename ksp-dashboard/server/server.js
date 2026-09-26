@@ -28,6 +28,7 @@ const app = express();
 // Berjalan di belakang reverse proxy (Caddy/cloudflared/Nginx) di VPS —
 // agar req.secure & cookie sesi benar saat akses via HTTPS.
 app.set('trust proxy', 1);
+app.disable('x-powered-by');
 const PORT = process.env.PORT || 3000;
 const CLICKUP_TOKEN = process.env.CLICKUP_TOKEN || '';
 const CLICKUP_LIST_ID = process.env.CLICKUP_LIST_ID || '901817330442';
@@ -48,6 +49,54 @@ function broadcast(event) {
     try { c.write(`event: ${event}\ndata: {}\n\n`); } catch (e) { /* client pergi */ }
   }
 }
+
+/* =====================================================
+   KEAMANAN basis HTTP (header + rate limit + CSRF)
+===================================================== */
+
+// Security headers. Frame blokir di-embed iframe asing (klikjacking).
+// Bila landing page butuh iframe, tambah origin: "frame-ancestors 'self' https://…"
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader('Content-Security-Policy', "frame-ancestors 'self'");
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000'); // HSTS — efektif atas HTTPS
+  next();
+});
+
+// Rate limit generik per IP utk seluruh /api (proteksi brute-force & abus).
+const API_MAX = 300;        // permintaan maksimal per jendela
+const API_WINDOW_MS = 60 * 1000;
+const apiTries = new Map(); // ip -> { count, resetAt }
+app.use((req, res, next) => {
+  if (!req.path.startsWith('/api/')) return next();
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress || '0.0.0.0';
+  const now = Date.now();
+  let w = apiTries.get(ip);
+  if (!w || w.resetAt < now) { w = { count: 0, resetAt: now + API_WINDOW_MS }; apiTries.set(ip, w); }
+  w.count += 1;
+  if (w.count > API_MAX) return res.status(429).json({ error: 'Rate limited' });
+  next();
+});
+
+// Proteksi CSRF ekstra: permintaan state-changing (POST/PATCH/PUT/DELETE) di
+// /api/* harus datang dari origin yang cocok (same-origin / trusted). Request
+// server-to-server (webhook, curl) tanpa Origin diterenjar langsung.
+app.use((req, res, next) => {
+  if (!/^(POST|PATCH|PUT|DELETE)$/.test(req.method)) return next();
+  if (!req.path.startsWith('/api/')) return next();
+  const origin = (req.headers.origin || '').replace(/\/$/, '');
+  if (!origin) return next();
+  const host = `${req.secure ? 'https' : 'http'}://${req.headers.host || ''}`.replace(/\/$/, '');
+  const trusted = new Set([
+    (process.env.BETTER_AUTH_URL || '').replace(/\/$/, ''),
+    ...(process.env.TRUSTED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean),
+  ].filter(Boolean));
+  if (origin === host || trusted.has(origin)) return next();
+  return res.status(403).json({ error: 'Origin tidak diizinkan' });
+});
 
 /* ---------------- AUTH WIRING (urutan penting) ---------------- */
 
@@ -89,7 +138,7 @@ app.all(/^\/api\/auth\/sign-in\/(?!email)/, toNodeHandler(auth));
 app.all(/^\/api\/auth\//, toNodeHandler(auth));
 
 // 3) Webhook ClickUp — butuh body MENTAH untuk verifikasi tanda tangan (sebelum express.json()).
-app.post('/api/clickup-webhook', express.raw({ type: '*/*' }), async (req, res) => {
+app.post('/api/clickup-webhook', express.raw({ type: '*/*', limit: '512kb' }), async (req, res) => {
   if (WEBHOOK_SECRET) {
     const sig = req.get('X-Signature') || '';
     const expected = crypto.createHmac('sha256', WEBHOOK_SECRET).update(req.body).digest('hex');
@@ -101,7 +150,7 @@ app.post('/api/clickup-webhook', express.raw({ type: '*/*' }), async (req, res) 
 });
 
 // 4) Body parser untuk route selanjutnya.
-app.use(express.json());
+app.use(express.json({ limit: '128kb' }));
 
 // Guard sesi.
 async function requireAuth(req, res, next) {
