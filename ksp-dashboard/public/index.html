@@ -305,40 +305,47 @@
   .bulk-selall{background:var(--surface); color:var(--ink-2); border:1px solid var(--border)!important;}
   .bulk-apply svg{width:13px;height:13px;}
 
-  /* ===== Timeline (Gantt) ===== */
+  /* ===== Timeline (Gantt) — gaya ClickUp ===== */
   .tl-head{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
   .tl-controls{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
   .tl-zoom{display:flex; background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:3px; gap:2px;}
   .tl-zoom button{border:0; background:transparent; padding:4px 10px; border-radius:6px; font-size:11.5px; color:var(--ink-3); cursor:pointer; font-family:inherit; font-weight:500;}
   .tl-zoom button.active{background:var(--surface); color:var(--ink); box-shadow:var(--shadow-sm);}
+  .tl-stepper{display:flex; align-items:center; gap:0; border:1px solid var(--border); border-radius:8px; overflow:hidden;}
+  .tl-stepper button{border:0; background:var(--surface); color:var(--ink-2); width:28px; height:28px; font-size:15px; cursor:pointer; font-family:inherit; display:flex; align-items:center; justify-content:center;}
+  .tl-stepper button:hover{background:var(--surface-2);}
+  .tl-stepper span{font-size:11px; color:var(--ink-3); padding:0 8px; min-width:64px; text-align:center; border-left:1px solid var(--border); border-right:1px solid var(--border);}
   .tl-legend{display:flex; gap:12px; flex-wrap:wrap; font-size:11px; color:var(--ink-2);}
   .tl-legend span{display:inline-flex; align-items:center; gap:5px;}
   .tl-legend i{width:14px; height:8px; border-radius:3px;}
-  .tl-wrap{margin-top:12px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface);}
-  .tl-scroll{overflow-x:auto; overflow-y:hidden;}
+
+  /* area statik yang bisa diatur ukurannya (drag pojok kanan-bawah) */
+  .tl-box{position:relative; margin-top:12px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface); height:560px; min-height:280px; max-height:1400px; resize:vertical;}
+  .tl-scroll{width:100%; height:100%; overflow:auto; position:relative;}
   .tl-inner{position:relative;}
-  .tl-axis{position:relative; height:34px; border-bottom:1px solid var(--border); background:var(--surface-2);}
-  .tl-tick{position:absolute; top:0; height:100%; border-left:1px solid var(--border); padding:5px 0 0 6px; font-size:10px; color:var(--ink-muted); white-space:nowrap;}
-  .tl-tick.month{border-left:1px solid var(--border-2);}
-  .tl-tick.month b{color:var(--ink-2); font-weight:600;}
-  .tl-today{position:absolute; top:0; bottom:0; width:2px; background:var(--bad); z-index:6; box-shadow:0 0 8px 1px color-mix(in srgb,var(--bad) 55%,transparent);}
-  .tl-today .tl-today-dot{position:absolute; top:-1px; left:-4px; width:10px; height:10px; border-radius:99px; background:var(--bad);}
-  .tl-rows{position:relative;}
-  .tl-wsband{display:flex; align-items:center; gap:8px; height:26px; padding:0 12px; background:var(--surface-3); border-bottom:1px solid var(--border); font-size:11px; font-weight:650; color:var(--ink-2); position:sticky; left:0;}
-  .tl-wsband .wc{font-weight:500; color:var(--ink-muted);}
-  .tl-row{position:relative; height:30px; border-bottom:1px solid var(--border);}
-  .tl-row:hover{background:var(--surface-2);}
-  .tl-bar{position:absolute; top:5px; height:20px; border-radius:6px; min-width:8px; display:flex; align-items:center; padding:0 8px; font-size:10.5px; font-weight:550; color:#fff; white-space:nowrap; overflow:hidden; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,.14); isolation:isolate;}
+  /* sumbu tanggal (sticky di atas saat scroll vertikal) */
+  .tl-axis{position:sticky; top:0; z-index:20; height:46px; background:var(--surface); border-bottom:1px solid var(--border-2);}
+  .tl-mn{position:absolute; top:0; height:23px; display:flex; align-items:center; padding-left:8px; font-size:11.5px; font-weight:700; color:var(--ink); border-left:1px solid var(--border-2);}
+  .tl-dy{position:absolute; top:23px; height:23px; display:flex; align-items:flex-start; justify-content:center; padding-top:4px; font-size:10px; color:var(--ink-3); border-left:1px solid var(--border); box-sizing:border-box;}
+  .tl-dy.wend{color:var(--ink-muted);}
+  .tl-dy.first{font-weight:700; color:var(--ink-2);}
+  .tl-canvas{position:relative;}
+  .tl-col{position:absolute; top:0; bottom:0; width:1px; background:var(--border); opacity:.5;}
+  .tl-wend-bg{position:absolute; top:0; bottom:0; background:repeating-linear-gradient(45deg, color-mix(in srgb,var(--ink) 4%,transparent) 0 6px, transparent 6px 12px); pointer-events:none;}
+  .tl-today{position:absolute; top:0; bottom:0; width:2px; background:var(--bad); z-index:15; box-shadow:0 0 8px 1px color-mix(in srgb,var(--bad) 55%,transparent);}
+  .tl-today-dot{position:absolute; top:1px; left:-5px; width:11px; height:11px; border-radius:99px; background:var(--bad); border:2px solid var(--surface); z-index:22;}
+  .tl-bar{position:absolute; height:22px; border-radius:6px; min-width:6px; display:flex; align-items:center; padding:0 8px; font-size:11px; font-weight:600; white-space:nowrap; overflow:hidden; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,.16); isolation:isolate; z-index:5;}
   .tl-bar span{position:relative; z-index:2; overflow:hidden; text-overflow:ellipsis;}
-  /* aliran glowing dinamis di dalam bar */
-  .tl-bar::before{content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(100deg, transparent 20%, rgba(255,255,255,.55) 46%, rgba(255,255,255,.05) 60%, transparent 78%); background-size:220% 100%; transform:translateZ(0); animation:tlflow 2.8s linear infinite;}
+  .tl-bar:hover{filter:brightness(1.04); z-index:12; box-shadow:0 3px 10px rgba(0,0,0,.22);}
+  /* aliran glowing dinamis */
+  .tl-bar::before{content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(100deg, transparent 20%, rgba(255,255,255,.5) 46%, rgba(255,255,255,.04) 60%, transparent 78%); background-size:220% 100%; animation:tlflow 2.8s linear infinite;}
   @keyframes tlflow{0%{background-position:180% 0;}100%{background-position:-80% 0;}}
-  .tl-bar.done::before{animation-duration:6s; opacity:.5;}
-  .tl-bar.progress::before{animation-duration:1.8s;}
-  .tl-bar.overdue{box-shadow:0 0 0 1px color-mix(in srgb,var(--bad) 55%,transparent), 0 0 12px 1px color-mix(in srgb,var(--bad) 45%,transparent); animation:tlpulse 1.8s ease-in-out infinite;}
-  @keyframes tlpulse{0%,100%{box-shadow:0 0 0 1px color-mix(in srgb,var(--bad) 50%,transparent),0 0 8px 0 color-mix(in srgb,var(--bad) 30%,transparent);}50%{box-shadow:0 0 0 1px color-mix(in srgb,var(--bad) 70%,transparent),0 0 16px 3px color-mix(in srgb,var(--bad) 55%,transparent);}}
-  .tl-bar.tl-hi{outline:2px solid var(--ink); outline-offset:1px;}
-  .tl-empty{padding:34px; text-align:center; color:var(--ink-muted); font-size:12.5px;}
+  .tl-bar.done::before{animation-duration:6s; opacity:.4;}
+  .tl-bar.progress::before{animation-duration:1.7s;}
+  .tl-bar.overdue{animation:tlpulse 1.8s ease-in-out infinite;}
+  @keyframes tlpulse{0%,100%{box-shadow:0 0 0 1px color-mix(in srgb,var(--bad) 45%,transparent),0 0 7px 0 color-mix(in srgb,var(--bad) 28%,transparent);}50%{box-shadow:0 0 0 1px color-mix(in srgb,var(--bad) 75%,transparent),0 0 16px 3px color-mix(in srgb,var(--bad) 55%,transparent);}}
+  .tl-empty{padding:40px 20px; text-align:center; color:var(--ink-muted); font-size:12.5px; line-height:1.6;}
+  .tl-resize-hint{position:absolute; right:8px; bottom:4px; font-size:10px; color:var(--ink-muted); pointer-events:none; z-index:25; opacity:.7;}
   @media (prefers-reduced-motion: reduce){ .tl-bar::before{animation:none;} .tl-bar.overdue{animation:none;} }
 
   .foot{display:flex; justify-content:space-between; align-items:center; padding:14px 2px 2px; font-size:11.5px; color:var(--ink-muted); flex-wrap:wrap; gap:8px;}
@@ -620,10 +627,11 @@
             </div>
             <div class="tl-controls">
               <div class="tl-zoom" id="tlZoom"><button data-px="6">Padat</button><button class="active" data-px="12">Normal</button><button data-px="26">Renggang</button></div>
+              <div class="tl-stepper"><button id="tlMinus" title="Perkecil">−</button><span id="tlPxLabel">12 px/hari</span><button id="tlPlus" title="Perbesar">+</button></div>
               <button class="btn btn-sm btn-ghost" id="tlToday">Hari ini</button>
             </div>
           </div>
-          <div class="tl-wrap"><div class="tl-scroll" id="tlScroll"><div class="tl-inner" id="tlInner"></div></div></div>
+          <div class="tl-box" id="tlBox"><div class="tl-scroll" id="tlScroll"><div class="tl-inner" id="tlInner"></div></div><div class="tl-resize-hint">↕ tarik tepi bawah untuk atur tinggi</div></div>
         </div>
       </div>
 
@@ -1710,14 +1718,21 @@ async function loadProgress(){
   }
 }
 
-/* ================= TIMELINE (Gantt) ================= */
+/* ================= TIMELINE (Gantt) — gaya ClickUp ================= */
 let TL_PX=12, TL_DATA=null;
 const DAYMS=864e5;
+const TL_MON=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+function tlHexLum(hex){hex=(hex||'').replace('#','');if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');const r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);if([r,g,b].some(isNaN))return .5;return (0.299*r+0.587*g+0.114*b)/255;}
+function tlTextOn(c){return (typeof c==='string'&&c[0]==='#')?(tlHexLum(c)>0.6?'#14181f':'#ffffff'):'#ffffff';}
+function tlColorMap(){const m={};((DATA&&DATA.statuses)||[]).forEach(s=>{if(s&&s.status&&s.color)m[s.status.toLowerCase()]=s.color;});return m;}
 function renderTimeline(data){
   TL_DATA=data;
-  const inner=document.getElementById('tlInner'); if(!inner)return;
+  const inner=document.getElementById('tlInner'), scroll=document.getElementById('tlScroll'); if(!inner)return;
+  const lbl=document.getElementById('tlPxLabel'); if(lbl)lbl.textContent=TL_PX+' px/hari';
   const src=(data&&data.tasks&&data.tasks.length)?data.tasks:ALLTASKS;
   const now=Date.now();
+  const cmap=tlColorMap();
+  const SC={done:'var(--good)',progress:'var(--warn)',overdue:'var(--bad)',todo:'var(--c1)'};
   const items=[];
   for(const t of (src||[])){
     let start=t.start||t.created||null, end=t.due||null;
@@ -1725,66 +1740,73 @@ function renderTimeline(data){
     if(!start)start=end-2*DAYMS;
     if(!end)end=start+2*DAYMS;
     if(end<start)end=start+DAYMS;
-    items.push({id:t.id,name:t.name,ws:(t.ws||'Lainnya').replace(/&amp;/g,'&'),status:t.status,url:t.url,start,end});
+    const cu=(t.cuStatus||'').toLowerCase();
+    items.push({id:t.id,name:t.name,status:t.status,url:t.url,start,end,color:cmap[cu]||SC[t.status]||SC.todo});
   }
-  if(!items.length){inner.innerHTML='<div class="tl-empty">'+(serverMode?'Belum ada tugas dengan tanggal (mulai / jatuh tempo) di ClickUp untuk ditampilkan di timeline.':'Timeline menampilkan jadwal tugas <b>live dari ClickUp</b>. Saat ini <b>mode pratinjau</b> (server belum terhubung ke ClickUp), jadi tanggal tugas belum tersedia. Akan tampil otomatis begitu token ClickUp aktif.')+'</div>';return;}
+  if(!items.length){inner.style.width='';inner.innerHTML='<div class="tl-empty">'+(serverMode?'Belum ada tugas dengan tanggal (mulai / jatuh tempo) di ClickUp untuk ditampilkan di timeline.':'Timeline menampilkan jadwal tugas <b>live dari ClickUp</b>. Saat ini <b>mode pratinjau</b> — akan tampil otomatis begitu terhubung ke ClickUp.')+'</div>';return;}
+  // rentang tanggal + padding
   let min=Math.min(...items.map(i=>i.start)), max=Math.max(...items.map(i=>i.end));
-  // beri padding & pastikan hari ini masuk
-  min=Math.min(min,now)-2*DAYMS; max=Math.max(max,now)+2*DAYMS;
-  const day0=new Date(min); day0.setHours(0,0,0,0);
-  const start0=day0.getTime();
-  const totalDays=Math.max(1,Math.ceil((max-start0)/DAYMS));
-  const px=TL_PX, width=Math.max(totalDays*px, 600);
+  min=Math.min(min,now); max=Math.max(max,now);
+  const day0=new Date(min); day0.setHours(0,0,0,0); const start0=day0.getTime()-3*DAYMS;
+  const endDay=new Date(max); endDay.setHours(0,0,0,0); const end0=endDay.getTime()+4*DAYMS;
+  const totalDays=Math.max(1,Math.round((end0-start0)/DAYMS));
+  const px=TL_PX;
+  const minW=(scroll?scroll.clientWidth:900)-2;
+  const width=Math.max(totalDays*px, minW);
   const xOf=ms=>((ms-start0)/DAYMS)*px;
-  // groups by workstream
-  const groups={};
-  for(const i of items){(groups[i.ws]=groups[i.ws]||[]).push(i);}
-  const wsNames=Object.keys(groups).sort((a,b)=>groups[b].length-groups[a].length);
-  // axis
-  const perWeek=px<18;
-  let axis='';
-  const MON=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
-  let lastMonth=-1;
-  for(let d=0; d<=totalDays; d++){
+  const rowH=26, barH=22, axisH=46;
+  // === sumbu: bulan + hari + weekend ===
+  let months='', days='', wend='';
+  const monthSpan={};
+  for(let d=0; d<totalDays; d++){
     const date=new Date(start0+d*DAYMS);
-    const isMonthStart=date.getDate()===1;
-    if(perWeek && !(date.getDay()===1) && !isMonthStart) continue;
-    const left=d*px;
-    const mArc=(date.getMonth()!==lastMonth);
-    if(isMonthStart||mArc&&d===0){
-      axis+='<div class="tl-tick month" style="left:'+left+'px"><b>'+MON[date.getMonth()]+' '+date.getFullYear()+'</b></div>';
-      lastMonth=date.getMonth();
-    } else {
-      axis+='<div class="tl-tick" style="left:'+left+'px">'+date.getDate()+'</div>';
-    }
+    const mk=date.getFullYear()+'-'+date.getMonth();
+    if(!monthSpan[mk])monthSpan[mk]={left:d*px,w:0,label:TL_MON[date.getMonth()]+' '+date.getFullYear()};
+    monthSpan[mk].w+=px;
+    const dow=date.getDay(), weekend=(dow===0||dow===6);
+    const showNum=px>=13||date.getDate()===1||dow===1;
+    days+='<div class="tl-dy'+(weekend?' wend':'')+(date.getDate()===1?' first':'')+'" style="left:'+(d*px)+'px;width:'+px+'px">'+(showNum?date.getDate():'')+'</div>';
+    if(weekend)wend+='<div class="tl-wend-bg" style="left:'+(d*px)+'px;width:'+px+'px"></div>';
+  }
+  Object.values(monthSpan).forEach(m=>{months+='<div class="tl-mn" style="left:'+m.left+'px;width:'+m.w+'px">'+m.label+'</div>';});
+  // === lane packing (padat seperti ClickUp) ===
+  items.sort((a,b)=>a.start-b.start||a.end-b.end);
+  const laneEnd=[]; const bufMs=(6/px)*DAYMS;
+  for(const it of items){
+    let placed=-1;
+    for(let l=0;l<laneEnd.length;l++){ if(it.start>=laneEnd[l]+bufMs){placed=l;break;} }
+    if(placed<0){placed=laneEnd.length;laneEnd.push(0);}
+    laneEnd[placed]=it.end; it.lane=placed;
+  }
+  const canvasH=Math.max(laneEnd.length*rowH+6, 120);
+  const stLbl={done:'Selesai',progress:'Dikerjakan',overdue:'Terlambat',todo:'Belum'};
+  let bars='';
+  for(const it of items){
+    const left=xOf(it.start), w=Math.max(14,xOf(it.end)-xOf(it.start));
+    const top=it.lane*rowH+3;
+    const dd=new Date(it.end).toLocaleDateString('id-ID',{day:'2-digit',month:'short'});
+    const ds=new Date(it.start).toLocaleDateString('id-ID',{day:'2-digit',month:'short'});
+    const title=esc(it.name)+' — '+(stLbl[it.status]||'')+' · '+ds+' → '+dd;
+    bars+='<div class="tl-bar '+it.status+'" data-url="'+esc(it.url||'')+'" style="left:'+left+'px;top:'+top+'px;width:'+w+'px;background:'+it.color+';color:'+tlTextOn(it.color)+'" title="'+title+'"><span>'+esc(it.name)+'</span></div>';
   }
   const todayLeft=xOf(now);
-  // rows
-  let rows='';
-  const SC={done:'var(--good)',progress:'var(--warn)',overdue:'var(--bad)',todo:'var(--c1)'};
-  let count=0; const cap=600;
-  for(const ws of wsNames){
-    const arr=groups[ws].sort((a,b)=>a.start-b.start);
-    rows+='<div class="tl-wsband"><span>'+esc(shortWs(ws))+'</span><span class="wc">'+arr.length+' tugas</span></div>';
-    for(const i of arr){
-      if(count++>cap){continue;}
-      const left=xOf(i.start), w=Math.max(8,xOf(i.end)-xOf(i.start));
-      const col=SC[i.status]||SC.todo;
-      const cls='tl-bar '+i.status;
-      const dd=new Date(i.end).toLocaleDateString('id-ID',{day:'2-digit',month:'short'});
-      const title=esc(i.name)+' — '+({done:'Selesai',progress:'Dikerjakan',overdue:'Terlambat',todo:'Belum'}[i.status]||'')+' · tempo '+dd;
-      rows+='<div class="tl-row"><div class="'+cls+'" data-url="'+esc(i.url||'')+'" style="left:'+left+'px;width:'+w+'px;background:'+col+'" title="'+title+'"><span>'+esc(i.name)+'</span></div></div>';
-    }
-  }
-  if(count>cap)rows+='<div class="tl-empty">Menampilkan '+cap+' dari '+items.length+' tugas berjadwal.</div>';
   inner.style.width=width+'px';
-  inner.innerHTML='<div class="tl-axis">'+axis+'<div class="tl-today" style="left:'+todayLeft+'px"><span class="tl-today-dot"></span></div></div><div class="tl-rows">'+rows+'</div>';
+  inner.innerHTML=
+    '<div class="tl-axis" style="width:'+width+'px">'+months+days+'</div>'
+    +'<div class="tl-canvas" style="height:'+canvasH+'px;width:'+width+'px">'+wend+bars+'</div>'
+    +'<div class="tl-today" style="left:'+todayLeft+'px"><div class="tl-today-dot"></div></div>';
   inner.querySelectorAll('.tl-bar').forEach(b=>b.addEventListener('click',()=>{const u=b.dataset.url; if(u&&!document.body.classList.contains('role-viewer'))window.open(u,'_blank','noopener');}));
-  // auto scroll ke hari ini
-  const sc=document.getElementById('tlScroll'); if(sc)sc.scrollLeft=Math.max(0,todayLeft-sc.clientWidth*0.35);
+  if(scroll)scroll.scrollLeft=Math.max(0,todayLeft-scroll.clientWidth*0.4);
 }
-document.getElementById('tlZoom').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('#tlZoom button').forEach(x=>x.classList.remove('active'));b.classList.add('active');TL_PX=Number(b.dataset.px)||12;if(TL_DATA)renderTimeline(TL_DATA);});
-document.getElementById('tlToday').addEventListener('click',()=>{const sc=document.getElementById('tlScroll');const t=document.querySelector('.tl-today');if(sc&&t)sc.scrollLeft=Math.max(0,parseFloat(t.style.left)-sc.clientWidth*0.35);});
+function tlSetPx(px,fromPreset){
+  TL_PX=Math.max(4,Math.min(60,px));
+  if(!fromPreset)document.querySelectorAll('#tlZoom button').forEach(x=>x.classList.remove('active'));
+  if(TL_DATA)renderTimeline(TL_DATA);
+}
+document.getElementById('tlZoom').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('#tlZoom button').forEach(x=>x.classList.remove('active'));b.classList.add('active');tlSetPx(Number(b.dataset.px)||12,true);});
+document.getElementById('tlPlus').addEventListener('click',()=>tlSetPx(TL_PX+4));
+document.getElementById('tlMinus').addEventListener('click',()=>tlSetPx(TL_PX-4));
+document.getElementById('tlToday').addEventListener('click',()=>{const sc=document.getElementById('tlScroll');const t=document.querySelector('.tl-today');if(sc&&t)sc.scrollLeft=Math.max(0,parseFloat(t.style.left)-sc.clientWidth*0.4);});
 
 /* ================= REKAP LAPORAN (PDF / JPG) ================= */
 const reportModal=document.getElementById('reportModal');
