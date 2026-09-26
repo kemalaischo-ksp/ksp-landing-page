@@ -432,3 +432,16 @@ File yang berubah:
     - `PROGRESS.md`
     - `ksp-dashboard/public/index.html`
     - `ksp-dashboard/server/server.js`
+
+### Update otomatis — 26 Sep 2026 23:56
+
+Commit baru:
+
+    **`6815975 feat: bulk edit status (checklist), Rekap laporan PDF/JPG (html2canvas+jsPDF), panel Timeline/Gantt dgn glowing flow; endpoint /api/tasks/status; alur draft U_DRAFT_OUTPUT UPD`**
+
+File yang berubah:
+
+    - `.gitignore`
+    - `PROGRESS.md`
+    - `ksp-dashboard/public/index.html`
+    - `ksp-dashboard/server/server.js`
