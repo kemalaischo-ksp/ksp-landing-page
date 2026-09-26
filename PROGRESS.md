@@ -28,6 +28,7 @@ untuk proyek **KSP Landing Page / Dashboard Traffic Pekerjaan KSP**.
 | 14 | Adopsi sistem Better Auth (external) sebagai basis deploy | ✅ Selesai | Merge ke `ksp-dashboard/`, backport Progress panel + Docker + rate-limit |
 | 15 | Update terbaru (external): Graph, Notifikasi, webhook instan | ✅ Selesai | Di-merge ke `ksp-dashboard/` + backport Progress/rate-limit/trust proxy |
 | 16 | Update #2 (external): Tugas klikable, modal, filter workstream, search popup | ✅ Selesai | Merge `UPDATE/U#2/` + backport Progress/rate-limit/trust proxy |
+| 17 | Update #3 (external): Tulis ke ClickUp — ubah status & buat tugas | ✅ Selesai | Merge `UPDATE/U#3/` + backport Progress/rate-limit/trust proxy |
 
 ---
 
@@ -274,6 +275,28 @@ Update eksternal terbaru dari folder `UPDATE/U#2/` di-merge ke `ksp-dashboard/`
   `/api/version` 200; `/api/progress` 200 (15 tahapan, 12 done, 3 pending);
   `/`→302 tanpa login; API→401 tanpa login; `index.html` 200 berisi
   tasks+modal+wsNav+searchPop+graph+notif+progress.
+
+### T17 — Update #3 (Tulis ke ClickUp: Ubah Status & Buat Tugas) (SELESAI)
+
+Update eksternal terbaru dari folder `UPDATE/U#3/` di-merge ke `ksp-dashboard/`
+(`public/index.html` + `server/server.js`), dengan re-backport fitur:
+
+- **Write API ke ClickUp (role admin saja)**:
+  - `PATCH /api/task/:id/status` — ubah status tugas → langsung ke ClickUp,
+    lalu refresh & dorong via SSE ke semua browser.
+  - `POST /api/task` — buat tugas baru di List (nama, status, due_date,
+    priority 1-4); validasi nama/status/tanggal.
+  - Helper `clickupFetchStatuses` (`data.statuses` = daftar status List utk
+    dropdown), `clickupUpdateTaskStatus`, `clickupCreateTask`.
+- **Frontend** — tombol **"Tambah Tugas"** (`newTaskBtn` + modal `createModal`),
+  dropdown ubah status di modal tugas, toast notifikasi; semua elemen tulis
+  disembunyikan utk role viewer.
+- Backport dipertahankan: `trust proxy`, rate-limit login (5 gagal/15 mnt),
+  panel **Progress Launch** + `GET /api/progress` + `PROGRESS_FILE`.
+- **Verifikasi (Node 22)**: write API tanpa login → 401; utk viewer → 403
+  (`Butuh hak admin`); admin `POST /api/task` → 502 (token ClickUp masih
+  invalid — rute sampai panggil ClickUp); `/api/progress` 200 (17 tahapan,
+  14 done? — lihat tabel); login/`/api/me`/`/api/version` OK.
 
 ---
 

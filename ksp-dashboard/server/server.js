@@ -146,6 +146,41 @@ async function clickupFetchAllTasks(listId) {
   return tasks;
 }
 
+// Status yang tersedia di List (untuk dropdown TO DO / IN PROGRESS / COMPLETE).
+let listStatuses = null; // [{status,color,type,orderindex}]
+async function clickupFetchStatuses(listId) {
+  const res = await fetch(`https://api.clickup.com/api/v2/list/${listId}`, { headers: { Authorization: CLICKUP_TOKEN } });
+  if (!res.ok) throw new Error(`ClickUp list ${res.status}: ${await res.text()}`);
+  const json = await res.json();
+  return (json.statuses || []).map(s => ({ status: s.status, color: s.color, type: s.type, orderindex: s.orderindex }));
+}
+// Ubah status satu tugas di ClickUp.
+async function clickupUpdateTaskStatus(taskId, status) {
+  const res = await fetch(`https://api.clickup.com/api/v2/task/${taskId}`, {
+    method: 'PUT',
+    headers: { Authorization: CLICKUP_TOKEN, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status }),
+  });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json?.err || `ClickUp update ${res.status}`);
+  return json;
+}
+// Buat tugas baru di List.
+async function clickupCreateTask(listId, { name, status, dueDate, priority }) {
+  const body = { name };
+  if (status) body.status = status;
+  if (dueDate) { body.due_date = Number(dueDate); body.due_date_time = false; }
+  if (priority) body.priority = Number(priority); // 1=Urgent 2=High 3=Normal 4=Low
+  const res = await fetch(`https://api.clickup.com/api/v2/list/${listId}/task`, {
+    method: 'POST',
+    headers: { Authorization: CLICKUP_TOKEN, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json?.err || `ClickUp create ${res.status}`);
+  return json;
+}
+
 function isoWeekStart(d) {
   const date = new Date(d);
   const day = (date.getDay() + 6) % 7;
@@ -230,6 +265,7 @@ function buildDashboardData(tasks, listName) {
     const done = t.status?.status?.toLowerCase() === 'complete';
     return {
       id: t.id, name: t.name, ws: wsOf(t), status: st, url: t.url,
+      cuStatus: t.status?.status || null,   // status asli di ClickUp (untuk dropdown)
       due, overdue: !!(due && !done && due <= now),
       dueSoon: !!(due && !done && due > now && due <= sevenDays),
       updated: Number(t.date_updated) || null, time: relTime(Number(t.date_updated)),
@@ -265,12 +301,14 @@ function buildDashboardData(tasks, listName) {
     workspace: 'AIO-KSP', list: listName || 'List',
     totals: { total, complete, inProgress, todo, overdue, dueNext7d },
     weekly: weeks, heat, workstreams, recent, graph, tasks: tasksList,
+    statuses: listStatuses || [],
     notifications: notifications.slice(0, 30),
   };
 }
 
 async function refreshCache() {
   try {
+    if (!listStatuses) { try { listStatuses = await clickupFetchStatuses(CLICKUP_LIST_ID); } catch (e) { console.error('[ksp-dashboard] gagal ambil status List:', e.message); } }
     const tasks = await clickupFetchAllTasks(CLICKUP_LIST_ID);
     const next = buildDashboardData(tasks, 'List');
     const changed = !cache.data || cache.data.totals.total !== next.totals.total
@@ -354,6 +392,43 @@ app.delete('/api/admin/users/:id', requireAuth, requireAdmin, async (req, res) =
     await auth.api.removeUser({ body: { userId: req.params.id }, headers: fromNodeHeaders(req.headers) });
     res.json({ ok: true });
   } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+/* ---------- WRITE API ke ClickUp (role admin saja) ---------- */
+// Ubah status satu tugas → langsung ke ClickUp, lalu refresh & dorong ke semua browser.
+app.patch('/api/task/:id/status', requireAuth, requireAdmin, async (req, res) => {
+  const status = (req.body?.status || '').trim();
+  if (!status) return res.status(400).json({ error: 'Status wajib diisi.' });
+  if (listStatuses && listStatuses.length && !listStatuses.some(s => s.status.toLowerCase() === status.toLowerCase())) {
+    return res.status(400).json({ error: `Status "${status}" tidak ada di List.` });
+  }
+  try {
+    await clickupUpdateTaskStatus(req.params.id, status);
+    await refreshCache();
+    broadcast('update');
+    res.json({ ok: true });
+  } catch (e) { res.status(502).json({ error: e.message || 'Gagal mengubah status di ClickUp.' }); }
+});
+
+// Buat tugas baru di List → langsung ke ClickUp, lalu refresh & dorong ke semua browser.
+app.post('/api/task', requireAuth, requireAdmin, async (req, res) => {
+  const name = (req.body?.name || '').trim();
+  const status = (req.body?.status || '').trim() || undefined;
+  const dueDate = req.body?.dueDate ? Number(req.body.dueDate) : undefined;
+  let priority = req.body?.priority != null && req.body.priority !== '' ? Number(req.body.priority) : undefined;
+  if (priority != null && ![1, 2, 3, 4].includes(priority)) priority = undefined;
+  if (!name) return res.status(400).json({ error: 'Nama tugas wajib diisi.' });
+  if (name.length > 500) return res.status(400).json({ error: 'Nama tugas terlalu panjang (maks. 500 karakter).' });
+  if (dueDate != null && !Number.isFinite(dueDate)) return res.status(400).json({ error: 'Tanggal jatuh tempo tidak valid.' });
+  if (status && listStatuses && listStatuses.length && !listStatuses.some(s => s.status.toLowerCase() === status.toLowerCase())) {
+    return res.status(400).json({ error: `Status "${status}" tidak ada di List.` });
+  }
+  try {
+    const t = await clickupCreateTask(CLICKUP_LIST_ID, { name, status, dueDate, priority });
+    await refreshCache();
+    broadcast('update');
+    res.json({ ok: true, id: t.id, url: t.url });
+  } catch (e) { res.status(502).json({ error: e.message || 'Gagal membuat tugas di ClickUp.' }); }
 });
 
 app.get('/api/health', (req, res) => res.json({ ok: true, cachedAt: cache.fetchedAt, clients: sseClients.size }));

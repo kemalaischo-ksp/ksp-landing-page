@@ -338,6 +338,79 @@
   .sp-empty{padding:26px 14px; text-align:center; color:var(--ink-muted); font-size:12px;}
   .kbd{font-size:9.5px; font-weight:600; color:var(--ink-3); background:var(--surface-3); border:1px solid var(--border-2); border-radius:4px; padding:1px 5px;}
 
+  /* per-task status selector + create controls */
+  .mt-name{font-size:12.5px; color:var(--ink); line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  a.mt-name:hover{text-decoration:underline;}
+  .mt-statusbtn{display:inline-flex; align-items:center; gap:6px; font-size:10.5px; font-weight:650; letter-spacing:.02em; padding:5px 9px; border-radius:99px; border:1px solid var(--border-2); background:var(--surface); color:var(--ink-2); cursor:pointer; white-space:nowrap; flex:0 0 auto;}
+  .mt-statusbtn:hover{background:var(--surface-2); border-color:var(--ink-muted);}
+  .mt-statusbtn i{width:7px; height:7px; border-radius:99px; flex:0 0 7px;}
+  .mt-statusbtn svg{width:11px; height:11px; opacity:.45; margin-left:-1px;}
+  body:not(.role-admin) .mt-statusbtn{display:none;}
+  .status-menu{position:fixed; z-index:100; background:var(--surface); border:1px solid var(--border); border-radius:11px; box-shadow:0 14px 40px -10px rgba(9,9,11,.4); padding:5px; min-width:184px;}
+  .status-menu .sm-h{font-size:10px; color:var(--ink-muted); padding:5px 9px 4px; font-weight:600; text-transform:uppercase; letter-spacing:.05em;}
+  .status-menu button{display:flex; align-items:center; gap:10px; width:100%; padding:9px 10px; border:0; background:transparent; font-family:inherit; font-size:12.5px; font-weight:500; color:var(--ink); cursor:pointer; border-radius:8px; text-align:left;}
+  .status-menu button:hover{background:var(--surface-2);}
+  .status-menu button i{width:9px; height:9px; border-radius:99px; flex:0 0 9px;}
+  .status-menu button.cur{font-weight:700;}
+  .status-menu button .chk{margin-left:auto; color:var(--good-ink);}
+  .new-task-btn{font-size:19px; font-weight:400; line-height:0;}
+  .mnew-btn{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; color:#fff; background:var(--c1); border:0; border-radius:8px; padding:6px 11px; cursor:pointer; font-family:inherit; flex:0 0 auto;}
+  .mnew-btn:hover{background:#255d94;}
+  .mnew-btn svg{width:13px; height:13px;}
+  body:not(.role-admin) .mnew-btn, body:not(.role-admin) .new-task-btn{display:none;}
+  .fld textarea{width:100%; padding:9px 11px; font-size:13px; font-family:inherit; color:var(--ink); background:var(--surface); border:1px solid var(--border-2); border-radius:9px; outline:none; resize:vertical; line-height:1.45;}
+  .fld textarea:focus{border-color:var(--c1); box-shadow:0 0 0 3px var(--c1-soft);}
+  .nt-lbl{display:block; font-size:11.5px; font-weight:550; color:var(--ink-2); margin-bottom:7px;}
+  .nt-opt{font-weight:400; color:var(--ink-muted); font-size:10.5px;}
+  .nt-2col{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start;}
+  @media (max-width:520px){ .nt-2col{grid-template-columns:1fr;} }
+  /* trigger fields (due date / priority) — gaya ClickUp */
+  .nt-trigger{display:flex; align-items:center; gap:8px; width:100%; padding:8px 11px; font-size:12.5px; font-family:inherit; color:var(--ink); background:var(--surface); border:1px solid var(--border-2); border-radius:8px; cursor:pointer; text-align:left;}
+  .nt-trigger:hover{background:var(--surface-2);}
+  .nt-trigger.on{border-color:var(--c1);}
+  .nt-trigger>svg{width:14px; height:14px; flex:0 0 14px; opacity:.65;}
+  .nt-trigger .nt-flag{width:14px; height:14px; flex:0 0 14px;}
+  .nt-trigger .nt-txt{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .nt-trigger .nt-ph{color:var(--ink-muted);}
+  .nt-trigger .nt-clear{margin-left:auto; opacity:.45; display:inline-flex; padding:2px; border-radius:5px; flex:0 0 auto;}
+  .nt-trigger .nt-clear:hover{opacity:1; background:var(--surface-3);}
+  .nt-trigger .nt-chev{margin-left:auto; opacity:.5;}
+  /* priority flag menu */
+  .prio-menu{position:fixed; z-index:110; background:var(--surface); border:1px solid var(--border); border-radius:11px; box-shadow:0 14px 40px -10px rgba(9,9,11,.42); padding:5px; min-width:196px;}
+  .prio-menu button{display:flex; align-items:center; gap:10px; width:100%; padding:8px 10px; border:0; background:transparent; font-family:inherit; font-size:12.5px; color:var(--ink); cursor:pointer; border-radius:8px; text-align:left;}
+  .prio-menu button:hover{background:var(--surface-2);}
+  .prio-menu button svg{width:15px; height:15px; flex:0 0 15px;}
+  .prio-menu button .kbd{margin-left:auto;}
+  /* due-date popover */
+  .due-pop{position:fixed; z-index:110; background:var(--surface); border:1px solid var(--border); border-radius:12px; box-shadow:0 16px 46px -10px rgba(9,9,11,.44); display:flex; overflow:hidden; width:452px; max-width:calc(100vw - 24px);}
+  .due-quick{width:176px; flex:0 0 176px; border-right:1px solid var(--border); padding:6px;}
+  .due-quick button{display:flex; justify-content:space-between; align-items:center; gap:8px; width:100%; padding:8px 10px; border:0; background:transparent; font-family:inherit; font-size:12.5px; color:var(--ink); cursor:pointer; border-radius:7px;}
+  .due-quick button:hover{background:var(--surface-2);}
+  .due-quick .dq-sub{color:var(--ink-muted); font-size:11px;}
+  .due-cal{flex:1; padding:10px 12px 12px; min-width:0;}
+  .due-cal-head{display:flex; align-items:center; gap:6px; margin-bottom:6px;}
+  .due-cal-title{font-size:13px; font-weight:650; flex:1;}
+  .due-today-btn{border:0; background:transparent; cursor:pointer; color:var(--ink-3); border-radius:6px; padding:3px 7px; font-family:inherit; font-size:11.5px; font-weight:500;}
+  .due-cal-nav{display:flex; gap:2px;}
+  .due-cal-nav button{border:0; background:transparent; cursor:pointer; color:var(--ink-3); border-radius:6px; padding:3px 6px; display:flex; align-items:center;}
+  .due-today-btn:hover, .due-cal-nav button:hover{background:var(--surface-2); color:var(--ink);}
+  .due-cal-nav svg{width:14px; height:14px;}
+  .due-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:2px;}
+  .due-dow{font-size:9.5px; color:var(--ink-muted); text-align:center; padding:4px 0 6px; font-weight:600;}
+  .due-day{aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:12px; border:0; background:transparent; color:var(--ink); cursor:pointer; border-radius:99px; font-family:inherit; padding:0;}
+  .due-day:hover{background:var(--surface-2);}
+  .due-day.other{color:var(--ink-muted); opacity:.45;}
+  .due-day.today{color:var(--bad); font-weight:700;}
+  .due-day.sel{background:var(--bad); color:#fff; font-weight:700;}
+  .due-day.sel:hover{background:#c11f1f;}
+
+  /* toast */
+  #toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(10px); z-index:130; background:var(--ink); color:var(--surface); font-size:12.5px; font-weight:500; padding:11px 17px; border-radius:10px; box-shadow:0 12px 34px rgba(0,0,0,.3); opacity:0; transition:opacity .18s, transform .18s; pointer-events:none; max-width:82vw; display:flex; align-items:center; gap:9px;}
+  #toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  #toast.good{background:var(--good);} #toast.bad{background:var(--bad);} #toast.warn{background:var(--warn); color:#fff;}
+  #toast .ts-spin{width:13px; height:13px; border:2px solid rgba(255,255,255,.35); border-top-color:#fff; border-radius:99px; animation:tspin .7s linear infinite; flex:0 0 13px;}
+  @keyframes tspin{to{transform:rotate(360deg);}}
+
   @media (max-width:1180px){ .stat-grid{grid-template-columns:repeat(3,1fr);} .row-2-1,.row-bottom,.row-heat,.admin-grid{grid-template-columns:1fr;} }
   @media (max-width:860px){ .sidebar{display:none;} .stat-grid{grid-template-columns:repeat(2,1fr);} .search{display:none;} .task-name{max-width:200px;} }
 </style>
@@ -372,6 +445,7 @@
       </div>
       <div class="topbar-right">
         <div class="preview-toggle" id="previewToggle"><button class="active" data-role="admin">Pratinjau: Admin</button><button data-role="viewer">Atasan (view)</button></div>
+        <button class="icon-btn admin-only new-task-btn" id="newTaskBtn" title="Buat tugas baru di ClickUp">+</button>
         <div class="bell-wrap">
           <div class="icon-btn" id="bellBtn" title="Notifikasi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg><span class="badge-dot" id="notifBadge" hidden>0</span></div>
           <div class="notif-panel" id="notifPanel">
@@ -497,6 +571,7 @@
       <div class="modal-title-row">
         <div class="modal-ic" id="mIc"></div>
         <div class="modal-title"><b id="mTitle">Tugas</b><span id="mSub"></span></div>
+        <button class="mnew-btn admin-only" id="mNewBtn" title="Buat tugas baru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Tugas</button>
         <button class="modal-close" id="mClose" title="Tutup (Esc)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="modal-search"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="mSearch" type="text" placeholder="Saring di dalam daftar ini…" autocomplete="off"></div>
@@ -505,6 +580,31 @@
     <div class="modal-list" id="mList"></div>
   </div>
 </div>
+
+<div class="modal-scrim" id="createModal">
+  <div class="modal" style="max-width:470px">
+    <div class="modal-head">
+      <div class="modal-title-row">
+        <div class="modal-ic" style="color:var(--c1); background:var(--c1-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+        <div class="modal-title"><b>Tugas Baru</b><span>Dibuat langsung di ClickUp · List AIO-KSP</span></div>
+        <button class="modal-close" id="ntClose" title="Tutup (Esc)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+    </div>
+    <div style="padding:15px 18px 18px; display:flex; flex-direction:column; gap:14px;">
+      <div class="fld"><label class="nt-lbl" for="ntName">Nama tugas</label><textarea id="ntName" rows="2" placeholder="Contoh:  LEGAL : Perpanjangan izin operasional AW29"></textarea></div>
+      <div><label class="nt-lbl">Status awal</label><div class="modal-chips" id="ntChips"></div></div>
+      <div class="nt-2col">
+        <div><label class="nt-lbl">Jatuh tempo <span class="nt-opt">(opsional)</span></label><button type="button" class="nt-trigger" id="ntDueBtn"></button></div>
+        <div><label class="nt-lbl">Prioritas <span class="nt-opt">(opsional)</span></label><button type="button" class="nt-trigger" id="ntPrioBtn"></button></div>
+      </div>
+      <div id="ntMsg" style="font-size:11.5px; min-height:15px;"></div>
+      <button class="btn" id="ntCreate">Buat Tugas di ClickUp</button>
+      <div class="admin-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 13px; margin-top:1px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Tips: awali nama dengan <b>KODE :</b> (mis. <b>LEGAL :</b>, <b>HRIS-KSP :</b>) agar tugas otomatis masuk ke workstream itu. Tekan <span class="kbd">⌘/Ctrl</span>+<span class="kbd">Enter</span> untuk cepat simpan.</span></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
 
 <script>
 const HEAT_DAYS=['Sen','Sel','Rab','Kam','Jum','Sab','Ahd'];
@@ -614,6 +714,7 @@ function render(data){
     {label:'Jatuh Tempo 7 Hari ke Depan',now:t.dueNext7d,max:openTotal,color:'var(--c2)',note:`${fmt(t.dueNext7d)} tugas`}
   ];
   document.getElementById('limitsBody').innerHTML=limits.map(l=>`<div class="limit"><div class="limit-top"><b>${l.label}</b><span>${Math.round(l.now/l.max*100)}%</span></div><div class="limit-track"><span class="limit-fill" style="width:${Math.min(100,l.now/l.max*100).toFixed(0)}%; background:${l.color}"></span></div><div class="limit-foot"><span>${l.note}</span></div></div>`).join('');
+  refreshOpenModal();
 }
 
 let TABLE_ROWS=[];
@@ -1078,7 +1179,7 @@ function openStatModal(key){
   openTaskModal({title:C.title,sub:'Klik tugas untuk buka di ClickUp',test:C.test,icon:C.icon,iconColor:C.c,iconBg:C.bg});
 }
 function openTaskModal(cfg){
-  MODAL={base:ALLTASKS.filter(cfg.test),statusFilter:'all',wsFocus:cfg.wsFocus||null};
+  MODAL={base:ALLTASKS.filter(cfg.test),statusFilter:'all',wsFocus:cfg.wsFocus||null,cfg:cfg};
   const ic=document.getElementById('mIc');
   ic.innerHTML=MICONS[cfg.icon]||MICONS.total; ic.style.color=cfg.iconColor||'var(--ink)'; ic.style.background=cfg.iconBg||'var(--surface-3)';
   document.getElementById('mTitle').textContent=cfg.title;
@@ -1109,6 +1210,7 @@ function renderModalList(){
   const el=document.getElementById('mList');
   if(!list.length){el.innerHTML='<div class="mt-empty">Tidak ada tugas pada filter ini.</div>';return;}
   const viewer=document.body.classList.contains('role-viewer');
+  const admin=document.body.classList.contains('role-admin');
   const cap=400;
   el.innerHTML=list.slice(0,cap).map(t=>{
     const m=SMETA[t.status]||SMETA.todo;
@@ -1116,9 +1218,13 @@ function renderModalList(){
     if(t.dueSoon&&t.status!=='done')meta.push('⏳ ≤7 hari');
     else if(t.overdue)meta.push('⚠ lewat tempo');
     if(t.time)meta.push(esc(t.time));
-    const inner='<span class="mt-status" style="background:'+m.color+'"></span><span class="mt-body"><span class="mt-name">'+hlName(t.name,pq)+'</span><span class="mt-meta">'+meta.join(' · ')+'</span></span><span class="mt-open"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg></span>';
-    return (t.url&&!viewer)?'<a class="mt-row" href="'+t.url+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="mt-row" style="cursor:default">'+inner+'</div>';
+    const nameEl=(t.url&&!viewer)?'<a class="mt-name" href="'+t.url+'" target="_blank" rel="noopener">'+hlName(t.name,pq)+'</a>':'<span class="mt-name">'+hlName(t.name,pq)+'</span>';
+    const cur=t.cuStatus||statusName(t.status);
+    const stBtn=admin?'<button class="mt-statusbtn" data-id="'+esc(t.id)+'" data-cur="'+esc(cur)+'"><i style="background:'+statusColorFor(cur)+'"></i>'+esc((cur||'').toUpperCase())+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></button>':'';
+    const openEl=(t.url&&!viewer&&!admin)?'<span class="mt-open"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg></span>':'';
+    return '<div class="mt-row"><span class="mt-status" style="background:'+m.color+'"></span><span class="mt-body">'+nameEl+'<span class="mt-meta">'+meta.join(' · ')+'</span></span>'+stBtn+openEl+'</div>';
   }).join('')+(list.length>cap?'<div class="mt-empty">Menampilkan '+cap+' dari '+list.length+' tugas — persempit dengan pencarian.</div>':'');
+  el.querySelectorAll('.mt-statusbtn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openStatusMenu(b,b.dataset.id,b.dataset.cur);}));
 }
 document.getElementById('mSearch').addEventListener('input',renderModalList);
 document.getElementById('mClose').addEventListener('click',closeModal);
@@ -1163,6 +1269,209 @@ document.getElementById('graphReset').addEventListener('click',()=>{
   if(GRAPH.zoom){d3.select(document.getElementById('graphCanvas')).call(GRAPH.zoom.transform,d3.zoomIdentity);}
   GRAPH.t=d3.zoomIdentity; if(GRAPH.sim)GRAPH.sim.alpha(0.4).restart();
 });
+
+/* ================= UBAH STATUS & BUAT TUGAS (tulis ke ClickUp) ================= */
+function getStatuses(){
+  const s=(DATA&&DATA.statuses&&DATA.statuses.length)?DATA.statuses:[
+    {status:'to do',type:'open'},{status:'in progress',type:'custom'},{status:'complete',type:'closed'}
+  ];
+  return s;
+}
+function statusName(key){return key==='done'?'complete':key==='progress'?'in progress':'to do';}
+function statusColorFor(name){const n=(name||'').toLowerCase();if(n==='complete'||n==='done'||n==='closed'||n==='selesai')return SMETA.done.color;if(n.includes('progress')||n==='dikerjakan')return SMETA.progress.color;if(n.includes('review')||n.includes('block'))return SMETA.overdue.color;return SMETA.todo.color;}
+
+/* --- toast --- */
+let toastT=null;
+function toast(msg,kind,spin){
+  const el=document.getElementById('toast'); el.className='';
+  el.innerHTML=(spin?'<span class="ts-spin"></span>':'')+esc(msg);
+  el.classList.add('show'); if(kind)el.classList.add(kind);
+  clearTimeout(toastT); if(!spin)toastT=setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+/* --- floating status menu --- */
+let statusMenuEl=null;
+function closeStatusMenu(){if(statusMenuEl){statusMenuEl.remove();statusMenuEl=null;document.removeEventListener('click',onDocStatusMenu,true);document.removeEventListener('keydown',onEscStatusMenu,true);}}
+function onDocStatusMenu(e){if(statusMenuEl&&!statusMenuEl.contains(e.target))closeStatusMenu();}
+function onEscStatusMenu(e){if(e.key==='Escape')closeStatusMenu();}
+function openStatusMenu(btn,taskId,curName){
+  closeStatusMenu();
+  const menu=document.createElement('div'); menu.className='status-menu';
+  menu.innerHTML='<div class="sm-h">Ubah status</div>'+getStatuses().map(s=>{
+    const cur=(s.status||'').toLowerCase()===(curName||'').toLowerCase();
+    return '<button data-s="'+esc(s.status)+'" class="'+(cur?'cur':'')+'"><i style="background:'+statusColorFor(s.status)+'"></i>'+esc((s.status||'').toUpperCase())+(cur?'<span class="chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg></span>':'')+'</button>';
+  }).join('');
+  document.body.appendChild(menu);
+  const r=btn.getBoundingClientRect(); const mw=menu.offsetWidth,mh=menu.offsetHeight;
+  let left=r.right-mw; let top=r.bottom+6;
+  if(left<8)left=8; if(left+mw>innerWidth-8)left=innerWidth-8-mw;
+  if(top+mh>innerHeight-8)top=r.top-6-mh;
+  menu.style.left=Math.max(8,left)+'px'; menu.style.top=Math.max(8,top)+'px';
+  statusMenuEl=menu;
+  menu.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const s=b.dataset.s;closeStatusMenu();if((s||'').toLowerCase()!==(curName||'').toLowerCase())setTaskStatus(taskId,s,curName);}));
+  setTimeout(()=>{document.addEventListener('click',onDocStatusMenu,true);document.addEventListener('keydown',onEscStatusMenu,true);},0);
+}
+
+/* --- ubah status satu tugas --- */
+async function setTaskStatus(id,statusNm,prevName){
+  if(!serverMode){toast('Mode pratinjau — jalankan di server untuk mengubah status di ClickUp.','warn');return;}
+  const t=ALLTASKS.find(x=>x.id===id);
+  if(t){ // optimistik: perbarui tampilan segera
+    t.cuStatus=statusNm; const n=statusNm.toLowerCase();
+    t.status=(n==='complete')?'done':n.includes('progress')?'progress':(t.overdue?'overdue':'todo');
+    if(n==='complete'){t.overdue=false;t.dueSoon=false;}
+    refreshOpenModal();
+  }
+  toast('Menyimpan status…','',true);
+  try{
+    const r=await fetch('/api/task/'+encodeURIComponent(id)+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({status:statusNm})});
+    const j=await r.json().catch(()=>({}));
+    if(r.ok){toast('Status → '+statusNm.toUpperCase()+' tersimpan di ClickUp.','good');}
+    else{toast(j.error||'Gagal mengubah status.','bad');if(t)t.cuStatus=prevName;loadData(true);}
+  }catch(e){toast('Tidak dapat terhubung ke server.','bad');loadData(true);}
+}
+
+/* --- re-render modal yang sedang terbuka (dipanggil tiap data refresh) --- */
+function refreshOpenModal(){
+  if(!scrim.classList.contains('show')||!MODAL.cfg)return;
+  MODAL.base=ALLTASKS.filter(MODAL.cfg.test);
+  renderModalChips(); renderModalList();
+}
+
+/* --- dialog buat tugas baru --- */
+let ntStatus='', ntPriority=null, ntDueMs=null, calView=null;
+const PRIOS=[{v:1,label:'Urgent',color:'#e5484d'},{v:2,label:'High',color:'#f5c518'},{v:3,label:'Normal',color:'#5b8def'},{v:4,label:'Low',color:'#9aa2ad'}];
+const CAL_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg>';
+const XSVG='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+function flagSvg(color){return '<svg class="nt-flag" viewBox="0 0 24 24" fill="'+color+'"><path d="M6 21a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10.4a.6.6 0 0 1 .49.94L15.4 6.9l1.99 2.96a.6.6 0 0 1-.5.94H7v10.2a1 1 0 0 1-1 1z"/></svg>';}
+function clearSvg(){return '<svg viewBox="0 0 24 24" fill="none" stroke="#9aa2ad" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M6 6l12 12"/></svg>';}
+const createModal=document.getElementById('createModal');
+const ntDueBtn=document.getElementById('ntDueBtn'), ntPrioBtn=document.getElementById('ntPrioBtn');
+function openCreateModal(prefill){
+  document.getElementById('ntName').value=prefill||'';
+  document.getElementById('ntMsg').textContent='';
+  const sts=getStatuses(); ntStatus=((sts.find(s=>s.type==='open')||sts[0]||{}).status)||'to do';
+  ntPriority=null; ntDueMs=null;
+  renderNtChips(); renderDueTrigger(); renderPrioTrigger();
+  createModal.classList.add('show');
+  setTimeout(()=>document.getElementById('ntName').focus(),60);
+}
+function closeCreateModal(){closeFloat();createModal.classList.remove('show');}
+function renderNtChips(){
+  const box=document.getElementById('ntChips');
+  box.innerHTML=getStatuses().map(s=>'<button class="mchip '+(s.status.toLowerCase()===ntStatus.toLowerCase()?'active':'')+'" data-s="'+esc(s.status)+'"><i style="background:'+statusColorFor(s.status)+'"></i>'+esc(s.status.toUpperCase())+'</button>').join('');
+  box.querySelectorAll('.mchip').forEach(b=>b.addEventListener('click',()=>{ntStatus=b.dataset.s;renderNtChips();}));
+}
+/* --- trigger tampilan --- */
+function fmtDue(ms){return new Date(ms).toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short',year:'numeric'});}
+function renderDueTrigger(){
+  ntDueBtn.classList.toggle('on',!!ntDueMs);
+  ntDueBtn.innerHTML=CAL_IC+(ntDueMs
+    ?'<span class="nt-txt">'+fmtDue(ntDueMs)+'</span><span class="nt-clear" data-clear="1">'+XSVG+'</span>'
+    :'<span class="nt-txt nt-ph">Pilih tanggal</span>');
+}
+function renderPrioTrigger(){
+  ntPrioBtn.classList.toggle('on',!!ntPriority);
+  if(ntPriority){const p=PRIOS.find(x=>x.v===ntPriority);
+    ntPrioBtn.innerHTML=flagSvg(p.color)+'<span class="nt-txt">'+p.label+'</span><span class="nt-clear" data-clear="1">'+XSVG+'</span>';
+  }else{
+    ntPrioBtn.innerHTML=flagSvg('#c4c8ce')+'<span class="nt-txt nt-ph">Tidak ada</span>';
+  }
+}
+/* --- panel mengambang generik --- */
+let floatEl=null, floatAnchor=null;
+function positionFloat(el,btn,align){const r=btn.getBoundingClientRect();const mw=el.offsetWidth,mh=el.offsetHeight;let left=align==='right'?r.right-mw:r.left;let top=r.bottom+6;if(left+mw>innerWidth-8)left=innerWidth-8-mw;if(left<8)left=8;if(top+mh>innerHeight-8)top=Math.max(8,r.top-6-mh);el.style.left=left+'px';el.style.top=top+'px';}
+function closeFloat(){if(floatEl){floatEl.remove();floatEl=null;floatAnchor=null;document.removeEventListener('click',onFloatDoc,true);document.removeEventListener('keydown',onFloatEsc,true);}}
+function onFloatDoc(e){if(floatEl&&!floatEl.contains(e.target)&&floatAnchor&&!floatAnchor.contains(e.target))closeFloat();}
+function onFloatEsc(e){if(e.key==='Escape'){e.stopPropagation();closeFloat();}}
+function wireFloat(el,btn){floatEl=el;floatAnchor=btn;document.body.appendChild(el);positionFloat(el,btn,'left');setTimeout(()=>{document.addEventListener('click',onFloatDoc,true);document.addEventListener('keydown',onFloatEsc,true);},0);}
+/* --- menu prioritas (bendera) --- */
+function openPrioMenu(btn){
+  closeFloat();
+  const menu=document.createElement('div'); menu.className='prio-menu';
+  menu.innerHTML=PRIOS.map(p=>'<button data-v="'+p.v+'">'+flagSvg(p.color)+'<span>'+p.label+'</span><span class="kbd">'+p.v+'</span></button>').join('')
+    +'<button data-v="0">'+clearSvg()+'<span>Bersihkan</span><span class="kbd">0</span></button>';
+  wireFloat(menu,btn);
+  menu.querySelectorAll('button').forEach(b=>b.onclick=()=>{const v=Number(b.dataset.v);ntPriority=v||null;renderPrioTrigger();closeFloat();});
+}
+/* --- popover tanggal (pilihan cepat + kalender) --- */
+function quickDates(){
+  const t=new Date(); t.setHours(0,0,0,0);
+  const add=n=>{const x=new Date(t);x.setDate(t.getDate()+n);return x;};
+  const nextDow=target=>{const x=new Date(t);const diff=((target-x.getDay())+7)%7||7;x.setDate(x.getDate()+diff);return x;};
+  const dow=d=>d.toLocaleDateString('id-ID',{weekday:'short'});
+  const sd=d=>d.toLocaleDateString('id-ID',{day:'numeric',month:'short'});
+  return [
+    {label:'Hari ini',date:new Date(t),sub:dow(new Date(t))},
+    {label:'Besok',date:add(1),sub:dow(add(1))},
+    {label:'Minggu depan',date:nextDow(1),sub:dow(nextDow(1))},
+    {label:'Akhir pekan depan',date:nextDow(6),sub:sd(nextDow(6))},
+    {label:'2 minggu',date:add(14),sub:sd(add(14))},
+    {label:'4 minggu',date:add(28),sub:sd(add(28))},
+    {label:'8 minggu',date:add(56),sub:sd(add(56))},
+  ];
+}
+function selectDue(date){
+  const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0');
+  ntDueMs=new Date(y+'-'+m+'-'+d+'T23:59:59+07:00').getTime(); // akhir hari WIB
+  renderDueTrigger(); closeFloat();
+}
+function calGrid(){
+  const y=calView.getFullYear(),m=calView.getMonth();
+  const dows=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  let html=dows.map(d=>'<div class="due-dow">'+d+'</div>').join('');
+  const startDow=new Date(y,m,1).getDay();
+  const start=new Date(y,m,1-startDow);
+  const today=new Date();today.setHours(0,0,0,0);
+  const seld=ntDueMs?new Date(ntDueMs):null; if(seld)seld.setHours(0,0,0,0);
+  for(let i=0;i<42;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);
+    const other=d.getMonth()!==m, isToday=d.getTime()===today.getTime(), isSel=seld&&d.getTime()===seld.getTime();
+    html+='<button class="due-day'+(other?' other':'')+(isToday?' today':'')+(isSel?' sel':'')+'" data-t="'+d.getTime()+'">'+d.getDate()+'</button>';
+  }
+  return html;
+}
+function drawDuePop(){
+  if(!floatEl)return;
+  const title=calView.toLocaleDateString('id-ID',{month:'long',year:'numeric'});
+  const q=quickDates().map((o,i)=>'<button data-qi="'+i+'">'+o.label+'<span class="dq-sub">'+o.sub+'</span></button>').join('');
+  floatEl.innerHTML='<div class="due-quick">'+q+'</div><div class="due-cal"><div class="due-cal-head"><span class="due-cal-title">'+title+'</span><button class="due-today-btn" data-today>Hari ini</button><span class="due-cal-nav"><button data-nav="-1" title="Bulan sebelumnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button><button data-nav="1" title="Bulan berikutnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button></span></div><div class="due-grid">'+calGrid()+'</div></div>';
+  const qd=quickDates();
+  floatEl.querySelectorAll('.due-quick button').forEach(b=>b.onclick=()=>selectDue(qd[+b.dataset.qi].date));
+  floatEl.querySelector('[data-today]').onclick=()=>{calView=new Date();calView.setDate(1);drawDuePop();};
+  floatEl.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{calView.setMonth(calView.getMonth()+Number(b.dataset.nav));drawDuePop();});
+  floatEl.querySelectorAll('.due-day').forEach(b=>b.onclick=()=>selectDue(new Date(Number(b.dataset.t))));
+}
+function openDuePicker(btn){
+  closeFloat();
+  calView=ntDueMs?new Date(ntDueMs):new Date(); calView.setDate(1);
+  const pop=document.createElement('div'); pop.className='due-pop';
+  wireFloat(pop,btn); drawDuePop(); positionFloat(pop,btn,'left');
+}
+ntDueBtn.addEventListener('click',e=>{if(e.target.closest('.nt-clear')){e.stopPropagation();ntDueMs=null;renderDueTrigger();return;}openDuePicker(ntDueBtn);});
+ntPrioBtn.addEventListener('click',e=>{if(e.target.closest('.nt-clear')){e.stopPropagation();ntPriority=null;renderPrioTrigger();return;}openPrioMenu(ntPrioBtn);});
+async function submitCreate(){
+  const name=document.getElementById('ntName').value.trim();
+  const msg=document.getElementById('ntMsg'), btn=document.getElementById('ntCreate');
+  if(!name){msg.style.color='var(--bad-ink)';msg.textContent='Nama tugas wajib diisi.';return;}
+  if(!serverMode){msg.style.color='var(--warn-ink)';msg.textContent='Mode pratinjau — jalankan di server untuk membuat tugas sungguhan.';return;}
+  const dueDate=ntDueMs||undefined;
+  btn.disabled=true;msg.style.color='var(--ink-muted)';msg.textContent='Membuat di ClickUp…';
+  try{
+    const r=await fetch('/api/task',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({name,status:ntStatus,dueDate,priority:ntPriority})});
+    const j=await r.json().catch(()=>({}));
+    if(r.ok){closeCreateModal();toast('Tugas baru dibuat di ClickUp.','good');loadData(true);}
+    else{msg.style.color='var(--bad-ink)';msg.textContent=j.error||'Gagal membuat tugas.';}
+  }catch(e){msg.style.color='var(--bad-ink)';msg.textContent='Tidak dapat terhubung ke server.';}
+  finally{btn.disabled=false;}
+}
+document.getElementById('newTaskBtn').addEventListener('click',()=>openCreateModal(''));
+document.getElementById('mNewBtn').addEventListener('click',()=>{const pre=(MODAL.wsFocus?MODAL.wsFocus.replace(/&amp;/g,'&')+' : ':'');openCreateModal(pre);});
+document.getElementById('ntClose').addEventListener('click',closeCreateModal);
+createModal.addEventListener('click',e=>{if(e.target===createModal)closeCreateModal();});
+document.getElementById('ntCreate').addEventListener('click',submitCreate);
+document.getElementById('ntName').addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();submitCreate();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&createModal.classList.contains('show'))closeCreateModal();});
 
 /* ---------- progress launch (PROGRESS.md) ---------- */
 const PROG_STYLE={
