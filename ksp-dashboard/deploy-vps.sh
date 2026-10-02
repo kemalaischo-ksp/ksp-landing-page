@@ -39,6 +39,15 @@ echo "==> 2-4/5 Backup DB, tarik kode, rebuild container di VPS"
   if docker ps --format '{{.Names}}' | grep -qx ksp-dashboard; then
     docker cp ksp-dashboard:/app/data/auth.db ~/backups/ksp-auth-\$TS.db && chmod 600 ~/backups/ksp-auth-\$TS.db
     echo \"   ✓ backup: ~/backups/ksp-auth-\$TS.db\"
+    # Riwayat Rekap: reports.db (mode WAL → snapshot konsisten via SQLite backup API)
+    # + berkas PDF/JPG ke satu folder cermin (berkas tak pernah diubah, jadi cukup disalin ulang).
+    if docker exec ksp-dashboard test -f /app/data/reports.db; then
+      docker exec -w /app/server ksp-dashboard node -e \"require('better-sqlite3')('/app/data/reports.db').backup('/tmp/reports-bak.db').then(()=>process.exit(0),e=>{console.error(e.message);process.exit(1)})\"
+      docker cp ksp-dashboard:/tmp/reports-bak.db ~/backups/ksp-reports-\$TS.db && chmod 600 ~/backups/ksp-reports-\$TS.db
+      docker exec ksp-dashboard rm -f /tmp/reports-bak.db
+      mkdir -p ~/backups/ksp-reports-files && docker cp ksp-dashboard:/app/data/reports/. ~/backups/ksp-reports-files/
+      echo \"   ✓ backup riwayat: ~/backups/ksp-reports-\$TS.db + ~/backups/ksp-reports-files/ (\$(ls ~/backups/ksp-reports-files | wc -l) berkas)\"
+    fi
   fi
   cd ${REMOTE_REPO}
   if [ -n \"\$(git status --porcelain --untracked-files=no)\" ]; then
