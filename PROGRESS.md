@@ -532,3 +532,13 @@ File yang berubah:
 
     - `PROGRESS.md`
     - `ksp-dashboard/public/index.html`
+
+### Update otomatis — 02 Oct 2026 12:32
+
+Commit baru:
+
+    **`04b49a4 feat(graph+admin): graph view premium (sinaps glowing, label kontras, zoom/fokus/layar penuh) + Panel Admin baru (reset sandi, cabut sesi, nonaktifkan akun, meter kekuatan sandi)`**
+
+File yang berubah:
+
+    - `ksp-dashboard/public/index.html`
