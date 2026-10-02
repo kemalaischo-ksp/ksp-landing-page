@@ -604,3 +604,13 @@ Commit baru:
 File yang berubah:
 
     - `ksp-dashboard/public/index.html`
+
+### Update otomatis — 02 Oct 2026 19:22
+
+Commit baru:
+
+    **`4f19ed2 chore(deploy): backup riwayat rekap (snapshot reports.db + cermin berkas PDF/JPG) sebelum deploy`**
+
+File yang berubah:
+
+    - `ksp-dashboard/deploy-vps.sh`
