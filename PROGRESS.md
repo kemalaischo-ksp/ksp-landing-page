@@ -571,3 +571,13 @@ File yang berubah:
     - `ksp-dashboard/.dockerignore`
     - `ksp-dashboard/deploy-vps.sh`
     - `ksp-dashboard/server/seed-admin.js`
+
+### Update otomatis — 02 Oct 2026 18:52
+
+Commit baru:
+
+    **`ab1389a feat(rekap): Studio Rekap Laporan — pratinjau langsung A4 + paginasi otomatis, template (Mingguan/Ringkas/Lengkap), periode & filter workstream, bagian bisa diatur/urutkan, timeline Gantt pekan ini, agenda harian, grafik donut & tren, progres per workstream, tema & orientasi, ekspor PDF/JPG/salin gambar`**
+
+File yang berubah:
+
+    - `ksp-dashboard/public/index.html`
