@@ -581,3 +581,16 @@ Commit baru:
 File yang berubah:
 
     - `ksp-dashboard/public/index.html`
+
+### Update otomatis — 02 Oct 2026 19:20
+
+Commit baru:
+
+    **`6009b24 feat(rekap): riwayat ekspor laporan — nomor dokumen otomatis (RKP/KSP/YYYY/MM/NNNN), simpan PDF/JPG + thumbnail, tinjauan internal (disetujui/revisi), hapus khusus admin; 401 utk API tanpa login`**
+
+File yang berubah:
+
+    - `ksp-dashboard/.dockerignore`
+    - `ksp-dashboard/.gitignore`
+    - `ksp-dashboard/server/reports.js`
+    - `ksp-dashboard/server/server.js`
