@@ -192,6 +192,46 @@
   .role-badge{font-size:10.5px; font-weight:600; padding:2px 8px; border-radius:99px;}
   .role-badge.admin{background:var(--c1-soft); color:var(--c1);}
   .role-badge.viewer{background:var(--surface-3); color:var(--ink-3);}
+  .u-cell{display:flex; align-items:center; gap:9px; min-width:0;}
+  .u-ava{width:28px; height:28px; border-radius:99px; flex:0 0 28px; display:grid; place-items:center; font-size:10.5px; font-weight:700; color:var(--c1); background:var(--c1-soft);}
+  .u-name{font-size:12.5px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .u-mail{font-size:11px; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .u-you{font-size:9.5px; font-weight:700; color:var(--c1); background:var(--c1-soft); border-radius:99px; padding:1px 6px; margin-left:5px; vertical-align:1px;}
+  .u-stat{display:inline-flex; align-items:center; gap:5px; font-size:11px; color:var(--ink-2); white-space:nowrap;}
+  .u-stat i{width:7px; height:7px; border-radius:99px; background:var(--good);}
+  .u-stat.off i{background:var(--bad);} .u-stat.off{color:var(--bad-ink);}
+  .u-sub{font-size:10.5px; color:var(--ink-muted); margin-top:2px; white-space:nowrap;}
+  tr.u-banned .u-name, tr.u-banned .u-mail{opacity:.55;}
+  .u-menu-btn{width:28px; height:28px; border-radius:7px; border:1px solid var(--border-2); background:var(--surface); color:var(--ink-3); cursor:pointer; display:inline-grid; place-items:center;}
+  .u-menu-btn:hover{background:var(--surface-2); color:var(--ink);}
+  .u-menu{position:fixed; z-index:90; min-width:210px; background:var(--surface); border:1px solid var(--border); border-radius:11px; box-shadow:0 18px 50px -14px rgba(9,9,11,.45); padding:5px; display:none;}
+  .u-menu.show{display:block;}
+  .u-menu button{display:flex; align-items:center; gap:9px; width:100%; text-align:left; border:0; background:transparent; color:var(--ink-2); font-family:inherit; font-size:12px; padding:8px 10px; border-radius:7px; cursor:pointer;}
+  .u-menu button:hover{background:var(--surface-2); color:var(--ink);}
+  .u-menu button svg{width:14px; height:14px; flex:0 0 14px; opacity:.75;}
+  .u-menu button.danger{color:var(--bad-ink);} .u-menu button.danger:hover{background:var(--bad-bg);}
+  .u-menu hr{border:0; border-top:1px solid var(--border); margin:4px 2px;}
+  .pw-wrap{position:relative; display:flex; gap:6px;}
+  .pw-wrap input{flex:1; padding-right:34px !important; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.02em;}
+  .pw-eye{position:absolute; right:calc(var(--gen-w,0px) + 6px); top:50%; transform:translateY(-50%); width:26px; height:26px; border:0; background:transparent; color:var(--ink-muted); cursor:pointer; display:grid; place-items:center; border-radius:6px;}
+  .pw-eye:hover{color:var(--ink);}
+  .pw-gen{flex:0 0 auto; font-size:11px !important; white-space:nowrap;}
+  .pw-meter{display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin-top:7px;}
+  .pw-meter i{height:4px; border-radius:99px; background:var(--surface-3); transition:background .2s;}
+  .pw-meter[data-s="1"] i:nth-child(-n+1){background:var(--bad);}
+  .pw-meter[data-s="2"] i:nth-child(-n+2){background:var(--warn);}
+  .pw-meter[data-s="3"] i:nth-child(-n+3){background:#65a30d;}
+  .pw-meter[data-s="4"] i{background:var(--good);}
+  .pw-label{font-size:10.5px; color:var(--ink-muted); margin-top:5px; display:flex; justify-content:space-between;}
+  .pw-rules{list-style:none; margin:7px 0 0; padding:0; display:grid; gap:3px;}
+  .pw-rules li{font-size:11px; color:var(--ink-muted); display:flex; align-items:center; gap:6px;}
+  .pw-rules li::before{content:''; width:12px; height:12px; flex:0 0 12px; border-radius:99px; border:1.5px solid var(--border-2);}
+  .pw-rules li.ok{color:var(--good-ink);}
+  .pw-rules li.ok::before{border-color:var(--good); background:var(--good) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/8px no-repeat;}
+  .sec-list{list-style:none; margin:10px 0 0; padding:12px 14px; display:grid; gap:6px; background:var(--surface-2); border:1px solid var(--border); border-radius:10px;}
+  .sec-list li{font-size:11px; color:var(--ink-2); display:flex; gap:7px; align-items:flex-start;}
+  .sec-list li svg{flex:0 0 13px; margin-top:1px; color:var(--good);}
+  .sec-list b{color:var(--ink);}
   .admin-note{font-size:11px; color:var(--ink-muted); margin-top:8px; display:flex; gap:6px; align-items:flex-start;}
 
   /* viewer (atasan) read-only mode */
@@ -211,15 +251,23 @@
   .graph-controls{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
   .graph-legend{display:flex; gap:12px; flex-wrap:wrap; font-size:11px; color:var(--ink-2);}
   .graph-legend span{display:inline-flex; align-items:center; gap:5px;}
-  .graph-legend i{width:9px; height:9px; border-radius:99px;}
-  .graph-canvas-wrap{position:relative; margin-top:10px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface-2);}
-  #graphCanvas{display:block; width:100%; height:440px; cursor:grab;}
+  .graph-legend i{width:9px; height:9px; border-radius:99px; box-shadow:0 0 7px 1px currentColor;}
+  .graph-canvas-wrap{position:relative; margin-top:10px; border:1px solid #1e2440; border-radius:14px; overflow:hidden; background:#070912; box-shadow:0 0 0 1px rgba(139,92,246,.08), 0 18px 40px -18px rgba(76,29,149,.45), inset 0 1px 0 rgba(255,255,255,.04);}
+  .graph-canvas-wrap:fullscreen{border-radius:0; border:0;}
+  .graph-canvas-wrap:fullscreen #graphCanvas{height:100vh;}
+  #graphCanvas{display:block; width:100%; height:560px; cursor:grab;}
+  @media (max-width:860px){ #graphCanvas{height:420px;} .graph-hint{display:none;} }
+  .graph-tools{position:absolute; top:10px; right:10px; display:flex; flex-direction:column; gap:2px; padding:3px; border-radius:10px; background:rgba(10,13,28,.72); border:1px solid rgba(255,255,255,.08); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);}
+  .graph-tools button{width:30px; height:30px; display:grid; place-items:center; border:0; border-radius:7px; background:transparent; color:#cbd5e1; cursor:pointer; transition:background .15s,color .15s;}
+  .graph-tools button:hover{background:rgba(167,139,250,.16); color:#fff;}
+  .graph-tools svg{width:15px; height:15px;}
   #graphCanvas:active{cursor:grabbing;}
-  .graph-hint{position:absolute; left:12px; bottom:10px; font-size:10.5px; color:var(--ink-muted); background:color-mix(in srgb,var(--surface) 80%,transparent); padding:3px 8px; border-radius:6px; pointer-events:none;}
-  .graph-focus{position:absolute; top:10px; left:12px; font-size:11.5px; color:var(--ink-2); background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:5px 10px; display:none; align-items:center; gap:8px;}
+  .graph-hint{position:absolute; left:12px; bottom:10px; font-size:10.5px; color:#94a3b8; background:rgba(10,13,28,.7); border:1px solid rgba(255,255,255,.06); padding:4px 10px; border-radius:99px; pointer-events:none; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);}
+  .graph-focus{position:absolute; top:10px; left:12px; font-size:11.5px; color:#cbd5e1; background:rgba(10,13,28,.8); border:1px solid rgba(167,139,250,.3); border-radius:99px; padding:5px 6px 5px 12px; display:none; align-items:center; gap:8px; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); box-shadow:0 0 18px -6px rgba(167,139,250,.6);}
   .graph-focus.show{display:flex;}
-  .graph-focus b{color:var(--ink);}
-  .graph-focus button{border:0; background:var(--surface-3); color:var(--ink-2); font-family:inherit; font-size:11px; padding:2px 8px; border-radius:5px; cursor:pointer;}
+  .graph-focus b{color:#fff;}
+  .graph-focus button{border:0; background:rgba(167,139,250,.18); color:#e9e5ff; font-family:inherit; font-size:11px; padding:3px 10px; border-radius:99px; cursor:pointer;}
+  .graph-focus button:hover{background:rgba(167,139,250,.3);}
 
   /* notif bell dropdown */
   .bell-wrap{position:relative;}
@@ -557,6 +605,7 @@
           </div>
         </div>
         <div style="display:flex; align-items:center; gap:9px;"><div class="avatar" id="avatar">KP</div><div class="who"><b id="whoName">Kemal Prabowo</b><span id="whoSub">KSP · AISCHO</span></div><span class="role-chip" id="roleChip">Admin</span></div>
+        <div class="icon-btn" id="myPwBtn" title="Ganti kata sandi saya" role="button" tabindex="0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2L20 3M17 6l3 3M15 8l2 2"/></svg></div>
         <div class="icon-btn" id="logoutBtn" title="Keluar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></div>
       </div>
     </div>
@@ -605,10 +654,10 @@
             <div><h3 style="margin:0; font-size:14px; font-weight:600;">Peta Tugas — Graph View</h3><p style="margin:3px 0 0; font-size:11.5px; color:var(--ink-muted);">Klik simpul cabang (workstream) untuk fokus. Seret untuk atur, scroll untuk zoom. <span id="graphFilterNote">Hasil pencarian ikut tersorot.</span></p></div>
             <div class="graph-controls">
               <div class="graph-legend">
-                <span><i style="background:var(--good)"></i>Selesai</span>
-                <span><i style="background:var(--warn)"></i>Dikerjakan</span>
-                <span><i style="background:var(--c1)"></i>Belum</span>
-                <span><i style="background:var(--bad)"></i>Terlambat</span>
+                <span><i style="background:#34d399;color:#34d399"></i>Selesai</span>
+                <span><i style="background:#fbbf24;color:#fbbf24"></i>Dikerjakan</span>
+                <span><i style="background:#60a5fa;color:#60a5fa"></i>Belum</span>
+                <span><i style="background:#fb7185;color:#fb7185"></i>Terlambat</span>
               </div>
               <button class="btn btn-sm btn-ghost" id="graphReset">Reset</button>
             </div>
@@ -616,7 +665,13 @@
           <div class="graph-canvas-wrap">
             <canvas id="graphCanvas"></canvas>
             <div class="graph-focus" id="graphFocus"></div>
-            <div class="graph-hint">Hover simpul untuk detail · klik cabang untuk isolasi</div>
+            <div class="graph-tools">
+              <button data-g="in" title="Perbesar" aria-label="Perbesar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+              <button data-g="out" title="Perkecil" aria-label="Perkecil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg></button>
+              <button data-g="fit" title="Paskan ke layar" aria-label="Paskan ke layar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+              <button data-g="full" title="Layar penuh" aria-label="Layar penuh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+            </div>
+            <div class="graph-hint">Hover untuk sorot sinaps · klik cabang untuk fokus · dobel-klik area kosong untuk kembali</div>
           </div>
         </div>
       </div>
@@ -661,20 +716,30 @@
       </div>
 
       <div class="panel admin-only" id="adminPanel" style="display:none;">
-        <div class="panel-head"><div><h3>Panel Admin — Manajemen Akun &amp; Role</h3><p>Buat, atur, dan hapus akun. Role: Admin (akses penuh) · Atasan/Viewer (hanya lihat)</p></div></div>
+        <div class="panel-head"><div><h3>Panel Admin — Akun, Role &amp; Keamanan</h3><p>Buat akun, atur role, reset kata sandi, cabut sesi, atau nonaktifkan akses. Role: Admin (akses penuh) · Atasan/Viewer (hanya lihat)</p></div><span class="pill pill-todo" id="usersCount">—</span></div>
         <div class="panel-body">
           <div class="admin-grid">
-            <div class="table-wrap"><table class="admin-table"><thead><tr><th>Nama</th><th>Email</th><th>Role</th><th style="text-align:right;">Aksi</th></tr></thead><tbody id="usersBody"></tbody></table></div>
+            <div class="table-wrap"><table class="admin-table"><thead><tr><th>Akun</th><th>Role</th><th>Status</th><th style="text-align:right;">Aksi</th></tr></thead><tbody id="usersBody"></tbody></table></div>
             <div>
-              <form class="admin-form" id="addUserForm">
+              <form class="admin-form" id="addUserForm" autocomplete="off">
                 <h4>Tambah Akun Baru</h4>
                 <div class="fld"><label for="nu-name">Nama</label><input id="nu-name" type="text" placeholder="Nama lengkap" required></div>
                 <div class="fld"><label for="nu-email">Email</label><input id="nu-email" type="email" placeholder="nama@alwildan.id" required autocomplete="off"></div>
-                <div class="fld"><label for="nu-pass">Kata Sandi (min. 8)</label><input id="nu-pass" type="password" placeholder="••••••••" minlength="8" required autocomplete="new-password"></div>
+                <div class="fld"><label for="nu-pass">Kata Sandi</label>
+                  <div class="pw-wrap" data-pw><input id="nu-pass" type="password" placeholder="min. 12 karakter" minlength="12" maxlength="128" required autocomplete="new-password"><button type="button" class="pw-eye" title="Tampilkan / sembunyikan"></button><button type="button" class="btn btn-sm btn-ghost pw-gen">Buat acak</button></div>
+                  <div class="pw-meter" data-meter><i></i><i></i><i></i><i></i></div>
+                  <div class="pw-label"><span data-meter-label>Kekuatan sandi</span><span data-meter-len></span></div>
+                  <ul class="pw-rules" data-rules></ul>
+                </div>
                 <div class="fld"><label for="nu-role">Role</label><select id="nu-role"><option value="viewer">Atasan / Viewer (hanya lihat)</option><option value="admin">Admin (akses penuh)</option></select></div>
                 <button class="btn" type="submit" id="addUserBtn">Buat Akun</button>
                 <div id="adminMsg" style="font-size:11.5px;"></div>
               </form>
+              <ul class="sec-list">
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5 9-10"/></svg><span>Kata sandi disimpan sebagai hash <b>Argon2id</b> ber-salt unik — tidak bisa dibaca siapa pun, termasuk admin.</span></li>
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5 9-10"/></svg><span>Login dibatasi <b>5 percobaan gagal / 15 menit</b> per IP.</span></li>
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5 9-10"/></svg><span>Reset sandi &amp; nonaktifkan akun otomatis <b>mengeluarkan</b> akun itu dari semua perangkat.</span></li>
+              </ul>
               <div class="admin-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 13px; margin-top:1px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Akun <b>Atasan/Viewer</b> hanya bisa melihat dashboard — tidak bisa mengklik tugas atau membuka panel admin. Cocok untuk laporan ke pimpinan.</span></div>
             </div>
           </div>
@@ -762,6 +827,32 @@
     </div>
   </div>
 </div>
+
+<div class="modal-scrim" id="pwModal">
+  <div class="modal" role="dialog" aria-modal="true" style="max-width:440px;">
+    <div class="modal-head">
+      <div class="modal-title-row">
+        <div class="modal-ic" style="color:var(--c1); background:var(--c1-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div>
+        <div class="modal-title"><b id="pwTitle">Ganti Kata Sandi</b><span id="pwSub"></span></div>
+        <button class="modal-close" id="pwClose" title="Tutup (Esc)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+    </div>
+    <form id="pwForm" style="padding:15px 18px 18px; display:flex; flex-direction:column; gap:13px;" autocomplete="off">
+      <div class="fld" id="pwCurWrap"><label for="pwCur">Kata sandi saat ini</label><div class="pw-wrap" data-pw><input id="pwCur" type="password" autocomplete="current-password"><button type="button" class="pw-eye" title="Tampilkan / sembunyikan"></button></div></div>
+      <div class="fld"><label for="pwNew">Kata sandi baru</label>
+        <div class="pw-wrap" data-pw><input id="pwNew" type="password" placeholder="min. 12 karakter" maxlength="128" autocomplete="new-password"><button type="button" class="pw-eye" title="Tampilkan / sembunyikan"></button><button type="button" class="btn btn-sm btn-ghost pw-gen">Buat acak</button></div>
+        <div class="pw-meter" data-meter><i></i><i></i><i></i><i></i></div>
+        <div class="pw-label"><span data-meter-label>Kekuatan sandi</span><span data-meter-len></span></div>
+        <ul class="pw-rules" data-rules></ul>
+      </div>
+      <div class="fld"><label for="pwConf">Ulangi kata sandi baru</label><div class="pw-wrap" data-pw><input id="pwConf" type="password" maxlength="128" autocomplete="new-password"><button type="button" class="pw-eye" title="Tampilkan / sembunyikan"></button></div></div>
+      <div id="pwMsg" style="font-size:11.5px; min-height:15px;"></div>
+      <button class="btn" type="submit" id="pwSave">Simpan Kata Sandi</button>
+      <div class="admin-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 13px; margin-top:1px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span id="pwNote"></span></div>
+    </form>
+  </div>
+</div>
+<div class="u-menu" id="uMenu" role="menu"></div>
 
 <div id="toast"></div>
 
@@ -980,41 +1071,184 @@ async function fetchMe(){
     const me=await r.json();
     if(me.name){document.getElementById('whoName').textContent=me.name;document.getElementById('avatar').textContent=me.name.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase();}
     if(me.email)document.getElementById('whoSub').textContent=me.email;
+    ME={email:me.email||'',name:me.name||''};
     applyRole(me.role||'viewer');
     return true;
   }catch(e){return false;}
 }
 
 /* ---------- admin panel (server mode) ---------- */
+/* Kebijakan sandi — cermin dari server/password.js (server tetap penentu akhir). */
+const PW_MIN=12;
+function pwRules(pw,ctx){
+  const cls=[/[a-z]/,/[A-Z]/,/[0-9]/,/[^A-Za-z0-9]/].filter(r=>r.test(pw)).length;
+  const low=pw.toLowerCase();
+  const parts=[(ctx.email||'').split('@')[0],...String(ctx.name||'').split(/\s+/)].map(x=>(x||'').toLowerCase()).filter(x=>x.length>=3);
+  return [
+    ['Minimal '+PW_MIN+' karakter', pw.length>=PW_MIN],
+    ['3 dari 4: huruf kecil, besar, angka, simbol', cls>=3],
+    ['Tanpa pengulangan / urutan (aaaa, 1234)', !!pw && !/(.)\1{3,}/.test(pw) && !/(0123|1234|2345|3456|4567|5678|6789|abcd|qwer|asdf)/.test(low)],
+    ['Tidak memuat nama atau email', !!pw && !parts.some(x=>low.includes(x))],
+  ];
+}
+function pwScore(pw){
+  if(!pw) return 0;
+  const pool=(/[a-z]/.test(pw)?26:0)+(/[A-Z]/.test(pw)?26:0)+(/[0-9]/.test(pw)?10:0)+(/[^A-Za-z0-9]/.test(pw)?32:0);
+  const bits=pw.length*Math.log2(pool||1);
+  return bits<40?1:bits<60?2:bits<80?3:4;
+}
+function genPassword(){
+  const sets=['abcdefghijkmnpqrstuvwxyz','ABCDEFGHJKLMNPQRSTUVWXYZ','23456789','!@#$%^&*-_=+?'];
+  const all=sets.join(''), rnd=n=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n;};
+  for(;;){
+    const out=sets.map(x=>x[rnd(x.length)]); while(out.length<20)out.push(all[rnd(all.length)]);
+    for(let i=out.length-1;i>0;i--){const j=rnd(i+1);[out[i],out[j]]=[out[j],out[i]];}
+    const pw=out.join(''); if(pwRules(pw,{}).every(r=>r[1]))return pw;
+  }
+}
+const EYE='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.9 17.9A10.5 10.5 0 0112 20C5 20 1 12 1 12a18.5 18.5 0 015.1-5.9M9.9 4.2A9.6 9.6 0 0112 4c7 0 11 8 11 8a18.6 18.6 0 01-2.2 3.2M14.1 14.1a3 3 0 01-4.2-4.2M1 1l22 22"/></svg>';
+/* Pasang show/hide, generator, meter & checklist pada satu field sandi. ctxFn → {email,name}. */
+function wirePwField(input,ctxFn,onGen){
+  const wrap=input.closest('[data-pw]'), fld=input.closest('.fld');
+  const eye=wrap.querySelector('.pw-eye'), gen=wrap.querySelector('.pw-gen');
+  eye.innerHTML=EYE;
+  eye.onclick=()=>{const show=input.type==='password';input.type=show?'text':'password';eye.innerHTML=show?EYE_OFF:EYE;};
+  if(gen){ wrap.style.setProperty('--gen-w',(gen.offsetWidth||74)+6+'px');
+    gen.onclick=async()=>{const pw=genPassword();input.value=pw;input.type='text';eye.innerHTML=EYE_OFF;update();if(onGen)onGen(pw);
+      try{await navigator.clipboard.writeText(pw);toast('Sandi acak dibuat & disalin — simpan di tempat aman.','good');}catch(_){toast('Sandi acak dibuat — salin & simpan di tempat aman.','good');}}; }
+  const meter=fld.querySelector('[data-meter]'), lbl=fld.querySelector('[data-meter-label]'), len=fld.querySelector('[data-meter-len]'), rules=fld.querySelector('[data-rules]');
+  function update(){
+    if(!meter)return; const pw=input.value, rs=pwRules(pw,ctxFn()), sc=rs.every(r=>r[1])?pwScore(pw):Math.min(1,pwScore(pw));
+    meter.dataset.s=sc; lbl.textContent=pw?['','Lemah','Cukup','Kuat','Sangat kuat'][sc]:'Kekuatan sandi'; len.textContent=pw?pw.length+' karakter':'';
+    rules.innerHTML=rs.map(([t,ok])=>'<li class="'+(ok?'ok':'')+'">'+t+'</li>').join('');
+  }
+  input.addEventListener('input',update); update();
+  return {update,valid:()=>pwRules(input.value,ctxFn()).every(r=>r[1])};
+}
+function timeAgo(iso){
+  if(!iso)return 'belum pernah login'; const d=(Date.now()-new Date(iso).getTime())/1000;
+  if(d<90)return 'aktif barusan'; if(d<3600)return 'aktif '+Math.round(d/60)+' mnt lalu'; if(d<86400)return 'aktif '+Math.round(d/3600)+' jam lalu';
+  return 'aktif '+Math.round(d/86400)+' hari lalu';
+}
+let USERS=[];
 async function loadUsers(){
   try{
     const r=await fetch('/api/admin/users',{credentials:'include'});
     if(!r.ok) return;
-    const users=await r.json();
-    renderUsers(users);
+    USERS=await r.json();
+    renderUsers(USERS);
   }catch(e){}
 }
 function renderUsers(users){
   const body=document.getElementById('usersBody');
-  body.innerHTML=users.map(u=>`<tr><td>${u.name||'—'}</td><td class="muted-col">${u.email}</td><td><span class="role-badge ${u.role==='admin'?'admin':'viewer'}">${u.role==='admin'?'Admin':'Atasan/Viewer'}</span></td><td style="text-align:right;"><button class="btn btn-sm btn-ghost" data-act="role" data-id="${u.id}" data-role="${u.role}">${u.role==='admin'?'Jadikan Viewer':'Jadikan Admin'}</button> <button class="btn btn-sm btn-danger" data-act="del" data-id="${u.id}">Hapus</button></td></tr>`).join('')||'<tr class="empty-row"><td colspan="4">Belum ada akun.</td></tr>';
-  body.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>userAction(b.dataset)));
+  const ini=n=>(n||'?').split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase();
+  document.getElementById('usersCount').textContent=users.length+' akun · '+users.filter(u=>u.role==='admin'&&!u.banned).length+' admin';
+  body.innerHTML=users.map(u=>`<tr class="${u.banned?'u-banned':''}">
+    <td><div class="u-cell"><div class="u-ava">${esc(ini(u.name||u.email))}</div><div style="min-width:0;"><div class="u-name">${esc(u.name||'—')}${u.self?'<span class="u-you">ANDA</span>':''}</div><div class="u-mail">${esc(u.email)}</div></div></div></td>
+    <td><span class="role-badge ${u.role==='admin'?'admin':'viewer'}">${u.role==='admin'?'Admin':'Atasan/Viewer'}</span></td>
+    <td><span class="u-stat ${u.banned?'off':''}"><i></i>${u.banned?'Nonaktif':'Aktif'}</span><div class="u-sub">${u.banned?'akses diblokir':esc(timeAgo(u.lastActive))}${!u.banned&&u.sessions?' · '+u.sessions+' sesi':''}</div></td>
+    <td style="text-align:right;">${u.self?'<span class="u-sub">—</span>':`<button class="u-menu-btn" data-id="${esc(u.id)}" title="Aksi" aria-haspopup="menu"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></button>`}</td></tr>`).join('')||'<tr class="empty-row"><td colspan="4">Belum ada akun.</td></tr>';
+  body.querySelectorAll('.u-menu-btn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openUserMenu(b);}));
 }
-async function userAction(ds){
-  if(ds.act==='del'){ if(!window.confirm('Hapus akun ini?')) return; await fetch('/api/admin/users/'+ds.id,{method:'DELETE',credentials:'include'}); loadUsers(); }
-  if(ds.act==='role'){ const nr=ds.role==='admin'?'viewer':'admin'; await fetch('/api/admin/users/'+ds.id+'/role',{method:'PATCH',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({role:nr})}); loadUsers(); }
+const uMenu=document.getElementById('uMenu');
+const IC={
+  role:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6z"/></svg>',
+  pw:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>',
+  out:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>',
+  ban:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>',
+  ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>',
+  del:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>',
+};
+function openUserMenu(btn){
+  const u=USERS.find(x=>x.id===btn.dataset.id); if(!u)return;
+  uMenu.innerHTML=`<button data-a="role">${IC.role}${u.role==='admin'?'Jadikan Atasan/Viewer':'Jadikan Admin'}</button>
+    <button data-a="pw">${IC.pw}Reset kata sandi…</button>
+    ${u.banned?'':`<button data-a="out">${IC.out}Keluarkan dari semua perangkat</button>`}
+    <hr><button data-a="ban" class="${u.banned?'':'danger'}">${u.banned?IC.ok+'Aktifkan kembali':IC.ban+'Nonaktifkan akun'}</button>
+    <button data-a="del" class="danger">${IC.del}Hapus akun</button>`;
+  uMenu.classList.add('show');
+  const r=btn.getBoundingClientRect(), mh=uMenu.offsetHeight, mw=uMenu.offsetWidth;
+  uMenu.style.left=Math.max(8,Math.min(innerWidth-mw-8,r.right-mw))+'px';
+  uMenu.style.top=(r.bottom+6+mh>innerHeight-8?r.top-mh-6:r.bottom+6)+'px';
+  uMenu.querySelectorAll('button').forEach(b=>b.onclick=()=>{closeUserMenu();userAction(b.dataset.a,u);});
 }
+function closeUserMenu(){uMenu.classList.remove('show');}
+document.addEventListener('click',e=>{if(!uMenu.contains(e.target))closeUserMenu();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeUserMenu();});
+window.addEventListener('scroll',closeUserMenu,true);
+async function adminCall(url,method,payload,okMsg){
+  try{
+    const r=await fetch(url,{method,headers:{'Content-Type':'application/json'},credentials:'include',body:payload?JSON.stringify(payload):undefined});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok){toast(j.error||j.message||'Gagal.','bad');return false;}
+    if(okMsg)toast(okMsg,'good'); loadUsers(); return true;
+  }catch(_){toast('Tidak dapat terhubung ke server.','bad');return false;}
+}
+async function userAction(a,u){
+  const who=u.name||u.email, base='/api/admin/users/'+encodeURIComponent(u.id);
+  if(a==='role'){const nr=u.role==='admin'?'viewer':'admin';if(!confirm(`Ubah role ${who} menjadi ${nr==='admin'?'Admin (akses penuh)':'Atasan/Viewer'}?`))return;adminCall(base+'/role','PATCH',{role:nr},'Role diperbarui.');}
+  if(a==='pw')openPwModal(u);
+  if(a==='out'){if(!confirm(`Keluarkan ${who} dari semua perangkat? Ia harus login ulang.`))return;adminCall(base+'/revoke-sessions','POST',null,'Semua sesi dicabut.');}
+  if(a==='ban'){if(!u.banned&&!confirm(`Nonaktifkan ${who}? Akun langsung dikeluarkan & tidak bisa login sampai diaktifkan kembali.`))return;adminCall(base+'/ban','POST',{banned:!u.banned},u.banned?'Akun diaktifkan kembali.':'Akun dinonaktifkan.');}
+  if(a==='del'){if(!confirm(`Hapus akun ${who} secara permanen? Tindakan ini tidak bisa dibatalkan.`))return;adminCall(base,'DELETE',null,'Akun dihapus.');}
+}
+const nuPw=wirePwField(document.getElementById('nu-pass'),()=>({email:document.getElementById('nu-email').value,name:document.getElementById('nu-name').value}));
+['nu-email','nu-name'].forEach(id=>document.getElementById(id).addEventListener('input',nuPw.update));
 document.getElementById('addUserForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const msg=document.getElementById('adminMsg'), btn=document.getElementById('addUserBtn');
   const payload={name:document.getElementById('nu-name').value.trim(),email:document.getElementById('nu-email').value.trim(),password:document.getElementById('nu-pass').value,role:document.getElementById('nu-role').value};
   if(!serverMode){ msg.style.color='var(--warn-ink)'; msg.textContent='Mode pratinjau — jalankan di server untuk membuat akun sungguhan.'; return; }
+  if(!nuPw.valid()){ msg.style.color='var(--bad-ink)'; msg.textContent='Kata sandi belum memenuhi semua syarat.'; return; }
   btn.disabled=true; msg.style.color='var(--ink-muted)'; msg.textContent='Menyimpan…';
   try{
     const r=await fetch('/api/admin/users',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify(payload)});
-    if(r.ok){ msg.style.color='var(--good-ink)'; msg.textContent='Akun berhasil dibuat.'; e.target.reset(); loadUsers(); }
+    if(r.ok){ msg.style.color='var(--good-ink)'; msg.textContent='Akun berhasil dibuat. Berikan kata sandinya lewat jalur aman.'; e.target.reset(); document.getElementById('nu-pass').type='password'; nuPw.update(); loadUsers(); }
     else { const j=await r.json().catch(()=>({})); msg.style.color='var(--bad-ink)'; msg.textContent=j.error||j.message||'Gagal membuat akun.'; }
   }catch(_){ msg.style.color='var(--bad-ink)'; msg.textContent='Tidak dapat terhubung ke server.'; }
   finally{ btn.disabled=false; }
+});
+
+/* ---------- modal kata sandi: reset (admin → akun lain) & ganti sandi sendiri ---------- */
+const pwModal=document.getElementById('pwModal'); let PW_TARGET=null; let ME={email:'',name:''};
+const pwNewF=wirePwField(document.getElementById('pwNew'),()=>PW_TARGET?{email:PW_TARGET.email,name:PW_TARGET.name}:ME,pw=>{document.getElementById('pwConf').value=pw;});
+wirePwField(document.getElementById('pwCur'),()=>ME); wirePwField(document.getElementById('pwConf'),()=>ME);
+function openPwModal(target){
+  PW_TARGET=target||null;
+  document.getElementById('pwForm').reset(); ['pwCur','pwNew','pwConf'].forEach(id=>document.getElementById(id).type='password'); pwNewF.update();
+  document.getElementById('pwMsg').textContent='';
+  document.getElementById('pwCurWrap').style.display=target?'none':'';
+  document.getElementById('pwTitle').textContent=target?'Reset Kata Sandi':'Ganti Kata Sandi Saya';
+  document.getElementById('pwSub').textContent=target?(target.name||'')+' · '+target.email:(ME.email||'');
+  document.getElementById('pwNote').textContent=target?'Akun ini akan dikeluarkan dari semua perangkat dan harus login dengan sandi baru. Sampaikan sandinya lewat jalur aman (bukan grup chat).':'Setelah disimpan, sesi Anda di perangkat lain otomatis dikeluarkan.';
+  pwModal.classList.add('show'); setTimeout(()=>document.getElementById(target?'pwNew':'pwCur').focus(),60);
+}
+function closePwModal(){pwModal.classList.remove('show');}
+document.getElementById('pwClose').onclick=closePwModal;
+pwModal.addEventListener('click',e=>{if(e.target===pwModal)closePwModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&pwModal.classList.contains('show'))closePwModal();});
+const myPwBtn=document.getElementById('myPwBtn');
+myPwBtn.addEventListener('click',()=>{if(!serverMode){toast('Mode pratinjau — jalankan di server untuk mengganti sandi.','warn');return;}openPwModal(null);});
+myPwBtn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();myPwBtn.click();}});
+document.getElementById('pwForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const msg=document.getElementById('pwMsg'), btn=document.getElementById('pwSave');
+  const cur=document.getElementById('pwCur').value, nw=document.getElementById('pwNew').value, cf=document.getElementById('pwConf').value;
+  const fail=t=>{msg.style.color='var(--bad-ink)';msg.textContent=t;};
+  if(!PW_TARGET&&!cur)return fail('Isi kata sandi saat ini.');
+  if(!pwNewF.valid())return fail('Kata sandi baru belum memenuhi semua syarat.');
+  if(nw!==cf)return fail('Konfirmasi kata sandi tidak sama.');
+  btn.disabled=true; msg.style.color='var(--ink-muted)'; msg.textContent='Menyimpan…';
+  try{
+    const url=PW_TARGET?'/api/admin/users/'+encodeURIComponent(PW_TARGET.id)+'/password':'/api/account/password';
+    const body=PW_TARGET?{password:nw}:{currentPassword:cur,newPassword:nw};
+    const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify(body)});
+    const j=await r.json().catch(()=>({}));
+    if(r.ok){closePwModal();toast(PW_TARGET?'Kata sandi direset & semua sesi akun itu dicabut.':'Kata sandi Anda berhasil diganti.','good');if(PW_TARGET)loadUsers();}
+    else fail(j.error||j.message||'Gagal menyimpan.');
+  }catch(_){fail('Tidak dapat terhubung ke server.');}
+  finally{btn.disabled=false;}
 });
 
 document.getElementById('logoutBtn').addEventListener('click',async()=>{try{await fetch('/api/auth/sign-out',{method:'POST',credentials:'include'});}catch(e){}window.location.href='/login.html';});
@@ -1112,12 +1346,25 @@ function getGraph(data){
   _graphCache={nodes,links}; return _graphCache;
 }
 function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888';}
-function nodeRadius(n){return n.type==='root'?9:n.type==='ws'?6:3;}
-function nodeColor(n){if(n.type==='root')return cssv('--ink');if(n.type==='ws')return cssv('--ink-3');return n.status==='done'?cssv('--good'):n.status==='progress'?cssv('--warn'):n.status==='overdue'?cssv('--bad'):cssv('--c1');}
-function sizeCanvas(c){const dpr=Math.min(2,window.devicePixelRatio||1);const r=c.getBoundingClientRect();GRAPH.w=r.width||800;GRAPH.h=r.height||440;GRAPH.dpr=dpr;c.width=GRAPH.w*dpr;c.height=GRAPH.h*dpr;}
+/* palet luminous khusus graph (kanvas selalu gelap agar efek glow terbaca) */
+const GP={done:'#34d399',progress:'#fbbf24',todo:'#60a5fa',overdue:'#fb7185',ws:'#c4b5fd',root:'#f8fafc'};
+const GSTAT=['done','progress','todo','overdue'];
+function hexA(hex,a){const v=parseInt(hex.slice(1),16);return `rgba(${v>>16&255},${v>>8&255},${v&255},${a})`;}
+const _gspr=new Map();
+function glowSprite(col){let s=_gspr.get(col);if(s)return s;s=document.createElement('canvas');s.width=s.height=64;const g=s.getContext('2d');const gr=g.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,hexA(col,1));gr.addColorStop(0.22,hexA(col,0.55));gr.addColorStop(0.55,hexA(col,0.14));gr.addColorStop(1,hexA(col,0));g.fillStyle=gr;g.fillRect(0,0,64,64);_gspr.set(col,s);return s;}
+function glow(ctx,col,x,y,rad,a){if(a<=0.004||rad<=0)return;ctx.globalAlpha=Math.min(1,a);ctx.drawImage(glowSprite(col),x-rad,y-rad,rad*2,rad*2);}
+function computeStats(){const st=new Map();GRAPH.nodes.forEach(n=>{if(n.type!=='task')return;let s=st.get(n.ws);if(!s){s={done:0,progress:0,todo:0,overdue:0,total:0};st.set(n.ws,s);}s[GSTAT.includes(n.status)?n.status:'todo']++;s.total++;});GRAPH.stats=st;GRAPH.nodes.forEach(n=>{if(n.type==='ws'){const s=st.get(n.id);n._r=5+Math.min(8,Math.sqrt(s?s.total:0)*1.1);}});}
+function nodeRadius(n){return n.type==='root'?12:n.type==='ws'?(n._r||6):3.2;}
+function nodeColor(n){if(n.type==='root')return GP.root;if(n.type==='ws')return GP.ws;return GP[n.status]||GP.todo;}
+function sizeCanvas(c){const dpr=Math.min(2,window.devicePixelRatio||1);const r=c.getBoundingClientRect();GRAPH.w=r.width||800;GRAPH.h=r.height||520;GRAPH.dpr=dpr;c.width=GRAPH.w*dpr;c.height=GRAPH.h*dpr;}
 function toGraph(px,py){return GRAPH.t.invert([px,py]);}
-function findNode(px,py){const[gx,gy]=GRAPH.t.invert([px,py]);let best=null,bd=Infinity;for(const n of GRAPH.nodes){const dx=n.x-gx,dy=n.y-gy,d=dx*dx+dy*dy,rr=(nodeRadius(n)+5)**2;if(d<rr&&d<bd){bd=d;best=n;}}return best;}
-function nodeTip(n){if(n.type==='root')return '<b>'+n.label+'</b><br><span class="tk">Pusat workspace</span>';if(n.type==='ws'){const c=GRAPH.nodes.filter(x=>x.type==='task'&&x.ws===n.id).length;return '<b>'+n.label+'</b><br><span class="tk">'+c+' tugas · klik untuk fokus</span>';}const sl={done:'Selesai',progress:'Dikerjakan',overdue:'Terlambat',todo:'Belum mulai'};return '<b>'+n.label+'</b><br><span class="tk">'+(sl[n.status]||'')+'</span>';}
+function findNode(px,py){const[gx,gy]=GRAPH.t.invert([px,py]);const pad=6/GRAPH.t.k;let best=null,bd=Infinity;for(const n of GRAPH.nodes){const dx=n.x-gx,dy=n.y-gy,d=dx*dx+dy*dy,rr=(nodeRadius(n)+pad)**2;if(d<rr&&d<bd){bd=d;best=n;}}return best;}
+function nodeTip(n){
+  if(n.type==='root')return '<b>'+n.label+'</b><br><span class="tk">Pusat workspace · '+GRAPH.nodes.filter(x=>x.type==='task').length+' tugas</span>';
+  if(n.type==='ws'){const s=(GRAPH.stats&&GRAPH.stats.get(n.id))||{done:0,progress:0,todo:0,overdue:0,total:0};const pct=s.total?Math.round(s.done/s.total*100):0;
+    return '<b>'+n.label+'</b><br><span class="tk">'+s.total+' tugas · '+pct+'% selesai</span><br><span class="tk"><span style="color:'+GP.done+'">●</span> '+s.done+' &nbsp;<span style="color:'+GP.progress+'">●</span> '+s.progress+' &nbsp;<span style="color:'+GP.todo+'">●</span> '+s.todo+' &nbsp;<span style="color:'+GP.overdue+'">●</span> '+s.overdue+'</span><br><span class="tk">klik untuk fokus</span>';}
+  const sl={done:'Selesai',progress:'Dikerjakan',overdue:'Terlambat',todo:'Belum mulai'};const ws=GRAPH.by.get(n.ws);
+  return '<b>'+n.label+'</b><br><span class="tk"><span style="color:'+nodeColor(n)+'">●</span> '+(sl[n.status]||'')+(ws?' · '+ws.label:'')+'</span>';}
 function isActive(n){
   if(GRAPH.focus){if(n.id==='root'||n.id===GRAPH.focus)return true;if(n.type==='task'&&n.ws===GRAPH.focus)return true;return false;}
   const pq=SEARCH_PQ;
@@ -1129,53 +1376,135 @@ function isActive(n){
   }
   return true;
 }
+/* tetangga simpul yang di-hover → disorot, sisanya diredupkan */
+function hoverSet(){const h=GRAPH.hover;if(!h)return null;const s=new Set([h.id]);
+  if(h.type==='root')GRAPH.nodes.forEach(n=>{if(n.type==='ws')s.add(n.id);});
+  else if(h.type==='ws'){s.add('root');GRAPH.nodes.forEach(n=>{if(n.ws===h.id)s.add(n.id);});}
+  else if(h.ws)s.add(h.ws);
+  return s;}
 const FADE_MS=550;
 function fadeOf(n){return n._born?Math.min(1,(performance.now()-n._born)/FADE_MS):1;}
 const dX=n=>n.x+(n._dx||0), dY=n=>n.y+(n._dy||0);
 function draw(){
   const c=document.getElementById('graphCanvas'); if(!c||!GRAPH.sim)return;
-  const ctx=c.getContext('2d'); const {w,h,dpr,t}=GRAPH;
+  const ctx=c.getContext('2d'); const {w,h,dpr,t}=GRAPH; const k=t.k;
   const now=performance.now()/1000;
   const searching=SEARCH_PQ&&(SEARCH_PQ.terms.length||SEARCH_PQ.status);
-  // offset visual (denyut lembut — kesan "hidup") tanpa mengubah layout fisik
-  GRAPH.nodes.forEach(n=>{const amp=n.type==='task'?1.15:0.4;n._dx=Math.sin(now*0.5+(n._bph||0))*amp;n._dy=Math.cos(now*0.42+(n._bph||0)*1.3)*amp;});
-  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h); ctx.translate(t.x,t.y); ctx.scale(t.k,t.k);
-  // 1) garis penghubung
-  ctx.lineWidth=0.6;
-  GRAPH.links.forEach(l=>{const a=l.source,b=l.target;if(!a||!b)return;const on=isActive(a)&&isActive(b);const f=Math.min(fadeOf(a),fadeOf(b));ctx.strokeStyle=on?`rgba(120,130,150,${0.28*f})`:`rgba(120,130,150,${0.05*f})`;ctx.beginPath();ctx.moveTo(dX(a),dY(a));ctx.lineTo(dX(b),dY(b));ctx.stroke();});
-  // 2) sinyal sinaps — kilatan cahaya menjalar sepanjang tautan (slow-motion loop)
-  ctx.globalCompositeOperation='lighter';
+  if(!GRAPH.stats)computeStats();
+  const hs=hoverSet();
+  // offset visual (denyut lembut) + interpolasi halus hover/sorotan
+  GRAPH.nodes.forEach(n=>{const amp=n.type==='task'?1.15:0.4;n._dx=Math.sin(now*0.5+(n._bph||0))*amp;n._dy=Math.cos(now*0.42+(n._bph||0)*1.3)*amp;
+    const hv=(GRAPH.hover&&GRAPH.hover.id===n.id)?1:0; n._hv=(n._hv||0)+(hv-(n._hv||0))*0.2;
+    const lt=(!hs||hs.has(n.id))?1:0.18; n._lt=(n._lt==null?1:n._lt)+(lt-(n._lt==null?1:n._lt))*0.16;});
+  // 0) latar: nebula gelap + bintang paralaks
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
+  const bg=ctx.createRadialGradient(w*0.5,h*0.42,0,w*0.5,h*0.5,Math.max(w,h)*0.78);
+  bg.addColorStop(0,'#161b33'); bg.addColorStop(0.5,'#0b0f1e'); bg.addColorStop(1,'#04050a');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,w,h);
+  glow(ctx,'#7c3aed',w*0.22,h*0.25,Math.max(w,h)*0.35,0.07);
+  glow(ctx,'#0ea5e9',w*0.8,h*0.78,Math.max(w,h)*0.32,0.06);
+  if(!GRAPH.stars)GRAPH.stars=Array.from({length:160},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.1+0.25,p:Math.random()*6.28,z:0.02+Math.random()*0.06}));
+  ctx.fillStyle='#dbeafe';
+  GRAPH.stars.forEach(s=>{const sx=((s.x*w+t.x*s.z)%w+w)%w, sy=((s.y*h+t.y*s.z)%h+h)%h;ctx.globalAlpha=0.06+0.16*(0.5+0.5*Math.sin(now*0.7+s.p));ctx.beginPath();ctx.arc(sx,sy,s.r,0,6.2832);ctx.fill();});
+  ctx.globalAlpha=1;
+  ctx.translate(t.x,t.y); ctx.scale(k,k);
+  const lw=1/Math.sqrt(k);
+  // 1) garis sinaps (blend aditif → persilangan ikut menyala)
+  ctx.globalCompositeOperation='lighter'; ctx.lineCap='round';
+  GRAPH.links.forEach(l=>{const a=l.source,b=l.target;if(!a||!b||a.x==null)return;
+    const on=isActive(a)&&isActive(b);const f=Math.min(fadeOf(a),fadeOf(b));
+    const hot=hs&&hs.has(a.id)&&hs.has(b.id);
+    const col=a.type==='root'?GP.ws:nodeColor(b);
+    let al=on?(a.type==='root'?0.26:0.2):0.035; if(hot)al=0.85; else if(hs)al*=0.3;
+    ctx.strokeStyle=col; ctx.beginPath(); ctx.moveTo(dX(a),dY(a)); ctx.lineTo(dX(b),dY(b));
+    if(hot||(on&&a.type==='root')){ctx.globalAlpha=(hot?0.22:0.06)*f;ctx.lineWidth=(hot?5:3.2)*lw;ctx.stroke();}
+    ctx.globalAlpha=al*f; ctx.lineWidth=(hot?1.5:a.type==='root'?0.9:0.65)*lw; ctx.stroke();});
+  // 2) impuls sinaps — komet bercahaya menjalar + kilatan saat tiba
   GRAPH.links.forEach(l=>{
-    const a=l.source,b=l.target; if(!a||!b)return;
-    const on=isActive(a)&&isActive(b); if(!on)return;
-    const hovBoost=(GRAPH.hover&&(GRAPH.hover.id===a.id||GRAPH.hover.id===b.id))?1:0;
-    const per=l._p||4, ph=l._ph||0, dur=0.6;
-    const cyc=((now/per)+ph)%1;
-    if(cyc<dur){
-      const tt=cyc/dur; const e=tt<0.5?2*tt*tt:1-Math.pow(-2*tt+2,2)/2;
-      const x=dX(a)+(dX(b)-dX(a))*e, y=dY(a)+(dY(b)-dY(a))*e;
-      const glow=Math.sin(tt*Math.PI)*(0.6+0.4*hovBoost)*Math.min(fadeOf(a),fadeOf(b));
-      const col=nodeColor(b);
-      ctx.globalAlpha=0.16*glow; ctx.beginPath(); ctx.arc(x,y,4.4,0,6.2832); ctx.fillStyle=col; ctx.fill();
-      ctx.globalAlpha=0.95*glow; ctx.beginPath(); ctx.arc(x,y,1.7,0,6.2832); ctx.fillStyle=col; ctx.fill();
-    }
+    const a=l.source,b=l.target; if(!a||!b||a.x==null)return;
+    if(!(isActive(a)&&isActive(b)))return;
+    const hot=hs&&hs.has(a.id)&&hs.has(b.id);
+    const per=hot?(l._p||4)*0.55:(l._p||4), ph=l._ph||0, dur=0.5;
+    const cyc=((now/per)+ph)%1; if(cyc>=dur)return;
+    const tt=cyc/dur; const ease=u=>u<0.5?2*u*u:1-Math.pow(-2*u+2,2)/2;
+    const env=Math.sin(tt*Math.PI)*Math.min(fadeOf(a),fadeOf(b))*(hot?1.5:hs?0.25:1);
+    const col=a.type==='root'?GP.ws:nodeColor(b);
+    const ax=dX(a),ay=dY(a),bx=dX(b),by=dY(b);
+    for(let i=5;i>=1;i--){const e=ease(Math.max(0,tt-i*0.035));glow(ctx,col,ax+(bx-ax)*e,ay+(by-ay)*e,(7-i)*1.15*lw*1.4,env*0.28*(1-i/6));}
+    const e=ease(tt), x=ax+(bx-ax)*e, y=ay+(by-ay)*e;
+    glow(ctx,col,x,y,10*lw*1.3,env*0.95);
+    ctx.globalAlpha=Math.min(1,env); ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.arc(x,y,1.05*lw,0,6.2832); ctx.fill();
+    if(tt>0.82)glow(ctx,col,bx,by,nodeRadius(b)*4.5,(tt-0.82)/0.18*0.55*env);
   });
-  ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
-  // 3) simpul (dengan denyut nafas + kilau saat firing/hover)
+  // 3) simpul: halo bercahaya + inti
   GRAPH.nodes.forEach(n=>{
-    const on=isActive(n);const hov=GRAPH.hover&&GRAPH.hover.id===n.id;
-    const breathe=1+0.05*Math.sin(now*1.1+(n._bph||0));
-    const r=nodeRadius(n)*(hov?1.7:breathe);
-    ctx.globalAlpha=(on?1:0.1)*fadeOf(n);
-    if((hov||(searching&&on&&n.type==='task'))){const col=nodeColor(n);ctx.globalAlpha=(on?0.5:0.06)*fadeOf(n);ctx.beginPath();ctx.arc(dX(n),dY(n),r+4,0,6.2832);ctx.fillStyle=col;ctx.fill();ctx.globalAlpha=(on?1:0.1)*fadeOf(n);}
-    ctx.beginPath();ctx.arc(dX(n),dY(n),r,0,6.2832);ctx.fillStyle=nodeColor(n);ctx.fill();
-    if(n.type!=='task'){ctx.lineWidth=1.2;ctx.strokeStyle=cssv('--surface');ctx.stroke();}
+    const on=isActive(n), f=fadeOf(n), x=dX(n), y=dY(n), col=nodeColor(n);
+    const vis=(on?1:0.1)*f*(0.3+0.7*n._lt);
+    const breathe=1+0.06*Math.sin(now*1.1+(n._bph||0));
+    const r=nodeRadius(n)*(breathe+0.55*n._hv);
+    const hl=searching&&on&&n.type==='task';
+    ctx.globalCompositeOperation='lighter';
+    if(n.type==='root')glow(ctx,'#a78bfa',x,y,r*(6.5+0.8*Math.sin(now*1.2)),0.55*vis);
+    glow(ctx,col,x,y,r*(n.type==='ws'?3.4:4.2)*(1+0.5*n._hv)*(hl?1.5:1),vis*(n.type==='task'?0.5:0.42)*(hl?1.7:1)*(1+n._hv));
+    ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=vis;
+    if(n.type==='task'){
+      ctx.beginPath(); ctx.arc(x,y,r,0,6.2832); ctx.fillStyle=col; ctx.fill();
+      ctx.globalAlpha=vis*0.65; ctx.beginPath(); ctx.arc(x-r*0.3,y-r*0.3,r*0.38,0,6.2832); ctx.fillStyle='#ffffff'; ctx.fill();
+    }else if(n.type==='ws'){
+      ctx.beginPath(); ctx.arc(x,y,r,0,6.2832); ctx.fillStyle='#0c1124'; ctx.fill();
+      const s=GRAPH.stats&&GRAPH.stats.get(n.id); ctx.lineWidth=Math.max(1.6,r*0.36);
+      if(s&&s.total){let a0=-Math.PI/2;const gap=s.total>1?0.07:0;GSTAT.forEach(st=>{const v=s[st];if(!v)return;const a1=a0+v/s.total*6.2832;ctx.beginPath();ctx.arc(x,y,r,a0+gap/2,Math.max(a0+gap/2+0.01,a1-gap/2));ctx.strokeStyle=st==='todo'?GP.todo:GP[st];ctx.stroke();a0=a1;});}
+      else{ctx.beginPath();ctx.arc(x,y,r,0,6.2832);ctx.strokeStyle=GP.ws;ctx.stroke();}
+      ctx.beginPath(); ctx.arc(x,y,r*0.34,0,6.2832); ctx.fillStyle='#e9e5ff'; ctx.fill();
+    }else{
+      const g=ctx.createRadialGradient(x-r*0.3,y-r*0.3,0,x,y,r);g.addColorStop(0,'#ffffff');g.addColorStop(0.6,'#ddd6fe');g.addColorStop(1,'#8b5cf6');
+      ctx.beginPath(); ctx.arc(x,y,r,0,6.2832); ctx.fillStyle=g; ctx.fill();
+      ctx.lineWidth=1.4*lw; ctx.strokeStyle='rgba(255,255,255,.7)'; ctx.stroke();
+    }
     ctx.globalAlpha=1;
   });
-  // 4) label
-  ctx.fillStyle=cssv('--ink-2'); ctx.font='600 10px Inter,sans-serif'; ctx.textAlign='center';
-  GRAPH.nodes.forEach(n=>{const hov=GRAPH.hover&&GRAPH.hover.id===n.id;if(n.type==='task'&&!hov)return;if(!isActive(n))return;const lbl=n.type==='task'?(n.label.length>26?n.label.slice(0,26)+'…':n.label):n.label;ctx.fillText(lbl,dX(n),dY(n)-nodeRadius(n)-4);});
-  ctx.setTransform(1,0,0,1,0,0);
+  // 4) label — digambar di ruang layar (tajam di zoom berapa pun), kontras tinggi,
+  //    dengan pil gelap + penghindaran tabrakan berbasis prioritas
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalCompositeOperation='source-over';
+  const cand=[];
+  GRAPH.nodes.forEach(n=>{ if(!isActive(n))return; const hv=GRAPH.hover&&GRAPH.hover.id===n.id; const inHs=hs&&hs.has(n.id); let pri;
+    if(hv)pri=1e7; else if(n.type==='root')pri=1e6;
+    else if(n.type==='ws'){pri=1000+((GRAPH.stats&&GRAPH.stats.get(n.id)?.total)||0); if(inHs)pri+=1e5; if(GRAPH.focus===n.id)pri+=1e5;}
+    else{ const show=(inHs&&k>1.1)||(GRAPH.focus&&n.ws===GRAPH.focus&&k>1.2)||k>2.3||(searching&&k>1.4); if(!show)return; pri=inHs?500:10; }
+    cand.push([pri,n]); });
+  cand.sort((a,b)=>b[0]-a[0]);
+  const placed=[]; ctx.textAlign='center'; ctx.textBaseline='middle';
+  cand.forEach(([,n])=>{
+    const hv=GRAPH.hover&&GRAPH.hover.id===n.id; const sx=t.applyX(dX(n)), sy=t.applyY(dY(n));
+    if(sx<-80||sx>w+80||sy<-30||sy>h+30)return;
+    const isTask=n.type==='task'; const fs=n.type==='root'?13:isTask?10.5:11.5;
+    ctx.font=(n.type==='task'?'550 ':n.type==='root'?'700 ':'650 ')+fs+'px Inter,sans-serif';
+    let lbl=n.label||''; const max=isTask?30:32; if(lbl.length>max&&!hv)lbl=lbl.slice(0,max-1)+'…';
+    const tw=ctx.measureText(lbl).width, pw=tw+(isTask?10:14), ph=fs+(isTask?7:9);
+    const off=Math.max(3,nodeRadius(n)*k*(1+0.55*(n._hv||0)))+5;
+    const bx=sx-pw/2, by=sy-off-ph;
+    const rc=[bx-2,by-2,bx+pw+2,by+ph+2];
+    if(!hv&&placed.some(p=>!(rc[2]<p[0]||rc[0]>p[2]||rc[3]<p[1]||rc[1]>p[3])))return;
+    placed.push(rc);
+    const a=(hs&&!hs.has(n.id)?0.4:1)*fadeOf(n);
+    ctx.globalAlpha=a; ctx.beginPath();
+    if(ctx.roundRect)ctx.roundRect(bx,by,pw,ph,ph/2); else ctx.rect(bx,by,pw,ph);
+    ctx.fillStyle=hv?'rgba(15,20,40,.94)':'rgba(8,11,24,.8)'; ctx.fill();
+    ctx.lineWidth=1; ctx.strokeStyle=hv?hexA(nodeColor(n),0.85):n.type==='root'?'rgba(196,181,253,.45)':'rgba(255,255,255,.12)'; ctx.stroke();
+    ctx.fillStyle=n.type==='root'?'#ffffff':isTask?'#e2e8f0':'#f8fafc';
+    ctx.fillText(lbl,sx,by+ph/2+0.5);
+  });
+  ctx.globalAlpha=1; ctx.setTransform(1,0,0,1,0,0);
+}
+/* zoom halus ke sekumpulan simpul (fokus / reset / tombol paskan) */
+function graphFit(pred,dur){
+  const c=document.getElementById('graphCanvas'); if(!c||!GRAPH.zoom)return;
+  const ns=GRAPH.nodes.filter(n=>n.x!=null&&(!pred||pred(n))); if(!ns.length)return;
+  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity; ns.forEach(n=>{x0=Math.min(x0,n.x);y0=Math.min(y0,n.y);x1=Math.max(x1,n.x);y1=Math.max(y1,n.y);});
+  const pad=48, bw=Math.max(60,x1-x0), bh=Math.max(60,y1-y0);
+  const k=Math.max(0.2,Math.min(2.4,Math.min((GRAPH.w-pad*2)/bw,(GRAPH.h-pad*2)/bh)));
+  const tr=d3.zoomIdentity.translate(GRAPH.w/2-k*(x0+x1)/2,GRAPH.h/2-k*(y0+y1)/2).scale(k);
+  d3.select(c).transition().duration(dur==null?700:dur).ease(d3.easeCubicInOut).call(GRAPH.zoom.transform,tr);
 }
 /* ---- loop animasi berkelanjutan (dijeda saat tab/graph tak terlihat) ---- */
 function graphFrame(){ if(!GRAPH.playing)return; draw(); GRAPH.raf=requestAnimationFrame(graphFrame); }
@@ -1184,16 +1513,17 @@ function stopGraphLoop(){ GRAPH.playing=false; if(GRAPH.raf)cancelAnimationFrame
 function syncGraphPlay(){ const want=GRAPH.visible&&!document.hidden; if(want)startGraphLoop(); else stopGraphLoop(); }
 document.addEventListener('visibilitychange',syncGraphPlay);
 function assignPulse(nodes,links){nodes.forEach(n=>{if(n._bph==null)n._bph=Math.random()*6.283;});links.forEach(l=>{if(l._p==null){l._p=3.2+Math.random()*3.2;l._ph=Math.random();}});}
-function setFocus(id){GRAPH.focus=id;const fb=document.getElementById('graphFocus');if(id){const ws=GRAPH.by.get(id);fb.classList.add('show');fb.innerHTML='Fokus: <b>'+(ws?ws.label:id)+'</b> <button id="clearFocus">tampilkan semua</button>';fb.querySelector('#clearFocus').onclick=()=>setFocus(null);try{syncWsNavActive(ws&&ws.type==='ws'?ws.label:null);}catch(e){}}else{fb.classList.remove('show');try{syncWsNavActive(null);}catch(e){}}if(GRAPH.sim)draw();}
+function setFocus(id){GRAPH.focus=id;const fb=document.getElementById('graphFocus');if(id){const ws=GRAPH.by.get(id);fb.classList.add('show');fb.innerHTML='Fokus: <b>'+(ws?ws.label:id)+'</b> <button id="clearFocus">tampilkan semua</button>';fb.querySelector('#clearFocus').onclick=()=>{setFocus(null);graphFit(null);};try{syncWsNavActive(ws&&ws.type==='ws'?ws.label:null);}catch(e){}if(GRAPH.sim)graphFit(n=>n.id===id||n.ws===id);}else{fb.classList.remove('show');try{syncWsNavActive(null);}catch(e){}}if(GRAPH.sim)draw();}
 function initGraph(g,c){
   GRAPH.nodes=g.nodes.map(d=>({...d})); GRAPH.links=g.links.map(d=>({...d}));
-  GRAPH.by=new Map(GRAPH.nodes.map(n=>[n.id,n])); GRAPH.t=d3.zoomIdentity; sizeCanvas(c);
+  GRAPH.by=new Map(GRAPH.nodes.map(n=>[n.id,n])); GRAPH.t=d3.zoomIdentity; sizeCanvas(c); computeStats();
   GRAPH.sim=d3.forceSimulation(GRAPH.nodes)
     .force('link',d3.forceLink(GRAPH.links).id(d=>d.id).distance(l=>l.source.type==='root'?70:24).strength(0.55))
     .force('charge',d3.forceManyBody().strength(-24))
     .force('center',d3.forceCenter(GRAPH.w/2,GRAPH.h/2))
     .force('collide',d3.forceCollide().radius(d=>nodeRadius(d)+2))
-    .on('tick',()=>{});
+    .on('tick',()=>{})
+    .on('end',()=>{if(!GRAPH._fitted){GRAPH._fitted=true;graphFit(null,900);}});
   assignPulse(GRAPH.nodes,GRAPH.links);
   // jeda animasi otomatis saat panel graph keluar layar
   try{ if(GRAPH._io)GRAPH._io.disconnect(); GRAPH._io=new IntersectionObserver(es=>{GRAPH.visible=es[0].isIntersecting;syncGraphPlay();},{threshold:0.02}); GRAPH._io.observe(c); }catch(e){ GRAPH.visible=true; }
@@ -1204,7 +1534,9 @@ function initGraph(g,c){
     .on('drag',ev=>{if(ev.subject){const p=toGraph(ev.x,ev.y);ev.subject.fx=p[0];ev.subject.fy=p[1];}})
     .on('end',ev=>{if(!ev.active)GRAPH.sim.alphaTarget(0);if(ev.subject){ev.subject.fx=null;ev.subject.fy=null;}}));
   GRAPH.zoom=d3.zoom().scaleExtent([0.2,6]).on('zoom',ev=>{GRAPH.t=ev.transform;draw();});
-  sel.call(GRAPH.zoom);
+  sel.call(GRAPH.zoom).on('dblclick.zoom',null);
+  c.ondblclick=ev=>{const r=c.getBoundingClientRect();const n=findNode(ev.clientX-r.left,ev.clientY-r.top);if(!n||n.type==='root'){setFocus(null);graphFit(null);}};
+  initGraphTools(c);
   c.onmousemove=ev=>{const r=c.getBoundingClientRect();const n=findNode(ev.clientX-r.left,ev.clientY-r.top);GRAPH.hover=n;c.style.cursor=n?(n.type==='task'?'pointer':'grab'):'grab';if(n)showTip(nodeTip(n),ev.clientX,ev.clientY);else hideTip();draw();};
   c.onmouseleave=()=>{GRAPH.hover=null;hideTip();draw();};
   c.onclick=ev=>{const r=c.getBoundingClientRect();const n=findNode(ev.clientX-r.left,ev.clientY-r.top);if(!n)return;if(n.type==='ws')setFocus(n.id);else if(n.type==='root')setFocus(null);else if(n.type==='task'&&n.url&&!document.body.classList.contains('role-viewer'))window.open(n.url,'_blank','noopener');};
@@ -1224,11 +1556,21 @@ function updateGraph(g){
   GRAPH.nodes=nodes;
   GRAPH.links=g.links.map(l=>({source:l.source,target:l.target}));
   GRAPH.by=new Map(GRAPH.nodes.map(n=>[n.id,n]));
+  computeStats();
   GRAPH.sim.force('link').links(GRAPH.links);
   GRAPH.sim.nodes(GRAPH.nodes);
   assignPulse(GRAPH.nodes,GRAPH.links);
   GRAPH.sim.alpha(0.35).restart();
   startGraphLoop();
+}
+function initGraphTools(c){
+  const wrap=c.closest('.graph-canvas-wrap'); if(!wrap||wrap._tools)return; wrap._tools=true;
+  const zoomBy=f=>d3.select(c).transition().duration(320).ease(d3.easeCubicOut).call(GRAPH.zoom.scaleBy,f);
+  const fitCur=d=>graphFit(GRAPH.focus?(n=>n.id===GRAPH.focus||n.ws===GRAPH.focus):null,d);
+  wrap.querySelectorAll('[data-g]').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.g;
+    if(a==='in')zoomBy(1.45); else if(a==='out')zoomBy(1/1.45); else if(a==='fit')fitCur();
+    else if(a==='full'){if(document.fullscreenElement)document.exitFullscreen();else if(wrap.requestFullscreen)wrap.requestFullscreen();}}));
+  document.addEventListener('fullscreenchange',()=>{requestAnimationFrame(()=>{sizeCanvas(c);GRAPH.sim.force('center',d3.forceCenter(GRAPH.w/2,GRAPH.h/2));fitCur(400);});});
 }
 function renderGraph(data){
   const canvas=document.getElementById('graphCanvas'); if(!canvas)return;
@@ -1236,7 +1578,7 @@ function renderGraph(data){
   const g=getGraph(data);
   if(!GRAPH.sim){initGraph(g,canvas);return;}
   const sameIds=GRAPH.nodes.length===g.nodes.length&&g.nodes.every(n=>GRAPH.by.has(n.id));
-  if(sameIds){const m=new Map(g.nodes.map(n=>[n.id,n]));GRAPH.nodes.forEach(n=>{const u=m.get(n.id);if(u&&u.status)n.status=u.status;});draw();}
+  if(sameIds){const m=new Map(g.nodes.map(n=>[n.id,n]));GRAPH.nodes.forEach(n=>{const u=m.get(n.id);if(u&&u.status)n.status=u.status;});computeStats();draw();}
   else{updateGraph(g);}
 }
 window.addEventListener('resize',()=>{const c=document.getElementById('graphCanvas');if(!c||!GRAPH.sim)return;sizeCanvas(c);GRAPH.sim.force('center',d3.forceCenter(GRAPH.w/2,GRAPH.h/2));GRAPH.sim.alpha(0.25).restart();});
@@ -1481,8 +1823,7 @@ function focusGraphByWsName(name){
 document.getElementById('graphReset').addEventListener('click',()=>{
   setFocus(null); searchInput.value=''; SEARCH_PQ=parseQuery(''); searchPop.classList.remove('show');
   renderTable(TABLE_ROWS); syncWsNavActive(null);
-  if(GRAPH.zoom){d3.select(document.getElementById('graphCanvas')).call(GRAPH.zoom.transform,d3.zoomIdentity);}
-  GRAPH.t=d3.zoomIdentity; if(GRAPH.sim)GRAPH.sim.alpha(0.4).restart();
+  if(GRAPH.zoom)graphFit(null);
 });
 
 /* ================= UBAH STATUS & BUAT TUGAS (tulis ke ClickUp) ================= */
