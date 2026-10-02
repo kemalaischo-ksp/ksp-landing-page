@@ -5,3 +5,5 @@ server/.env
 .env.prod
 .DS_Store
 *.log
+server/auth.db
+server/*.db

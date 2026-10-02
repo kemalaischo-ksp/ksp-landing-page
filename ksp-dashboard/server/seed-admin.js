@@ -22,17 +22,29 @@ if (!email || !password) {
   console.error('✗ Isi ADMIN_EMAIL dan ADMIN_PASSWORD di file .env terlebih dahulu.');
   process.exit(1);
 }
-const weak = checkPassword(password, { email, name });
-if (weak) {
-  console.error('✗ ADMIN_PASSWORD belum memenuhi kebijakan: ' + weak);
-  process.exit(1);
-}
-
+// Seed berjalan di SETIAP start container → akun yang sudah ada dilewati
+// (kebijakan sandi hanya berlaku saat membuat akun baru, agar container tidak crash-loop).
+let exists = false;
 try {
-  await auth.api.signUpEmail({ body: { email, password, name } });
-  console.log(`✓ Akun dibuat: ${email}`);
-} catch (err) {
-  console.warn('• Sign-up dilewati (email mungkin sudah ada):', err.message || err);
+  const db = new Database(process.env.AUTH_DB_PATH || path.join(__dirname, 'auth.db'), { readonly: true });
+  exists = !!db.prepare('SELECT 1 FROM user WHERE email = ?').get(email);
+  db.close();
+} catch { /* tabel belum ada → anggap belum ada akun */ }
+
+if (exists) {
+  console.log(`• Akun ${email} sudah ada — pembuatan dilewati.`);
+} else {
+  const weak = checkPassword(password, { email, name });
+  if (weak) {
+    console.error('✗ ADMIN_PASSWORD belum memenuhi kebijakan: ' + weak);
+    process.exit(1);
+  }
+  try {
+    await auth.api.signUpEmail({ body: { email, password, name } });
+    console.log(`✓ Akun dibuat: ${email}`);
+  } catch (err) {
+    console.warn('• Sign-up gagal:', err.message || err);
+  }
 }
 
 // Tetapkan role admin langsung di DB.

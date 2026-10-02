@@ -12,7 +12,7 @@ APP_PORT="3100"
 
 echo "==> 1/4 Kirim folder ke ${VPS_USER}@${VPS_HOST}:${REMOTE_DIR}"
 rsync -avz --exclude 'node_modules' --exclude 'server/node_modules' \
-  --exclude 'server/.env' --exclude '.env' --exclude '.DS_Store' --exclude '*.log' \
+  --exclude 'server/.env' --exclude '.env' --exclude '.DS_Store' --exclude '*.log' --exclude '*.db' \
   "${LOCAL_DIR}/" "${VPS_USER}@${VPS_HOST}:${REMOTE_DIR}/"
 
 echo "==> 2/4 Siapkan .env produksi di VPS (jika belum ada)"
