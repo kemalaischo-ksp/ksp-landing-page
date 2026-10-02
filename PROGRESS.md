@@ -542,3 +542,19 @@ Commit baru:
 File yang berubah:
 
     - `ksp-dashboard/public/index.html`
+
+### Update otomatis — 02 Oct 2026 12:32
+
+Commit baru:
+
+    **`461ab38 security(auth): hash Argon2id + upgrade otomatis hash scrypt lama, kebijakan sandi 12+ karakter, endpoint admin terproteksi, fix spoof IP rate-limit login, guard secret production`**
+
+File yang berubah:
+
+    - `ksp-dashboard/server/.env.example`
+    - `ksp-dashboard/server/auth.js`
+    - `ksp-dashboard/server/package-lock.json`
+    - `ksp-dashboard/server/package.json`
+    - `ksp-dashboard/server/password.js`
+    - `ksp-dashboard/server/seed-admin.js`
+    - `ksp-dashboard/server/server.js`
