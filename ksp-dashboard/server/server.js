@@ -21,6 +21,7 @@ import { fileURLToPath } from 'node:url';
 import { toNodeHandler, fromNodeHeaders } from 'better-auth/node';
 import { auth, authDb } from './auth.js';
 import { checkPassword } from './password.js';
+import { reportsRouter } from './reports.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUB = path.join(__dirname, '..', 'public');
@@ -160,6 +161,14 @@ app.post('/api/clickup-webhook', express.raw({ type: '*/*', limit: '512kb' }), a
   broadcast('update'); // dorong ke semua browser yang terbuka
 });
 
+// 3b) Riwayat Rekap Laporan — punya parser sendiri (unggahan PDF/JPG hingga 40 MB),
+//     jadi dipasang SEBELUM express.json() global yang dibatasi 128 KB.
+//     Data disimpan di folder yang sama dengan auth.db (volume persisten di Docker).
+app.use('/api/reports', reportsRouter({
+  requireAuth, requireAdmin,
+  dataDir: path.dirname(process.env.AUTH_DB_PATH || path.join(__dirname, 'auth.db')),
+}));
+
 // 4) Body parser untuk route selanjutnya.
 app.use(express.json({ limit: '128kb' }));
 
@@ -168,7 +177,7 @@ async function requireAuth(req, res, next) {
   try {
     const s = await auth.api.getSession({ headers: fromNodeHeaders(req.headers) });
     if (!s) {
-      if (req.path.startsWith('/api/')) return res.status(401).json({ error: 'unauthorized' });
+      if (req.originalUrl.startsWith('/api/')) return res.status(401).json({ error: 'unauthorized' });
       return res.redirect('/login.html');
     }
     req.user = s.user;

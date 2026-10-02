@@ -8,3 +8,5 @@ node_modules/
 # Database auth SQLite (berisi akun & sesi) — jangan pernah di-commit
 server/auth.db
 server/*.db
+# Riwayat Rekap Laporan (berkas PDF/JPG hasil ekspor)
+server/reports/

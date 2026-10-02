@@ -7,3 +7,4 @@ server/.env
 *.log
 server/auth.db
 server/*.db
+server/reports/
