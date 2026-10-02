@@ -594,3 +594,13 @@ File yang berubah:
     - `ksp-dashboard/.gitignore`
     - `ksp-dashboard/server/reports.js`
     - `ksp-dashboard/server/server.js`
+
+### Update otomatis — 02 Oct 2026 19:20
+
+Commit baru:
+
+    **`18fc992 feat(dashboard): tab Riwayat di Studio Rekap, tanda tangan default KEMAL PRABOWO + stempel tanggal ekspor opsional + nama/jabatan editable (panel & langsung di pratinjau); heatmap interaktif (klik sel/hari/jam → daftar tugas, filter rentang & workstream, total, insight)`**
+
+File yang berubah:
+
+    - `ksp-dashboard/public/index.html`
