@@ -558,3 +558,16 @@ File yang berubah:
     - `ksp-dashboard/server/password.js`
     - `ksp-dashboard/server/seed-admin.js`
     - `ksp-dashboard/server/server.js`
+
+### Update otomatis — 02 Oct 2026 13:03
+
+Commit baru:
+
+    **`be136ac chore(deploy): deploy-vps.sh via SSH port 2222 + git pull dari GitHub, backup auth.db otomatis, cek health`**
+    **`fc1e708 fix(deploy): seed admin lewati akun yang sudah ada (cegah crash-loop karena kebijakan sandi baru); auth.db tidak ikut ke image/rsync`**
+
+File yang berubah:
+
+    - `ksp-dashboard/.dockerignore`
+    - `ksp-dashboard/deploy-vps.sh`
+    - `ksp-dashboard/server/seed-admin.js`
