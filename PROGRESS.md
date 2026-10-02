@@ -614,3 +614,17 @@ Commit baru:
 File yang berubah:
 
     - `ksp-dashboard/deploy-vps.sh`
+
+### Update otomatis — 02 Oct 2026 21:01
+
+Commit baru:
+
+    **`19b0666 feat(kalender): panel Kalender KSP — agenda manual (API + calendar.db, ubah khusus admin), kaldik AL-WILDAN (digabung per rentang), jatuh tempo tugas ClickUp per hari (klik → daftar tugas), tampilan bulan/daftar, filter kategori, pencarian, hari ini & 45 hari mendatang, seret-pindah, CSV, pintasan keyboard; backup calendar.db saat deploy`**
+
+File yang berubah:
+
+    - `ksp-dashboard/deploy-vps.sh`
+    - `ksp-dashboard/public/index.html`
+    - `ksp-dashboard/public/kaldik.js`
+    - `ksp-dashboard/server/calendar.js`
+    - `ksp-dashboard/server/server.js`
