@@ -10,6 +10,7 @@ import Database from 'better-sqlite3';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { auth } from './auth.js';
+import { checkPassword } from './password.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -21,8 +22,9 @@ if (!email || !password) {
   console.error('✗ Isi ADMIN_EMAIL dan ADMIN_PASSWORD di file .env terlebih dahulu.');
   process.exit(1);
 }
-if (password.length < 8) {
-  console.error('✗ ADMIN_PASSWORD minimal 8 karakter.');
+const weak = checkPassword(password, { email, name });
+if (weak) {
+  console.error('✗ ADMIN_PASSWORD belum memenuhi kebijakan: ' + weak);
   process.exit(1);
 }
 

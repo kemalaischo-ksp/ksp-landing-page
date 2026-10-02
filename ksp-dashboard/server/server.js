@@ -19,7 +19,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { toNodeHandler, fromNodeHeaders } from 'better-auth/node';
-import { auth } from './auth.js';
+import { auth, authDb } from './auth.js';
+import { checkPassword } from './password.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUB = path.join(__dirname, '..', 'public');
@@ -66,13 +67,17 @@ app.use((req, res, next) => {
   next();
 });
 
+// IP klien via 'trust proxy' (1 hop). JANGAN baca X-Forwarded-For mentah:
+// penyerang bisa memalsukannya untuk menghindari rate-limit login.
+const clientIp = req => req.ip || req.socket.remoteAddress || '0.0.0.0';
+
 // Rate limit generik per IP utk seluruh /api (proteksi brute-force & abus).
 const API_MAX = 300;        // permintaan maksimal per jendela
 const API_WINDOW_MS = 60 * 1000;
 const apiTries = new Map(); // ip -> { count, resetAt }
 app.use((req, res, next) => {
   if (!req.path.startsWith('/api/')) return next();
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress || '0.0.0.0';
+  const ip = clientIp(req);
   const now = Date.now();
   let w = apiTries.get(ip);
   if (!w || w.resetAt < now) { w = { count: 0, resetAt: now + API_WINDOW_MS }; apiTries.set(ip, w); }
@@ -116,7 +121,7 @@ function trackSignIn(req, res, next) {
 }
 
 function rateLimitSignIn(req, res, next) {
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress || '0.0.0.0';
+  const ip = clientIp(req);
   const now = Date.now();
   let w = signInTries.get(ip);
   if (!w || w.resetAt < now) { w = { count: 0, resetAt: now + SIGNIN_WINDOW_MS }; signInTries.set(ip, w); }
@@ -130,6 +135,12 @@ function rateLimitSignIn(req, res, next) {
 // 1) Blokir registrasi publik — hanya akun hasil seed-admin.js yang boleh ada.
 app.all(/^\/api\/auth\/sign-up/, (req, res) =>
   res.status(403).json({ error: 'Registrasi publik dinonaktifkan.' }));
+
+// 1b) Endpoint bawaan Better Auth yang mengubah kata sandi/akun ditutup dari luar —
+//     semua lewat /api/admin/* & /api/account/* di bawah agar kebijakan sandi
+//     & proteksi admin terakhir selalu berlaku.
+app.all(/^\/api\/auth\/(admin\/|change-password|set-password|reset-password|request-password-reset|forget-password|change-email|delete-user)/, (req, res) =>
+  res.status(403).json({ error: 'Gunakan Panel Admin / menu akun.' }));
 
 // 2) Handler Better Auth (harus SEBELUM express.json()).
 //    Login menempuh rate-limit khusus; endpoint auth lain tetap normal.
@@ -405,11 +416,30 @@ app.get('/api/stream', requireAuth, (req, res) => {
 });
 
 /* ---------- ADMIN API (role admin saja) ---------- */
-// Daftar akun.
+const H = req => fromNodeHeaders(req.headers);
+const activeAdmins = () => authDb.prepare("SELECT COUNT(*) n FROM user WHERE role = 'admin' AND (banned IS NULL OR banned = 0)").get().n;
+const userById = id => authDb.prepare('SELECT id, email, name, role, banned FROM user WHERE id = ?').get(id);
+// Cegah admin mengunci diri sendiri / menghapus admin aktif terakhir.
+function guardTarget(req, res, { allowSelf = false } = {}) {
+  const u = userById(req.params.id);
+  if (!u) { res.status(404).json({ error: 'Akun tidak ditemukan.' }); return null; }
+  if (!allowSelf && u.id === req.user.id) { res.status(400).json({ error: 'Tidak dapat melakukan aksi ini pada akun sendiri.' }); return null; }
+  return u;
+}
+const isLastAdmin = u => u.role === 'admin' && !u.banned && activeAdmins() <= 1;
+
+// Daftar akun (+ status nonaktif, sesi aktif, terakhir aktif).
 app.get('/api/admin/users', requireAuth, requireAdmin, async (req, res) => {
   try {
-    const out = await auth.api.listUsers({ query: { limit: 200 }, headers: fromNodeHeaders(req.headers) });
-    const users = (out.users || out || []).map(u => ({ id: u.id, name: u.name, email: u.email, role: u.role || 'viewer' }));
+    const out = await auth.api.listUsers({ query: { limit: 200 }, headers: H(req) });
+    const stats = new Map(authDb.prepare(
+      'SELECT userId, MAX(updatedAt) lastActive, SUM(CASE WHEN expiresAt > ? THEN 1 ELSE 0 END) sessions FROM session GROUP BY userId'
+    ).all(new Date().toISOString()).map(r => [r.userId, r]));
+    const users = (out.users || out || []).map(u => ({
+      id: u.id, name: u.name, email: u.email, role: u.role || 'viewer', banned: !!u.banned,
+      createdAt: u.createdAt, lastActive: stats.get(u.id)?.lastActive || null,
+      sessions: stats.get(u.id)?.sessions || 0, self: u.id === req.user.id,
+    }));
     res.json(users);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -417,11 +447,13 @@ app.get('/api/admin/users', requireAuth, requireAdmin, async (req, res) => {
 // Buat akun baru (Admin membuat akun untuk atasan/viewer atau admin lain).
 app.post('/api/admin/users', requireAuth, requireAdmin, async (req, res) => {
   const { email, password, name, role } = req.body || {};
-  if (!email || !password || password.length < 8) return res.status(400).json({ error: 'Email & kata sandi (min. 8) wajib diisi.' });
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Email tidak valid.' });
+  const bad = checkPassword(password, { email, name });
+  if (bad) return res.status(400).json({ error: bad });
   try {
     await auth.api.createUser({
-      body: { email, password, name: name || email, role: role === 'admin' ? 'admin' : 'viewer' },
-      headers: fromNodeHeaders(req.headers),
+      body: { email: email.trim().toLowerCase(), password, name: (name || email).trim(), role: role === 'admin' ? 'admin' : 'viewer' },
+      headers: H(req),
     });
     res.json({ ok: true });
   } catch (e) { res.status(400).json({ error: e.message || 'Gagal membuat akun.' }); }
@@ -429,20 +461,80 @@ app.post('/api/admin/users', requireAuth, requireAdmin, async (req, res) => {
 
 // Ubah role.
 app.patch('/api/admin/users/:id/role', requireAuth, requireAdmin, async (req, res) => {
+  const u = guardTarget(req, res); if (!u) return;
   const role = req.body?.role === 'admin' ? 'admin' : 'viewer';
+  if (role !== 'admin' && isLastAdmin(u)) return res.status(400).json({ error: 'Minimal harus ada satu admin aktif.' });
   try {
-    await auth.api.setRole({ body: { userId: req.params.id, role }, headers: fromNodeHeaders(req.headers) });
+    await auth.api.setRole({ body: { userId: u.id, role }, headers: H(req) });
+    res.json({ ok: true });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+// Reset kata sandi akun lain → semua sesi akun itu ikut dicabut.
+app.post('/api/admin/users/:id/password', requireAuth, requireAdmin, async (req, res) => {
+  const u = guardTarget(req, res); if (!u) return;
+  const bad = checkPassword(req.body?.password, { email: u.email, name: u.name });
+  if (bad) return res.status(400).json({ error: bad });
+  try {
+    await auth.api.setUserPassword({ body: { userId: u.id, newPassword: req.body.password }, headers: H(req) });
+    await auth.api.revokeUserSessions({ body: { userId: u.id }, headers: H(req) });
+    res.json({ ok: true });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+// Paksa keluar dari semua perangkat.
+app.post('/api/admin/users/:id/revoke-sessions', requireAuth, requireAdmin, async (req, res) => {
+  const u = guardTarget(req, res); if (!u) return;
+  try {
+    await auth.api.revokeUserSessions({ body: { userId: u.id }, headers: H(req) });
+    res.json({ ok: true });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+// Nonaktifkan / aktifkan kembali akun (ban otomatis mencabut sesi).
+app.post('/api/admin/users/:id/ban', requireAuth, requireAdmin, async (req, res) => {
+  const u = guardTarget(req, res); if (!u) return;
+  const ban = req.body?.banned !== false;
+  if (ban && isLastAdmin(u)) return res.status(400).json({ error: 'Minimal harus ada satu admin aktif.' });
+  try {
+    if (ban) await auth.api.banUser({ body: { userId: u.id, banReason: 'Dinonaktifkan oleh admin' }, headers: H(req) });
+    else await auth.api.unbanUser({ body: { userId: u.id }, headers: H(req) });
     res.json({ ok: true });
   } catch (e) { res.status(400).json({ error: e.message }); }
 });
 
 // Hapus akun.
 app.delete('/api/admin/users/:id', requireAuth, requireAdmin, async (req, res) => {
-  if (req.params.id === req.user.id) return res.status(400).json({ error: 'Tidak dapat menghapus akun sendiri.' });
+  const u = guardTarget(req, res); if (!u) return;
+  if (isLastAdmin(u)) return res.status(400).json({ error: 'Minimal harus ada satu admin aktif.' });
   try {
-    await auth.api.removeUser({ body: { userId: req.params.id }, headers: fromNodeHeaders(req.headers) });
+    await auth.api.removeUser({ body: { userId: u.id }, headers: H(req) });
     res.json({ ok: true });
   } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+/* ---------- AKUN SENDIRI (semua role) ---------- */
+// Ganti kata sandi sendiri — wajib sandi lama, sesi di perangkat lain dicabut.
+// Kegagalan dihitung oleh rate-limit yang sama dengan login.
+app.post('/api/account/password', rateLimitSignIn, trackSignIn, requireAuth, async (req, res) => {
+  const { currentPassword, newPassword } = req.body || {};
+  if (!currentPassword) return res.status(400).json({ error: 'Kata sandi lama wajib diisi.' });
+  if (currentPassword === newPassword) return res.status(400).json({ error: 'Kata sandi baru harus berbeda dari yang lama.' });
+  const bad = checkPassword(newPassword, { email: req.user.email, name: req.user.name });
+  if (bad) return res.status(400).json({ error: bad });
+  try {
+    const out = await auth.api.changePassword({
+      body: { currentPassword, newPassword, revokeOtherSessions: true },
+      headers: H(req), returnHeaders: true,
+    });
+    // Better Auth menerbitkan sesi baru — teruskan cookie-nya ke browser.
+    const cookies = out.headers?.getSetCookie?.() || [];
+    if (cookies.length) res.setHeader('Set-Cookie', cookies);
+    res.json({ ok: true });
+  } catch (e) {
+    const msg = /invalid password/i.test(e.message || '') ? 'Kata sandi lama salah.' : (e.message || 'Gagal mengganti kata sandi.');
+    res.status(400).json({ error: msg });
+  }
 });
 
 /* ---------- WRITE API ke ClickUp (role admin saja) ---------- */
