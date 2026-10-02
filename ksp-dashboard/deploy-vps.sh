@@ -48,6 +48,13 @@ echo "==> 2-4/5 Backup DB, tarik kode, rebuild container di VPS"
       mkdir -p ~/backups/ksp-reports-files && docker cp ksp-dashboard:/app/data/reports/. ~/backups/ksp-reports-files/
       echo \"   ✓ backup riwayat: ~/backups/ksp-reports-\$TS.db + ~/backups/ksp-reports-files/ (\$(ls ~/backups/ksp-reports-files | wc -l) berkas)\"
     fi
+    # Kalender KSP: agenda manual (calendar.db, mode WAL)
+    if docker exec ksp-dashboard test -f /app/data/calendar.db; then
+      docker exec -w /app/server ksp-dashboard node -e \"require('better-sqlite3')('/app/data/calendar.db').backup('/tmp/calendar-bak.db').then(()=>process.exit(0),e=>{console.error(e.message);process.exit(1)})\"
+      docker cp ksp-dashboard:/tmp/calendar-bak.db ~/backups/ksp-calendar-\$TS.db && chmod 600 ~/backups/ksp-calendar-\$TS.db
+      docker exec ksp-dashboard rm -f /tmp/calendar-bak.db
+      echo \"   ✓ backup kalender: ~/backups/ksp-calendar-\$TS.db\"
+    fi
   fi
   cd ${REMOTE_REPO}
   if [ -n \"\$(git status --porcelain --untracked-files=no)\" ]; then

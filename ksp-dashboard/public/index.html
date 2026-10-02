@@ -138,6 +138,78 @@
   .pill-todo{background:var(--surface-3); color:var(--ink-3);}
   .muted-col{color:var(--ink-muted);}
 
+  /* ===== Kalender KSP ===== */
+  .cal-wrap{display:grid; grid-template-columns:1fr 300px; gap:16px; align-items:start;}
+  .cal-top{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:10px;}
+  .cal-nav{width:30px; height:30px; border-radius:8px; border:1px solid var(--border-2); background:var(--surface); color:var(--ink-2); cursor:pointer; font-size:16px; line-height:1; display:grid; place-items:center;}
+  .cal-nav:hover{background:var(--surface-2); color:var(--ink);}
+  .cal-sel{font-family:inherit; font-size:12.5px; font-weight:650; color:var(--ink); background:var(--surface); border:1px solid var(--border-2); border-radius:8px; padding:5px 8px; cursor:pointer;}
+  .cal-search{display:flex; align-items:center; gap:6px; border:1px solid var(--border-2); border-radius:8px; padding:0 9px; background:var(--surface); min-width:150px; flex:0 1 200px;}
+  .cal-search input{border:0; outline:none; background:transparent; font-family:inherit; font-size:12px; color:var(--ink); padding:6px 0; width:100%;}
+  .cal-search:focus-within{border-color:var(--c1); box-shadow:0 0 0 3px var(--c1-soft);}
+  .cal-chips{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;}
+  .cal-fchip{display:inline-flex; align-items:center; gap:5px; border:1px solid var(--border-2); background:var(--surface); color:var(--ink-3); border-radius:99px; padding:3px 10px; font-family:inherit; font-size:11px; font-weight:600; cursor:pointer; opacity:.5; transition:opacity .15s, border-color .15s;}
+  .cal-fchip.on{opacity:1; color:var(--ink); border-color:var(--border-2);}
+  .cal-fchip i{width:9px; height:9px; border-radius:3px;}
+  .cal-fchip b{font-weight:600; opacity:.6;}
+  .cal-gh{display:grid; grid-template-columns:repeat(7,1fr); gap:5px; margin-bottom:5px;}
+  .cal-gh div{text-align:center; font-size:10.5px; font-weight:650; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.05em;}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:5px;}
+  .cal-cell{min-height:96px; border:1px solid var(--border); border-radius:10px; padding:5px; display:flex; flex-direction:column; gap:3px; background:var(--surface); cursor:pointer; min-width:0; transition:border-color .15s, box-shadow .15s;}
+  .cal-cell:hover{border-color:var(--border-2); box-shadow:0 4px 14px -8px rgba(9,9,11,.25);}
+  .cal-cell.out{background:transparent; border:0; cursor:default; box-shadow:none;}
+  .cal-cell.wknd{background:var(--surface-2);}
+  .cal-cell.past .cal-d{color:var(--ink-muted);}
+  .cal-cell.today{border-color:var(--c1); box-shadow:inset 0 0 0 1px var(--c1);}
+  .cal-cell.dropok{border-color:var(--c3); box-shadow:inset 0 0 0 2px var(--c3);}
+  .cal-dh{display:flex; align-items:center; justify-content:space-between;}
+  .cal-d{font-size:11.5px; font-weight:700; color:var(--ink-2); width:22px; height:22px; display:grid; place-items:center; border-radius:99px;}
+  .cal-cell.today .cal-d{background:var(--c1); color:#fff;}
+  .cal-add{width:20px; height:20px; border:0; border-radius:6px; background:transparent; color:var(--ink-muted); cursor:pointer; font-size:14px; line-height:1; opacity:0; transition:opacity .12s;}
+  .cal-cell:hover .cal-add{opacity:1;} .cal-add:hover{background:var(--c1-soft); color:var(--c1);}
+  .cal-ev{font-size:10px; padding:2px 5px; border-radius:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:600; border-left:2px solid var(--k); color:var(--k); background:color-mix(in srgb,var(--k) 13%,transparent);}
+  .cal-ev.cont{opacity:.6;}
+  .cal-ev.drag{cursor:grab;}
+  .cal-ev.task{display:flex; align-items:center; gap:4px;}
+  .cal-ev.task b{margin-left:auto; font-size:9.5px;}
+  .cal-more{font-size:9.5px; color:var(--ink-muted); padding-left:3px; font-weight:600;}
+  .cal-hint{font-size:10.5px; color:var(--ink-muted); margin-top:10px;}
+  .cal-hint kbd{font-family:inherit; font-size:9.5px; border:1px solid var(--border-2); border-bottom-width:2px; border-radius:4px; padding:0 4px; background:var(--surface);}
+  .cal-list{display:flex; flex-direction:column; gap:6px;}
+  .cal-lday{display:grid; grid-template-columns:52px 1fr; gap:10px; padding:8px; border:1px solid var(--border); border-radius:10px;}
+  .cal-lday.today{border-color:var(--c1);}
+  .cal-ldate{text-align:center; cursor:pointer;}
+  .cal-ldate b{display:block; font-size:18px; font-weight:750; line-height:1.1;}
+  .cal-ldate span{font-size:10.5px; color:var(--ink-muted); text-transform:uppercase;}
+  .cal-litem{display:flex; align-items:center; gap:8px; padding:5px 6px; border-radius:7px; cursor:pointer;}
+  .cal-litem:hover{background:var(--surface-2);}
+  .cal-litem i{width:8px; height:8px; border-radius:3px; flex:0 0 8px;}
+  .cal-litem .t{font-size:12px; font-weight:600; color:var(--ink);}
+  .cal-litem .s{font-size:10.5px; color:var(--ink-muted);}
+  .cal-side{display:flex; flex-direction:column; gap:14px;}
+  .cal-card{border:1px solid var(--border); border-radius:12px; padding:12px; background:var(--surface-2);}
+  .cal-card h4{margin:0 0 9px; font-size:12.5px; font-weight:650; display:flex; justify-content:space-between; align-items:baseline;}
+  .cal-card h4 span{font-size:10.5px; color:var(--ink-muted); font-weight:500;}
+  .ag-item{display:flex; gap:10px; align-items:center; padding:8px 10px; border-radius:9px; background:var(--surface); margin-bottom:6px; border-left:3px solid var(--k); cursor:pointer; transition:transform .1s;}
+  .ag-item:hover{transform:translateX(2px);}
+  .ag-dt{font-size:10.5px; font-weight:750; color:var(--ink-2); white-space:nowrap; min-width:44px; line-height:1.25;}
+  .ag-dt small{display:block; font-weight:600; color:var(--ink-muted);}
+  .ag-t{font-size:12px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .ag-sub{font-size:10.5px; color:var(--ink-muted);}
+  .cd{font-size:9.5px; font-weight:700; padding:1px 7px; border-radius:99px; background:var(--surface-3); color:var(--ink-3); white-space:nowrap; margin-left:auto;}
+  .cd.now{background:var(--c1); color:#fff;} .cd.soon{background:var(--warn-bg); color:var(--warn-ink);}
+  .cal-empty{font-size:11.5px; color:var(--ink-muted); padding:6px 2px;}
+  .cal-mbody{padding:14px 18px 18px; display:flex; flex-direction:column; gap:9px; overflow-y:auto;}
+  .cal-dayitem{display:flex; gap:10px; align-items:flex-start; padding:9px 11px; border-radius:9px; border-left:3px solid var(--k); background:color-mix(in srgb,var(--k) 8%,transparent);}
+  .cal-kpick{display:flex; flex-wrap:wrap; gap:6px;}
+  .cal-kpick input{display:none;}
+  .cal-kpick span{display:inline-flex; align-items:center; gap:5px; border:1px solid var(--border-2); border-radius:99px; padding:4px 10px; font-size:11.5px; font-weight:600; color:var(--ink-3); cursor:pointer;}
+  .cal-kpick span i{width:9px; height:9px; border-radius:3px; background:var(--k);}
+  .cal-kpick input:checked + span{border-color:var(--k); color:var(--ink); background:color-mix(in srgb,var(--k) 10%,transparent);}
+  .cal-form-row{display:grid; grid-template-columns:1fr 1fr 110px; gap:9px;}
+  @media (max-width:1100px){ .cal-wrap{grid-template-columns:1fr;} }
+  @media (max-width:640px){ .cal-cell{min-height:64px;} .cal-ev{font-size:0; padding:0; height:5px; border-left:0; background:var(--k);} .cal-ev.task b{display:none;} .cal-form-row{grid-template-columns:1fr 1fr;} .cal-hint{display:none;} }
+
   /* heatmap */
   .heat-wrap{display:flex; flex-direction:column; gap:9px; padding-top:6px;}
   .heat-grid{display:grid; grid-template-columns:34px repeat(8,1fr) 46px; gap:4px; align-items:center;}
@@ -817,6 +889,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="kaldik.js"></script>
 
 <div id="tip"></div>
 <div class="app">
@@ -829,6 +902,7 @@
       <a class="nav-item" href="#heat"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>Heatmap &amp; Status</a>
       <a class="nav-item" href="#" id="navReports"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg>Riwayat Laporan</a>
       <a class="nav-item" href="#graph"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="7" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="12" cy="12" r="2.4"/><path d="M6.6 7.2l3.7 3.4M17.5 8.3l-3.8 2.6M12 14v.6"/></svg>Peta Tugas (Graph)</a>
+      <a class="nav-item" href="#calendar"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>Kalender</a>
       <a class="nav-item" href="#timeline"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h12M8 12h9M8 18h6M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>Timeline</a>
       <a class="nav-item" href="#activity"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Aktivitas Terbaru</a>
       <a class="nav-item" href="#progress"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Progress Launch</a>
@@ -949,6 +1023,11 @@
           </div>
           <div class="tl-box" id="tlBox"><div class="tl-scroll" id="tlScroll"><div class="tl-inner" id="tlInner"></div></div><div class="tl-resize-hint">↕ tarik tepi bawah untuk atur tinggi</div></div>
         </div>
+      </div>
+
+      <div class="panel" id="calendar">
+        <div class="panel-head"><div><h3>Kalender KSP</h3><p>Agenda tim KSP, kalender akademik AL-WILDAN &amp; jatuh tempo tugas ClickUp</p></div></div>
+        <div class="panel-body"><div id="calRoot"></div></div>
       </div>
 
       <div class="panel" id="activity">
@@ -1122,6 +1201,7 @@
   </div>
 </div>
 <div class="rp-host" id="rpHost" aria-hidden="true"></div>
+<div class="modal-scrim" id="calModal"><div class="modal" role="dialog" aria-modal="true" style="max-width:520px" id="calModalBox"></div></div>
 
 <div class="modal-scrim" id="createModal">
   <div class="modal" style="max-width:470px">
@@ -1265,6 +1345,7 @@ function render(data){
   renderSidebarWorkstreams(data);
   drawChart(data.weekly);
   drawHeat(data.heat);
+  if(typeof calRender==='function')calRender();
   drawDonut(data.totals);
   renderGraph(data);
   renderNotifications(data);
@@ -3039,6 +3120,212 @@ async function hsOpen(id){
   if(del)del.onclick=async()=>{if(!confirm('Hapus '+r.docNo+' dari riwayat secara permanen?'))return;
     const res=await fetch('/api/reports/'+id,{method:'DELETE',credentials:'include'});if(!res.ok){toast('Gagal menghapus.','bad');return;}
     HS.items=HS.items.filter(x=>x.id!==id);HS.sel=null;document.getElementById('hsCount').textContent=HS.items.length;document.getElementById('hsDetail').innerHTML='';hsRender();toast('Dihapus dari riwayat.','good');};
+}
+
+/* ================= KALENDER KSP ================= */
+/* Sumber: agenda manual KSP (/api/calendar) · Kaldik AL-WILDAN (kaldik.js) ·
+   jatuh tempo tugas ClickUp (dari data dashboard, dikelompokkan per hari). */
+const CAL_K={agenda:{l:'Agenda KSP',c:'#0d9488'},rapat:{l:'Rapat',c:'#2563eb'},deadline:{l:'Deadline',c:'#ea580c'},
+  libur:{l:'Libur',c:'#dc2626'},ujian:{l:'Ujian/PTS',c:'#a16207'},kaldik:{l:'Kaldik',c:'#7c3aed'},tugas:{l:'Tugas ClickUp',c:'#0284c7'}};
+const CAL_MANUAL=['agenda','rapat','deadline','libur','ujian','kaldik'];
+const CAL_MON=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const CALS={y:null,m:null,mode:'month',q:'',filter:[],ev:null,loading:false,err:''};
+const calDs=(y,m,d)=>y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+const calParse=ds=>{const [y,m,d]=String(ds).split('-').map(Number);return new Date(y,m-1,d);};
+const calAdd=(ds,n)=>{const d=calParse(ds);d.setDate(d.getDate()+n);return calDs(d.getFullYear(),d.getMonth(),d.getDate());};
+const calDiff=(a,b)=>Math.round((calParse(b)-calParse(a))/864e5);
+const calToday=()=>{const n=new Date();return calDs(n.getFullYear(),n.getMonth(),n.getDate());};
+const calMsDs=ms=>{const d=new Date(ms);return calDs(d.getFullYear(),d.getMonth(),d.getDate());};
+const calAdmin=()=>document.body.classList.contains('role-admin');
+const calFmt=(ds,o)=>calParse(ds).toLocaleDateString('id-ID',o);
+// Kaldik: entri harian berurutan dengan judul sama digabung jadi satu acara multi-hari
+const CAL_KALDIK=(()=>{const src=Array.isArray(window.KALDIK_DATA)?window.KALDIK_DATA:[],by=new Map();
+  for(const e of src){if(!/^\d{4}-\d{2}-\d{2}$/.test(e.d))continue;const key=e.k+'|'+e.t;(by.get(key)||by.set(key,[]).get(key)).push(e.d);}
+  const out=[];for(const [key,ds] of by){const [k,...t]=key.split('|');ds.sort();let s=ds[0],p=ds[0];
+    for(const d of ds.slice(1).concat([null])){if(d&&calDiff(p,d)<=1){p=d;continue;}out.push({d:s,end:p!==s?p:null,t:t.join('|'),k:CAL_K[k]?k:'kaldik',auto:true,src:'Kalender akademik AL-WILDAN'});if(d){s=d;p=d;}}}
+  return out;})();
+async function calLoad(){
+  if(!serverMode||CALS.loading)return; CALS.loading=true;
+  try{const r=await fetch('/api/calendar',{credentials:'include'});if(!r.ok)throw new Error('HTTP '+r.status);CALS.ev=(await r.json()).events||[];CALS.err='';}
+  catch(e){CALS.err='Gagal memuat agenda: '+(e.message||e);CALS.ev=CALS.ev||[];}
+  CALS.loading=false; calRender();
+}
+function calTaskDays(){
+  const q=CALS.q.toLowerCase(), by={};
+  for(const t of (ALLTASKS||[])){if(!t.due)continue;if(q&&!(t.name||'').toLowerCase().includes(q)&&!(t.ws||'').toLowerCase().includes(q))continue;const ds=calMsDs(t.due);(by[ds]=by[ds]||[]).push(t);}
+  return Object.entries(by).map(([d,ts])=>{const c=statusCounts(ts),open=ts.length-(c.done||0);
+    const st=c.overdue?'overdue':c.progress?'progress':open?'todo':'done';
+    return {d,k:'tugas',auto:true,task:true,tasks:ts,st,t:ts.length+' tugas jatuh tempo',open};});
+}
+function calAll(){
+  const f=CALS.filter, q=CALS.q.toLowerCase(), out=[];
+  CAL_KALDIK.forEach(e=>out.push(e));
+  (CALS.ev||[]).forEach(e=>out.push({...e,k:CAL_K[e.k]?e.k:'agenda',auto:false}));
+  const base=out.filter(e=>!q||(e.t||'').toLowerCase().includes(q)||(e.note||'').toLowerCase().includes(q));
+  return base.concat(calTaskDays()).filter(e=>!f.length||f.includes(e.k));
+}
+function calMonthEvents(y,m){
+  const first=calDs(y,m,1), last=calDs(y,m,new Date(y,m+1,0).getDate()), res=[];
+  for(const e of calAll()){const end=e.end&&e.end>e.d?e.end:e.d;if(end<first||e.d>last)continue;
+    let ds=e.d<first?first:e.d;const stop=end>last?last:end;
+    while(ds<=stop){res.push({...e,day:calParse(ds).getDate(),cont:ds!==e.d,multi:end!==e.d});ds=calAdd(ds,1);}}
+  const rank=e=>e.task?2:e.auto?1:0;
+  return res.sort((a,b)=>rank(a)-rank(b)||(a.jam||'99').localeCompare(b.jam||'99'));
+}
+function calColor(e){return e.task?(e.st==='overdue'?'#dc2626':e.st==='done'?'#16a34a':e.st==='progress'?'#d97706':CAL_K.tugas.c):(CAL_K[e.k]||CAL_K.agenda).c;}
+function calChip(e){
+  const drag=!e.auto&&calAdmin();
+  if(e.task)return '<div class="cal-ev task" style="--k:'+calColor(e)+'" data-task="'+e.d+'" title="'+e.tasks.length+' tugas jatuh tempo · '+e.open+' belum selesai">📌 Tugas<b>'+e.tasks.length+'</b></div>';
+  return '<div class="cal-ev'+(e.cont?' cont':'')+(drag?' drag':'')+'" style="--k:'+calColor(e)+'" '+(drag?'draggable="true" data-drag="'+esc(e.id)+'"':'')+(e.auto?'':' data-ev="'+esc(e.id)+'"')+' title="'+esc(e.t)+(e.jam?' · '+e.jam:'')+'">'+(e.jam&&!e.cont?e.jam+' ':'')+esc(e.t)+'</div>';
+}
+function calCountdown(ds){const n=calDiff(calToday(),ds);return n===0?'<span class="cd now">Hari ini</span>':n===1?'<span class="cd soon">Besok</span>':n<=7?'<span class="cd soon">H-'+n+'</span>':'<span class="cd">H-'+n+'</span>';}
+function calAgItem(e,cd){
+  const attr=e.task?'data-task="'+e.d+'"':e.auto?'data-goto="'+e.d+'"':'data-ev="'+esc(e.id)+'"';
+  return '<div class="ag-item" style="--k:'+calColor(e)+'" '+attr+'><div class="ag-dt">'+calFmt(e.d,{day:'2-digit',month:'short'})+(e.jam?'<small>'+e.jam+'</small>':'')+'</div>'
+    +'<div style="min-width:0;flex:1"><div class="ag-t">'+esc(e.task?'📌 '+e.t:e.t)+'</div><div class="ag-sub">'+(e.task?(e.open?e.open+' belum selesai':'semua selesai'):esc(CAL_K[e.k].l)+(e.end?' · s/d '+calFmt(e.end,{day:'numeric',month:'short'}):''))+'</div></div>'+(cd?calCountdown(e.d):'')+'</div>';
+}
+function calRender(){
+  const root=document.getElementById('calRoot'); if(!root)return;
+  if(CALS.ev===null&&serverMode&&!CALS.loading)setTimeout(calLoad,0);
+  const now=new Date(), y=CALS.y??now.getFullYear(), m=CALS.m??now.getMonth(), today=calToday(), admin=calAdmin();
+  const evs=calMonthEvents(y,m), byDay={}; evs.forEach(e=>(byDay[e.day]=byDay[e.day]||[]).push(e));
+  const startDow=(new Date(y,m,1).getDay()+6)%7, days=new Date(y,m+1,0).getDate();
+  let cells=''; for(let i=0;i<startDow;i++)cells+='<div class="cal-cell out"></div>';
+  for(let d=1;d<=days;d++){const ds=calDs(y,m,d),list=byDay[d]||[],dow=(startDow+d-1)%7;
+    cells+='<div class="cal-cell'+(ds===today?' today':'')+(dow>=5?' wknd':'')+(ds<today?' past':'')+'" data-day="'+ds+'"><div class="cal-dh"><span class="cal-d">'+d+'</span>'+(admin?'<button class="cal-add" data-new="'+ds+'" title="Agenda baru '+d+' '+CAL_MON[m]+'">+</button>':'')+'</div>'
+      +list.slice(0,3).map(calChip).join('')+(list.length>3?'<div class="cal-more">+'+(list.length-3)+' lagi</div>':'')+'</div>';}
+  const listHtml=Object.keys(byDay).map(Number).sort((a,b)=>a-b).map(d=>{const ds=calDs(y,m,d);
+    return '<div class="cal-lday'+(ds===today?' today':'')+'"><div class="cal-ldate" data-day="'+ds+'"><b>'+d+'</b><span>'+calFmt(ds,{weekday:'short'})+'</span></div><div>'
+      +byDay[d].filter(e=>!e.cont||d===1).map(e=>'<div class="cal-litem" '+(e.task?'data-task="'+e.d+'"':e.auto?'data-day="'+ds+'"':'data-ev="'+esc(e.id)+'"')+'><i style="background:'+calColor(e)+'"></i><div style="min-width:0"><div class="t">'+esc(e.task?'📌 '+e.t:e.t)+'</div><div class="s">'+(e.jam?e.jam+' · ':'')+esc(CAL_K[e.k].l)+(e.multi?' · '+calFmt(e.d,{day:'numeric',month:'short'})+' – '+calFmt(e.end,{day:'numeric',month:'short'}):'')+(e.byNama?' · '+esc(e.byNama):'')+'</div></div></div>').join('')+'</div></div>';}).join('');
+  const all=calAll(), lim=calAdd(today,45);
+  const todayList=all.filter(e=>e.d<=today&&(e.end||e.d)>=today);
+  const upcoming=all.filter(e=>e.d>today&&e.d<=lim).sort((a,b)=>a.d.localeCompare(b.d)||(a.jam||'').localeCompare(b.jam||''));
+  const monthCount=k=>evs.filter(e=>e.k===k&&!e.cont).reduce((s,e)=>s+(e.task?e.tasks.length:1),0);
+  const sel=CALS.filter;
+  const yrs=[];for(let yy=Math.min(2025,y);yy<=Math.max(now.getFullYear()+2,y);yy++)yrs.push(yy);
+  root.innerHTML=(CALS.err?'<div class="cal-empty" style="color:var(--bad-ink)">⚠ '+esc(CALS.err)+'</div>':'')
+   +'<div class="cal-wrap"><div>'
+   +'<div class="cal-top"><button class="cal-nav" data-nav="-1" title="Bulan sebelumnya (←)">‹</button>'
+   +'<select class="cal-sel" id="calMon">'+CAL_MON.map((n,i)=>'<option value="'+i+'"'+(i===m?' selected':'')+'>'+n+'</option>').join('')+'</select>'
+   +'<select class="cal-sel" id="calYr">'+yrs.map(v=>'<option'+(v===y?' selected':'')+'>'+v+'</option>').join('')+'</select>'
+   +'<button class="cal-nav" data-nav="1" title="Bulan berikutnya (→)">›</button>'
+   +'<div class="heat-seg"><button class="'+(CALS.mode==='month'?'on':'')+'" data-mode="month">Bulan</button><button class="'+(CALS.mode==='list'?'on':'')+'" data-mode="list">Daftar</button></div>'
+   +'<div class="cal-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="calQ" placeholder="Cari agenda / tugas…" value="'+esc(CALS.q)+'"></div>'
+   +'<span style="flex:1"></span><button class="btn btn-sm btn-ghost" data-act="today" title="Bulan ini (T)">Hari ini</button>'
+   +'<button class="btn btn-sm btn-ghost" data-act="csv" title="Unduh agenda bulan ini (CSV)">⭳ CSV</button>'
+   +(admin?'<button class="btn btn-sm" data-new="'+(y===now.getFullYear()&&m===now.getMonth()?today:calDs(y,m,1))+'" title="Agenda baru (N)">+ Agenda</button>':'')+'</div>'
+   +'<div class="cal-chips">'+Object.keys(CAL_K).map(k=>'<button class="cal-fchip'+(!sel.length||sel.includes(k)?' on':'')+'" data-cat="'+k+'"><i style="background:'+CAL_K[k].c+'"></i>'+CAL_K[k].l+' <b>'+monthCount(k)+'</b></button>').join('')
+   +(sel.length?'<button class="cal-fchip on" data-cat="" style="border-style:dashed">Semua</button>':'')+'</div>'
+   +(CALS.mode==='month'?'<div class="cal-gh">'+['Sen','Sel','Rab','Kam','Jum','Sab','Min'].map(d=>'<div>'+d+'</div>').join('')+'</div><div class="cal-grid">'+cells+'</div>'
+     +'<div class="cal-hint">Klik tanggal untuk detail'+(admin?' · <b>+</b> agenda baru · seret agenda untuk pindah tanggal':'')+' · klik 📌 untuk daftar tugas · <kbd>←</kbd>/<kbd>→</kbd> ganti bulan · <kbd>T</kbd> hari ini'+(admin?' · <kbd>N</kbd> agenda baru':'')+'</div>'
+     :'<div class="cal-list">'+(listHtml||'<div class="cal-empty">Tidak ada agenda di '+CAL_MON[m]+' '+y+(CALS.q?' yang cocok dengan pencarian':'')+'.</div>')+'</div>')
+   +'</div><div class="cal-side">'
+   +'<div class="cal-card"><h4>Hari Ini<span>'+now.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'})+'</span></h4>'+(todayList.length?todayList.map(e=>calAgItem(e,false)).join(''):'<div class="cal-empty">Tidak ada agenda hari ini. 🌿</div>')
+   +(admin?'<button class="btn btn-sm btn-ghost" style="width:100%;margin-top:4px" data-new="'+today+'">+ Tambah untuk hari ini</button>':'')+'</div>'
+   +'<div class="cal-card"><h4>Mendatang<span>45 hari ke depan</span></h4>'+(upcoming.length?upcoming.slice(0,12).map(e=>calAgItem(e,true)).join('')+(upcoming.length>12?'<div class="cal-empty" style="text-align:center">+'+(upcoming.length-12)+' agenda lain</div>':''):'<div class="cal-empty">Belum ada agenda mendatang.</div>')+'</div>'
+   +'</div></div>';
+}
+/* ---- interaksi (delegasi, sekali pasang) ---- */
+function calSetMonth(y,m){if(m<0){m=11;y--;}if(m>11){m=0;y++;}CALS.y=y;CALS.m=m;calRender();}
+function calCur(){const n=new Date();return [CALS.y??n.getFullYear(),CALS.m??n.getMonth()];}
+function calOpenTasks(ds){openTaskModal({title:'Jatuh tempo '+calFmt(ds,{weekday:'long',day:'numeric',month:'long',year:'numeric'}),sub:'Tugas ClickUp yang jatuh tempo di tanggal ini',icon:'due7',iconColor:'var(--c2)',iconBg:'var(--c2-soft)',test:t=>t.due&&calMsDs(t.due)===ds});}
+(function(){
+  const root=document.getElementById('calRoot');
+  root.addEventListener('click',e=>{
+    const t=e.target.closest('[data-nav],[data-mode],[data-act],[data-new],[data-cat],[data-task],[data-ev],[data-goto],[data-day]');if(!t)return;
+    const [y,m]=calCur(), d=t.dataset;
+    if(d.nav!=null)return calSetMonth(y,m+Number(d.nav));
+    if(d.mode){CALS.mode=d.mode;return calRender();}
+    if(d.act==='today'){CALS.y=CALS.m=null;return calRender();}
+    if(d.act==='csv')return calCsv(y,m);
+    if(d.new)return calForm(null,d.new);
+    if(d.cat!=null){const keys=Object.keys(CAL_K),k=d.cat;let s=CALS.filter;
+      if(!k)s=[];else if(!s.length)s=keys.filter(x=>x!==k);else if(s.includes(k))s=s.filter(x=>x!==k);else s=[...s,k];
+      CALS.filter=(s.length===keys.length)?[]:s;return calRender();}
+    if(d.task){e.stopPropagation();return calOpenTasks(d.task);}
+    if(d.ev){e.stopPropagation();return calForm(d.ev);}
+    if(d.goto){const p=calParse(d.goto);CALS.y=p.getFullYear();CALS.m=p.getMonth();calRender();return calDay(d.goto);}
+    if(d.day)return calDay(d.day);
+  });
+  root.addEventListener('change',e=>{if(e.target.id==='calMon'||e.target.id==='calYr')calSetMonth(Number(document.getElementById('calYr').value),Number(document.getElementById('calMon').value));});
+  let qt=0;root.addEventListener('input',e=>{if(e.target.id!=='calQ')return;CALS.q=e.target.value;clearTimeout(qt);qt=setTimeout(()=>{calRender();const i=document.getElementById('calQ');i.focus();i.setSelectionRange(i.value.length,i.value.length);},220);});
+  // seret agenda manual ke tanggal lain (admin)
+  root.addEventListener('dragstart',e=>{const el=e.target.closest('[data-drag]');if(!el)return;e.dataTransfer.setData('text/plain',el.dataset.drag);e.dataTransfer.effectAllowed='move';});
+  root.addEventListener('dragover',e=>{const c=e.target.closest('.cal-cell[data-day]');if(!c)return;e.preventDefault();root.querySelectorAll('.dropok').forEach(x=>x!==c&&x.classList.remove('dropok'));c.classList.add('dropok');});
+  root.addEventListener('dragleave',e=>{const c=e.target.closest('.cal-cell');if(c&&!c.contains(e.relatedTarget))c.classList.remove('dropok');});
+  root.addEventListener('drop',async e=>{const c=e.target.closest('.cal-cell[data-day]');if(!c)return;e.preventDefault();c.classList.remove('dropok');
+    const id=e.dataTransfer.getData('text/plain'),ev=(CALS.ev||[]).find(x=>x.id===id),ds=c.dataset.day;if(!ev||ev.d===ds)return;
+    const span=ev.end?calDiff(ev.d,ev.end):0,patch={d:ds,end:span?calAdd(ds,span):null};Object.assign(ev,patch);calRender();
+    const r=await calSave(id,patch);if(r.ok)toast('"'+ev.t+'" dipindah ke '+calFmt(ds,{day:'numeric',month:'long'})+'.','good');else toast(r.error,'bad');calLoad();});
+  // pintasan keyboard saat kursor di atas panel kalender
+  let over=false;const panel=document.getElementById('calendar');panel.addEventListener('mouseenter',()=>over=true);panel.addEventListener('mouseleave',()=>over=false);
+  document.addEventListener('keydown',e=>{if(!over||document.querySelector('.modal-scrim.show'))return;const tag=(e.target.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea'||tag==='select')return;
+    const [y,m]=calCur();if(e.key==='ArrowLeft'){e.preventDefault();calSetMonth(y,m-1);}else if(e.key==='ArrowRight'){e.preventDefault();calSetMonth(y,m+1);}
+    else if(e.key==='t'||e.key==='T'){CALS.y=CALS.m=null;calRender();}else if((e.key==='n'||e.key==='N')&&calAdmin()){e.preventDefault();calForm(null,calToday());}});
+})();
+/* ---- modal: detail hari & form agenda ---- */
+const calModal=document.getElementById('calModal'), calBox=document.getElementById('calModalBox');
+function calShow(html){calBox.innerHTML=html;calModal.classList.add('show');}
+function calClose(){calModal.classList.remove('show');}
+calModal.addEventListener('click',e=>{if(e.target===calModal||e.target.closest('[data-x]'))calClose();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&calModal.classList.contains('show'))calClose();});
+const calHead=(title,sub)=>'<div class="modal-head"><div class="modal-title-row"><div class="modal-ic" style="color:var(--c1);background:var(--c1-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="modal-title"><b>'+title+'</b><span>'+sub+'</span></div><button class="modal-close" data-x title="Tutup (Esc)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div></div>';
+function calDay(ds){
+  const p=calParse(ds), list=calMonthEvents(p.getFullYear(),p.getMonth()).filter(e=>e.day===p.getDate());
+  calShow(calHead(calFmt(ds,{weekday:'long',day:'numeric',month:'long',year:'numeric'}),list.length+' agenda')+'<div class="cal-mbody">'
+    +(list.length?list.map(e=>e.task
+      ?'<div class="cal-dayitem" style="--k:'+calColor(e)+';cursor:pointer" data-dtask="'+ds+'"><div style="flex:1"><div style="font-size:13px;font-weight:600">📌 '+e.tasks.length+' tugas ClickUp jatuh tempo</div><div style="font-size:11px;color:var(--ink-muted)">'+e.tasks.slice(0,4).map(t=>esc(t.name)).join(' · ')+(e.tasks.length>4?' · …':'')+'</div></div><span class="cd">Lihat</span></div>'
+      :'<div class="cal-dayitem" style="--k:'+calColor(e)+'"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">'+(e.jam?'<span style="color:'+calColor(e)+'">'+e.jam+'</span> · ':'')+esc(e.t)+'</div>'
+        +'<div style="font-size:11px;color:var(--ink-muted)">'+esc(CAL_K[e.k].l)+(e.multi?' · '+calFmt(e.d,{day:'numeric',month:'short'})+' – '+calFmt(e.end,{day:'numeric',month:'short'}):'')+(e.byNama?' · oleh '+esc(e.byNama):'')+(e.src?' · '+esc(e.src):'')+'</div>'
+        +(e.note?'<div style="font-size:12px;color:var(--ink-2);margin-top:4px;white-space:pre-wrap">'+esc(e.note)+'</div>':'')+'</div>'
+        +(e.auto?'<span style="font-size:10px;color:var(--ink-muted)">otomatis</span>':'<button class="btn btn-sm btn-ghost" data-edit="'+esc(e.id)+'">'+(calAdmin()?'Edit':'Detail')+'</button>')+'</div>').join('')
+      :'<div class="cal-empty">Belum ada agenda di tanggal ini.</div>')
+    +(calAdmin()?'<button class="btn" data-dnew="'+ds+'" style="margin-top:4px">+ Tambah agenda di tanggal ini</button>':'')+'</div>');
+  calBox.querySelectorAll('[data-dtask]').forEach(b=>b.onclick=()=>{calClose();calOpenTasks(b.dataset.dtask);});
+  calBox.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>calForm(b.dataset.edit));
+  calBox.querySelectorAll('[data-dnew]').forEach(b=>b.onclick=()=>calForm(null,b.dataset.dnew));
+}
+async function calSave(id,data){
+  try{const r=await fetch('/api/calendar'+(id?'/'+encodeURIComponent(id):''),{method:id?'PATCH':'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    const j=await r.json().catch(()=>({}));return r.ok?{ok:true,event:j.event}:{ok:false,error:j.error||'Gagal menyimpan.'};}
+  catch(e){return {ok:false,error:'Tidak dapat terhubung ke server.'};}
+}
+function calForm(id,ds){
+  if(!serverMode&&!id){toast('Mode pratinjau — jalankan di server untuk menambah agenda.','warn');return;}
+  const e=id?(CALS.ev||[]).find(x=>x.id===id):null; if(id&&!e){toast('Agenda tidak ditemukan.','bad');return;}
+  const ro=!calAdmin(), v=e||{d:ds,t:'',k:'agenda',jam:'',end:'',note:''};
+  const dis=ro?' disabled':'';
+  calShow(calHead(e?(ro?'Detail Agenda':'Edit Agenda'):'Agenda Baru',e&&e.byNama?'Dibuat oleh '+esc(e.byNama):'Tersimpan di server · terlihat oleh semua akun KSP')
+    +'<form class="cal-mbody" id="calForm" autocomplete="off">'
+    +'<div class="fld"><label for="cfT">Judul agenda</label><input id="cfT" maxlength="160" required placeholder="cth: Rapat koordinasi AW28, Deadline kontrak vendor…" value="'+esc(v.t)+'"'+dis+'></div>'
+    +'<div class="cal-kpick">'+CAL_MANUAL.map(k=>'<label><input type="radio" name="cfK" value="'+k+'"'+(v.k===k?' checked':'')+dis+'><span style="--k:'+CAL_K[k].c+'"><i></i>'+CAL_K[k].l+'</span></label>').join('')+'</div>'
+    +'<div class="cal-form-row"><div class="fld"><label for="cfD">Mulai</label><input id="cfD" type="date" required value="'+esc(v.d||'')+'"'+dis+'></div><div class="fld"><label for="cfE">Sampai <span style="font-weight:400;color:var(--ink-muted)">(opsional)</span></label><input id="cfE" type="date" value="'+esc(v.end||'')+'"'+dis+'></div><div class="fld"><label for="cfJ">Jam</label><input id="cfJ" type="time" value="'+esc(v.jam||'')+'"'+dis+'></div></div>'
+    +'<div class="fld"><label for="cfN">Catatan</label><textarea id="cfN" rows="3" maxlength="1000" placeholder="Lokasi, peserta, tautan…"'+dis+'>'+esc(v.note||'')+'</textarea></div>'
+    +'<div id="cfMsg" style="font-size:11.5px;color:var(--bad-ink);min-height:14px"></div>'
+    +'<div style="display:flex;gap:8px;align-items:center">'+(e&&!ro?'<button type="button" class="btn btn-danger" id="cfDel">Hapus</button>':'')+'<span style="flex:1"></span><button type="button" class="btn btn-ghost" data-x>'+(ro?'Tutup':'Batal')+'</button>'+(ro?'':'<button class="btn" type="submit" id="cfSave">Simpan</button>')+'</div>'
+    +(ro?'<div class="cal-empty">Hanya admin yang dapat mengubah agenda.</div>':'')+'</form>');
+  if(!ro)setTimeout(()=>document.getElementById('cfT').focus(),50);
+  document.getElementById('calForm').onsubmit=async ev=>{ev.preventDefault();if(ro)return;
+    const g=i=>document.getElementById(i).value.trim(), data={t:g('cfT'),k:(calBox.querySelector('input[name=cfK]:checked')||{}).value||'agenda',d:g('cfD'),end:g('cfE')||null,jam:g('cfJ')||null,note:g('cfN')};
+    if(data.end&&data.end<data.d){document.getElementById('cfMsg').textContent='Tanggal "sampai" tidak boleh sebelum tanggal mulai.';return;}
+    const btn=document.getElementById('cfSave');btn.disabled=true;
+    const r=await calSave(id,data);btn.disabled=false;
+    if(!r.ok){document.getElementById('cfMsg').textContent=r.error;return;}
+    calClose();toast(id?'Agenda diperbarui.':'Agenda ditambahkan.','good');const p=calParse(data.d);CALS.y=p.getFullYear();CALS.m=p.getMonth();calLoad();};
+  const del=document.getElementById('cfDel');
+  if(del)del.onclick=async()=>{if(!confirm('Hapus agenda "'+e.t+'"?'))return;
+    try{const r=await fetch('/api/calendar/'+encodeURIComponent(id),{method:'DELETE',credentials:'include'});if(!r.ok)throw 0;calClose();toast('Agenda dihapus.','good');calLoad();}catch(_){toast('Gagal menghapus agenda.','bad');}};
+}
+function calCsv(y,m){
+  const evs=calMonthEvents(y,m).filter(e=>!e.cont).sort((a,b)=>a.day-b.day);
+  if(!evs.length){toast('Tidak ada agenda di bulan ini.','warn');return;}
+  const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const rows=[];evs.forEach(e=>{if(e.task)e.tasks.forEach(t=>rows.push([e.d,'','','Tugas ClickUp',t.name,(t.ws||'')+' · '+(SMETA[t.status]?.label||''),'']));
+    else rows.push([e.d,e.end||'',e.jam||'',CAL_K[e.k].l,e.t,e.note||'',e.byNama||(e.src||'')]);});
+  const csv='TANGGAL,SAMPAI,JAM,KATEGORI,AGENDA,CATATAN,SUMBER/OLEH\n'+rows.map(r=>r.map(q).join(',')).join('\n');
+  const u=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');
+  a.href=u;a.download='Kalender-KSP_'+CAL_MON[m]+'_'+y+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);
+  toast(rows.length+' baris diekspor (CSV).','good');
 }
 
 loadData(false);

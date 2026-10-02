@@ -22,6 +22,7 @@ import { toNodeHandler, fromNodeHeaders } from 'better-auth/node';
 import { auth, authDb } from './auth.js';
 import { checkPassword } from './password.js';
 import { reportsRouter } from './reports.js';
+import { calendarRouter } from './calendar.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUB = path.join(__dirname, '..', 'public');
@@ -164,10 +165,10 @@ app.post('/api/clickup-webhook', express.raw({ type: '*/*', limit: '512kb' }), a
 // 3b) Riwayat Rekap Laporan — punya parser sendiri (unggahan PDF/JPG hingga 40 MB),
 //     jadi dipasang SEBELUM express.json() global yang dibatasi 128 KB.
 //     Data disimpan di folder yang sama dengan auth.db (volume persisten di Docker).
-app.use('/api/reports', reportsRouter({
-  requireAuth, requireAdmin,
-  dataDir: path.dirname(process.env.AUTH_DB_PATH || path.join(__dirname, 'auth.db')),
-}));
+const DATA_DIR = path.dirname(process.env.AUTH_DB_PATH || path.join(__dirname, 'auth.db'));
+app.use('/api/reports', reportsRouter({ requireAuth, requireAdmin, dataDir: DATA_DIR }));
+// Kalender KSP — agenda manual (terpisah dari HR). Lihat: semua login · ubah: admin.
+app.use('/api/calendar', calendarRouter({ requireAuth, requireAdmin, dataDir: DATA_DIR }));
 
 // 4) Body parser untuk route selanjutnya.
 app.use(express.json({ limit: '128kb' }));
