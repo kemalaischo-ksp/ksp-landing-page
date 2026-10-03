@@ -30,6 +30,17 @@ services:
       - ADMIN_EMAIL=${ADMIN_EMAIL}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - ADMIN_NAME=${ADMIN_NAME:-KSP}
+      # Panel SDM: akun baca-saja ke view ksp_ro di database HR (nilai hanya di .env VPS).
+      - HR_DB_URL=${HR_DB_URL:-}
+    networks:
+      - default
+      # Jaringan internal aplikasi HR — agar bisa menjangkau hr30-db (tidak dibuka ke internet).
+      - hr
 
 volumes:
   ksp-auth-data:
+
+networks:
+  hr:
+    name: sdm_aw_default
+    external: true
