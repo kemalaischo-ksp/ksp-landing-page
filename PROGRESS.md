@@ -642,3 +642,13 @@ File yang berubah:
     - `ksp-dashboard/server/package.json`
     - `ksp-dashboard/server/sdm.js`
     - `ksp-dashboard/server/server.js`
+
+### Update otomatis — 03 Oct 2026 13:17
+
+Commit baru:
+
+    **`ba4f0db chore(sdm): hubungkan container KSP ke jaringan internal HR (sdm_aw_default) + teruskan HR_DB_URL (nilai hanya di .env VPS)`**
+
+File yang berubah:
+
+    - `ksp-dashboard/docker-compose.yml`
