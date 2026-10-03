@@ -628,3 +628,17 @@ File yang berubah:
     - `ksp-dashboard/public/kaldik.js`
     - `ksp-dashboard/server/calendar.js`
     - `ksp-dashboard/server/server.js`
+
+### Update otomatis — 03 Oct 2026 13:13
+
+Commit baru:
+
+    **`686b3bb feat(sdm): panel SDM (khusus admin) — ringkasan karyawan dari database HR via view baca-saja ksp_ro (tanpa NIK/gaji per orang/alamat/rekening/kesehatan): kartu, tren rekrutmen, gender, kelengkapan data, heatmap cabang×tahun, sebaran unit & jabatan, drill-down nama+unit+jabatan; deteksi perubahan HR tiap 30 dtk → panel diperbarui otomatis via SSE. Aktif setelah HR_DB_URL diisi.`**
+
+File yang berubah:
+
+    - `ksp-dashboard/public/index.html`
+    - `ksp-dashboard/server/package-lock.json`
+    - `ksp-dashboard/server/package.json`
+    - `ksp-dashboard/server/sdm.js`
+    - `ksp-dashboard/server/server.js`
