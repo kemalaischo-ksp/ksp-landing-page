@@ -23,6 +23,7 @@ import { auth, authDb } from './auth.js';
 import { checkPassword } from './password.js';
 import { reportsRouter } from './reports.js';
 import { calendarRouter } from './calendar.js';
+import { sdmRouter } from './sdm.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUB = path.join(__dirname, '..', 'public');
@@ -169,6 +170,8 @@ const DATA_DIR = path.dirname(process.env.AUTH_DB_PATH || path.join(__dirname, '
 app.use('/api/reports', reportsRouter({ requireAuth, requireAdmin, dataDir: DATA_DIR }));
 // Kalender KSP — agenda manual (terpisah dari HR). Lihat: semua login · ubah: admin.
 app.use('/api/calendar', calendarRouter({ requireAuth, requireAdmin, dataDir: DATA_DIR }));
+// Panel SDM — ringkasan dari database HR lewat view baca-saja (khusus admin KSP).
+app.use('/api/sdm', sdmRouter({ requireAuth, requireAdmin, onChange: () => broadcast('sdm') }));
 
 // 4) Body parser untuk route selanjutnya.
 app.use(express.json({ limit: '128kb' }));

@@ -138,6 +138,63 @@
   .pill-todo{background:var(--surface-3); color:var(--ink-3);}
   .muted-col{color:var(--ink-muted);}
 
+  /* ===== Panel SDM ===== */
+  #sdm .panel-body{display:flex; flex-direction:column; gap:14px;}
+  #sdmRoot{display:flex; flex-direction:column; gap:14px;}
+  .sdm-tiles{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+  .sdm-tile{border:1px solid var(--border); border-radius:12px; padding:13px 14px; background:var(--surface); position:relative; overflow:hidden; display:flex; flex-direction:column; gap:4px;}
+  .sdm-tile::before{content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--k);}
+  .sdm-tile.click{cursor:pointer;} .sdm-tile.click:hover{border-color:var(--border-2); box-shadow:0 6px 18px -10px rgba(9,9,11,.3);}
+  .sdm-tile .l{font-size:11px; color:var(--ink-muted); font-weight:550;}
+  .sdm-tile b{font-size:24px; font-weight:750; letter-spacing:-.03em; color:var(--ink);}
+  .sdm-tile .m{font-size:10.5px; color:var(--ink-muted);}
+  .sdm-2{display:grid; grid-template-columns:1.4fr 1fr; gap:14px;}
+  .sdm-card{border:1px solid var(--border); border-radius:12px; padding:13px 14px; background:var(--surface); min-width:0;}
+  .sdm-h{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
+  .sdm-h h4{margin:0; font-size:13px; font-weight:650;} .sdm-h span{font-size:10.5px; color:var(--ink-muted);}
+  .sdm-note{font-size:10.5px; color:var(--ink-muted); margin-top:6px;}
+  .sdm-col{display:flex; align-items:flex-end; gap:4px; height:160px; padding-top:6px;}
+  .sdm-colbar{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:3px; border:0; background:transparent; cursor:pointer; padding:0; font-family:inherit; min-width:0;}
+  .sdm-colbar i{width:72%; border-radius:4px 4px 0 0; display:block; transition:filter .15s;}
+  .sdm-colbar:hover i{filter:brightness(1.15) saturate(1.2);}
+  .sdm-colbar b{font-size:9.5px; color:var(--ink-2); font-weight:650;}
+  .sdm-colbar span{font-size:9.5px; color:var(--ink-muted);}
+  .sdm-donut{display:flex; align-items:center; gap:16px;}
+  .sdm-donut .n{font-size:20px; font-weight:750; fill:var(--ink);} .sdm-donut .s{font-size:9px; fill:var(--ink-muted);}
+  .sdm-arc{cursor:pointer; transition:stroke-width .15s;} .sdm-arc:hover{stroke-width:22;}
+  .sdm-leg{display:flex; flex-direction:column; gap:6px; flex:1;}
+  .sdm-leg button{display:flex; align-items:center; gap:7px; border:0; background:transparent; font-family:inherit; font-size:12px; color:var(--ink-2); cursor:pointer; padding:4px 6px; border-radius:7px;}
+  .sdm-leg button:hover{background:var(--surface-2);}
+  .sdm-leg i{width:9px; height:9px; border-radius:3px;} .sdm-leg b{margin-left:auto; color:var(--ink);} .sdm-leg em{font-style:normal; color:var(--ink-muted); width:34px; text-align:right;}
+  .sdm-rings{display:grid; grid-template-columns:repeat(8,1fr); gap:8px;}
+  .sdm-ring{display:flex; flex-direction:column; align-items:center; gap:3px; border:1px solid transparent; background:transparent; border-radius:10px; padding:6px 2px; font-family:inherit; cursor:pointer;}
+  .sdm-ring:hover{background:var(--surface-2); border-color:var(--border);}
+  .sdm-ring text{font-size:12px; font-weight:700; fill:var(--ink);}
+  .sdm-ring .l{font-size:10.5px; font-weight:600; color:var(--ink-2); text-align:center; line-height:1.25;}
+  .sdm-ring .s{font-size:9.5px; color:var(--ink-muted);}
+  .sdm-heat{display:grid; gap:3px; align-items:center; overflow-x:auto;}
+  .sdm-heat .hy{font-size:9.5px; color:var(--ink-muted); text-align:center;}
+  .sdm-heat .hu{font-size:10.5px; color:var(--ink-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-right:6px;}
+  .sdm-heat .hc{height:24px; border:0; border-radius:4px; font-family:inherit; font-size:9.5px; font-weight:650; cursor:pointer; min-width:22px; transition:transform .1s;}
+  .sdm-heat .hc:hover:not([disabled]){transform:scale(1.15); box-shadow:0 0 0 2px var(--surface), 0 0 0 3px rgba(214,59,35,.5);}
+  .sdm-heat .hc[disabled]{cursor:default;}
+  .sdm-bars{display:flex; flex-direction:column; gap:4px;}
+  .sdm-bar{display:grid; grid-template-columns:minmax(80px,140px) 1fr 44px; gap:8px; align-items:center; border:0; background:transparent; font-family:inherit; padding:4px 6px; border-radius:7px; cursor:pointer; text-align:left;}
+  .sdm-bar:hover{background:var(--surface-2);}
+  .sdm-bar .l{font-size:11.5px; color:var(--ink-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .sdm-bar .t{height:9px; background:var(--surface-3); border-radius:99px; overflow:hidden;} .sdm-bar .t i{display:block; height:100%; border-radius:99px;}
+  .sdm-bar b{font-size:11.5px; text-align:right; color:var(--ink);}
+  .sdm-empty{padding:30px; text-align:center; font-size:12px; color:var(--ink-muted);}
+  .sdm-setup{display:flex; gap:14px; align-items:flex-start; padding:16px; border:1px dashed var(--border-2); border-radius:12px; background:var(--surface-2);}
+  .sdm-setup .ic{font-size:24px;} .sdm-setup b{font-size:13px;} .sdm-setup p{margin:5px 0 0; font-size:12px; color:var(--ink-3); line-height:1.5;}
+  .sdm-setup code{font-size:11px; background:var(--surface-3); padding:1px 5px; border-radius:4px;}
+  .sdm-prow{display:grid; grid-template-columns:30px 1fr auto; gap:10px; align-items:center; padding:7px 10px; border-radius:8px;}
+  .sdm-prow:hover{background:var(--surface-2);}
+  .sdm-prow .av{width:30px; height:30px; border-radius:99px; background:var(--c1-soft); color:var(--c1); font-size:10.5px; font-weight:700; display:grid; place-items:center;}
+  .sdm-prow b{display:block; font-size:12.5px; font-weight:600; color:var(--ink);} .sdm-prow span{font-size:11px; color:var(--ink-muted);}
+  .sdm-prow em{font-style:normal; font-size:10.5px; font-weight:600; color:var(--ink-3); background:var(--surface-3); padding:2px 8px; border-radius:99px; white-space:nowrap;}
+  @media (max-width:1100px){ .sdm-tiles{grid-template-columns:repeat(2,1fr);} .sdm-2{grid-template-columns:1fr;} .sdm-rings{grid-template-columns:repeat(4,1fr);} }
+
   /* ===== Kalender KSP ===== */
   .cal-wrap{display:grid; grid-template-columns:1fr 300px; gap:16px; align-items:start;}
   .cal-top{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:10px;}
@@ -906,6 +963,7 @@
       <a class="nav-item" href="#timeline"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h12M8 12h9M8 18h6M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>Timeline</a>
       <a class="nav-item" href="#activity"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Aktivitas Terbaru</a>
       <a class="nav-item" href="#progress"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Progress Launch</a>
+      <a class="nav-item admin-only" href="#sdm"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6M17 11a3 3 0 100-6M22 21c0-3-2-5-5-5"/></svg>SDM (HR)</a>
       <a class="nav-item admin-only" href="#adminPanel"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6z"/><circle cx="12" cy="11" r="2.5"/></svg>Panel Admin</a>
     </nav>
     <nav class="nav-group ws-nav" id="wsNav">
@@ -1044,6 +1102,12 @@
           <div class="panel-head"><div><h3>Kapasitas &amp; Risiko</h3><p>Beban kerja saat ini vs. total tugas</p></div></div>
           <div class="panel-body" id="limitsBody"></div>
         </div>
+      </div>
+
+      <div class="panel admin-only" id="sdm" style="display:none;">
+        <div class="panel-head"><div><h3>SDM — Ringkasan Karyawan</h3><p>Dibaca dari database aplikasi HR (baca-saja) · khusus admin · <span id="sdmMeta"></span></p></div>
+          <div style="display:flex;gap:8px;align-items:center"><button class="btn btn-sm btn-ghost" id="sdmRefresh" title="Muat ulang dari HR">↻ Muat ulang</button><a class="btn btn-sm btn-ghost" href="https://hr.office-alwildan.id" target="_blank" rel="noopener">Buka HR ↗</a></div></div>
+        <div class="panel-body"><div id="sdmRoot"></div></div>
       </div>
 
       <div class="panel admin-only" id="adminPanel" style="display:none;">
@@ -1201,6 +1265,7 @@
   </div>
 </div>
 <div class="rp-host" id="rpHost" aria-hidden="true"></div>
+<div class="modal-scrim" id="sdmModal"><div class="modal" role="dialog" aria-modal="true" style="max-width:560px" id="sdmModalBox"></div></div>
 <div class="modal-scrim" id="calModal"><div class="modal" role="dialog" aria-modal="true" style="max-width:520px" id="calModalBox"></div></div>
 
 <div class="modal-scrim" id="createModal">
@@ -1516,7 +1581,8 @@ function applyRole(role){
   chip.textContent=role==='admin'?'Admin':'Atasan (View)';
   chip.classList.toggle('viewer',role!=='admin');
   document.getElementById('adminPanel').style.display = role==='admin' ? '' : 'none';
-  if(role==='admin' && serverMode) loadUsers();
+  document.getElementById('sdm').style.display = role==='admin' ? '' : 'none';
+  if(role==='admin' && serverMode){ loadUsers(); if(typeof sdmLoad==='function')sdmLoad(false); }
 }
 
 async function fetchMe(){
@@ -1722,6 +1788,7 @@ function startRealtime(){
   try{
     const es=new EventSource('/api/stream',{withCredentials:true});
     es.addEventListener('update',()=>loadData(true));
+    es.addEventListener('sdm',()=>{if(typeof sdmLoad==='function')sdmLoad(false);});
     es.onerror=()=>{}; // biarkan version-poll jadi cadangan
   }catch(e){}
   // 2) version-poll tiap 3 detik — murah (tanpa panggil ClickUp), hanya reload bila berubah
@@ -3327,6 +3394,101 @@ function calCsv(y,m){
   a.href=u;a.download='Kalender-KSP_'+CAL_MON[m]+'_'+y+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);
   toast(rows.length+' baris diekspor (CSV).','good');
 }
+
+/* ================= PANEL SDM (ringkasan dari database HR, khusus admin) ================= */
+const SDM={data:null,loading:false,err:null,notConf:false,mode:'year'};
+const SDM_COL=['var(--c1)','var(--c2)','var(--c3)','#7c3aed','#db2777','#64748b'];
+const rpShort=v=>{v=Number(v)||0;if(v>=1e9)return 'Rp '+(v/1e9).toLocaleString('id-ID',{maximumFractionDigits:2})+' M';if(v>=1e6)return 'Rp '+(v/1e6).toLocaleString('id-ID',{maximumFractionDigits:1})+' jt';return 'Rp '+v.toLocaleString('id-ID');};
+async function sdmLoad(force){
+  if(!serverMode||!document.body.classList.contains('role-admin')||SDM.loading)return;
+  SDM.loading=true; if(force)sdmRender();
+  try{const r=await fetch('/api/sdm/summary'+(force?'?refresh=1':''),{credentials:'include'});const j=await r.json().catch(()=>({}));
+    if(!r.ok){SDM.err=j.error||('HTTP '+r.status);SDM.notConf=!!j.notConfigured;SDM.data=null;}else{SDM.data=j;SDM.err=null;SDM.notConf=false;}}
+  catch(e){SDM.err='Tidak dapat terhubung ke server.';}
+  SDM.loading=false; sdmRender();
+}
+function sdmBars(rows,drill,color){
+  const max=Math.max(1,...rows.map(r=>r[1]));
+  return '<div class="sdm-bars">'+rows.map(([k,v],i)=>'<button class="sdm-bar" data-drill="'+drill+'" data-v="'+esc(k)+'" title="'+esc(k)+': '+v+' · klik untuk daftar"><span class="l">'+esc(k)+'</span><span class="t"><i style="width:'+(v/max*100)+'%;background:'+(typeof color==='function'?color(i):color)+'"></i></span><b>'+fmt(v)+'</b></button>').join('')+'</div>';
+}
+function sdmDonut(parts){
+  const tot=parts.reduce((s,p)=>s+p.v,0)||1;let a=-Math.PI/2;const R=52,C=60,sw=18;
+  const arcs=parts.map(p=>{if(!p.v)return '';const a1=a+p.v/tot*Math.PI*2,lg=a1-a>Math.PI?1:0;
+    const x0=C+R*Math.cos(a),y0=C+R*Math.sin(a),x1=C+R*Math.cos(a1-0.0001),y1=C+R*Math.sin(a1-0.0001);a=a1;
+    return '<path class="sdm-arc" data-drill="gender" data-v="'+p.k+'" d="M'+x0+' '+y0+' A'+R+' '+R+' 0 '+lg+' 1 '+x1+' '+y1+'" stroke="'+p.c+'" stroke-width="'+sw+'" fill="none"><title>'+p.l+': '+p.v+'</title></path>';}).join('');
+  return '<div class="sdm-donut"><svg viewBox="0 0 120 120" width="150" height="150">'+arcs+'<text x="60" y="58" text-anchor="middle" class="n">'+fmt(tot)+'</text><text x="60" y="74" text-anchor="middle" class="s">karyawan</text></svg>'
+    +'<div class="sdm-leg">'+parts.map(p=>'<button data-drill="gender" data-v="'+p.k+'"><i style="background:'+p.c+'"></i>'+p.l+'<b>'+fmt(p.v)+'</b><em>'+Math.round(p.v/tot*100)+'%</em></button>').join('')+'</div></div>';
+}
+function sdmRing(n,total,label,key){
+  const p=total?n/total*100:0,r=26,c=2*Math.PI*r,col=p>=80?'var(--good)':p>=50?'var(--warn)':'var(--bad)';
+  return '<button class="sdm-ring" '+(key&&key!=='menikah'?'data-drill="missing" data-v="'+key+'" title="Klik: daftar yang belum lengkap"':'title="'+esc(label)+'"')+'><svg viewBox="0 0 64 64" width="64" height="64"><circle cx="32" cy="32" r="'+r+'" stroke="var(--surface-3)" stroke-width="6" fill="none"/>'
+    +'<circle cx="32" cy="32" r="'+r+'" stroke="'+col+'" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="'+(c*p/100)+' '+c+'" transform="rotate(-90 32 32)"/><text x="32" y="36" text-anchor="middle">'+Math.round(p)+'%</text></svg>'
+    +'<span class="l">'+esc(label)+'</span><span class="s">'+fmt(n)+' / '+fmt(total)+'</span></button>';
+}
+function sdmRecruitChart(rec){
+  const cum=SDM.mode==='cum'; let s=0; const vals=rec.map(r=>cum?(s+=r[1]):r[1]), max=Math.max(1,...vals);
+  return '<div class="sdm-col">'+rec.map((r,i)=>'<button class="sdm-colbar" data-drill="year" data-v="'+r[0]+'" title="'+r[0]+': '+fmt(vals[i])+(cum?' (kumulatif)':' bergabung')+'"><b>'+fmt(vals[i])+'</b><i style="height:'+Math.max(2,vals[i]/max*120)+'px;background:'+(cum?'var(--c3)':'var(--c1)')+'"></i><span>'+r[0].slice(2)+'</span></button>').join('')+'</div>';
+}
+function sdmRender(){
+  const root=document.getElementById('sdmRoot'); if(!root)return;
+  const meta=document.getElementById('sdmMeta');
+  if(!serverMode){root.innerHTML='<div class="sdm-empty">Panel SDM tersedia saat dashboard terhubung ke server.</div>';return;}
+  if(SDM.loading&&!SDM.data){root.innerHTML='<div class="sdm-empty">Memuat data SDM dari database HR…</div>';return;}
+  if(SDM.notConf||(!SDM.data&&SDM.err)){
+    root.innerHTML='<div class="sdm-setup"><div class="ic">'+(SDM.notConf?'🔌':'⚠')+'</div><div><b>'+(SDM.notConf?'Panel SDM belum terhubung ke database HR':'Gagal membaca data SDM')+'</b><p>'+esc(SDM.err||'')+'</p>'
+      +(SDM.notConf?'<p>Langkah aktivasi (sekali, oleh pemilik server): jalankan <code>server/sql/hr_ksp_ro.sql</code> di database HR untuk membuat akses <b>baca-saja</b>, lalu isi <code>HR_DB_URL</code> di .env KSP dan hubungkan container ke jaringan HR.</p>':'<button class="btn btn-sm btn-ghost" id="sdmRetry">Coba lagi</button>')+'</div></div>';
+    const rt=document.getElementById('sdmRetry');if(rt)rt.onclick=()=>sdmLoad(true);
+    if(meta)meta.textContent='';return;}
+  const d=SDM.data; if(!d)return;
+  const nowY=String(new Date().getFullYear()), rc=d.recruit, cur=rc.find(r=>r[0]===nowY), prev=rc.find(r=>r[0]===String(+nowY-1));
+  const growth=cur&&prev&&prev[1]?Math.round((cur[1]-prev[1])/prev[1]*100):null;
+  const tile=(l,v,m,c,drill)=>'<div class="sdm-tile'+(drill?' click':'')+'" style="--k:'+c+'" '+(drill||'')+'><span class="l">'+l+'</span><b>'+v+'</b><span class="m">'+m+'</span></div>';
+  const heatMax=Math.max(1,...d.heat.matrix.flat()), cs=getComputedStyle(document.documentElement);
+  const heatLvl=v=>v<=0?0:Math.max(1,Math.min(7,Math.ceil(v/heatMax*7)));
+  root.innerHTML='<div class="sdm-tiles">'
+    +tile('Total Karyawan',fmt(d.total),d.units.length+' unit · '+d.byRole.length+' kelompok jabatan','var(--c1)','data-drill="all" data-v="1"')
+    +tile('Total THP / bulan',rpShort(d.payroll.total),fmt(d.payroll.nValid)+' data gaji valid','var(--c3)')
+    +tile('Rata-rata THP',rpShort(d.payroll.avg),'per karyawan / bulan','var(--c2)')
+    +tile('Rekrutmen '+nowY,fmt(cur?cur[1]:0),(growth==null?'':(growth>=0?'▲ ':'▼ ')+Math.abs(growth)+'% ')+'vs '+(prev?prev[0]:'—'),'#7c3aed',cur?'data-drill="year" data-v="'+nowY+'"':'')
+    +'</div>'
+    +'<div class="sdm-2"><div class="sdm-card"><div class="sdm-h"><h4>Tren Rekrutmen per Tahun</h4><div class="heat-seg" id="sdmMode"><button data-m="year" class="'+(SDM.mode!=='cum'?'on':'')+'">Per Tahun</button><button data-m="cum" class="'+(SDM.mode==='cum'?'on':'')+'">Kumulatif</button></div></div>'+sdmRecruitChart(rc)+'<div class="sdm-note">Berdasarkan tahun aktif · klik batang untuk daftar karyawan</div></div>'
+    +'<div class="sdm-card"><div class="sdm-h"><h4>Komposisi Gender</h4></div>'+sdmDonut([{k:'Pria',l:'Pria',v:d.gender.pria,c:'var(--c1)'},{k:'Perempuan',l:'Perempuan',v:d.gender.perempuan,c:'var(--c2)'}].concat(d.gender.kosong?[{k:'kosong',l:'Tidak diisi',v:d.gender.kosong,c:'var(--ink-muted)'}]:[]))+'</div></div>'
+    +'<div class="sdm-card"><div class="sdm-h"><h4>Kelengkapan Data Karyawan</h4><span>klik meter untuk daftar yang belum lengkap</span></div><div class="sdm-rings">'+d.completeness.map(c=>sdmRing(c.n,d.total,c.label,c.key)).join('')+'</div></div>'
+    +'<div class="sdm-card"><div class="sdm-h"><h4>Heatmap Rekrutmen per Cabang</h4><span>tahun × cabang (12 unit terbesar) · klik sel untuk daftar</span></div>'
+    +'<div class="sdm-heat" style="grid-template-columns:110px repeat('+d.heat.years.length+',1fr)"><div></div>'+d.heat.years.map(y=>'<div class="hy">'+y+'</div>').join('')
+    +d.heat.units.map((u,i)=>'<div class="hu" title="'+esc(u)+'">'+esc(u)+'</div>'+d.heat.matrix[i].map((v,j)=>{const L=heatLvl(v);return '<button class="hc" data-drill="unityear" data-v="'+esc(u)+'|'+d.heat.years[j]+'" style="background:'+cs.getPropertyValue(HEAT_RAMP[L]).trim()+';color:'+(L>=5?'#fff':'var(--ink-2)')+'" title="'+esc(u)+' · '+d.heat.years[j]+': '+v+'"'+(v?'':' disabled')+'>'+(v||'')+'</button>';}).join('')).join('')+'</div></div>'
+    +'<div class="sdm-2"><div class="sdm-card"><div class="sdm-h"><h4>Karyawan per Unit / Cabang</h4><span>Top 10 · klik untuk daftar</span></div>'+sdmBars(d.byUnit.slice(0,10),'unit','var(--c1)')+'</div>'
+    +'<div class="sdm-card"><div class="sdm-h"><h4>Kelompok Jabatan</h4></div>'+sdmBars(d.byRole,'role',i=>SDM_COL[i%SDM_COL.length])+'</div></div>'
+    +'<div class="sdm-card"><div class="sdm-h"><h4>Karyawan Terbaru Bergabung</h4><span>berdasarkan tahun aktif</span></div><div class="table-wrap"><table><thead><tr><th>Nama</th><th>Unit</th><th>Jabatan</th><th style="text-align:right">Thn Aktif</th></tr></thead><tbody>'
+    +d.latest.map(e=>'<tr><td><b>'+esc(e.nama)+'</b></td><td>'+esc(e.unit||'—')+'</td><td class="muted-col">'+esc(e.jabatan||'—')+'</td><td style="text-align:right">'+esc(e.thnAktif)+'</td></tr>').join('')+'</tbody></table></div></div>';
+  if(meta)meta.textContent='Sumber: database HR · diperbarui '+new Date(d.generatedAt).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+' WIB';
+}
+const SDM_DRILL={all:()=>({},'Semua karyawan'),unit:v=>({unit:v}),year:v=>({year:v}),role:v=>({role:v}),gender:v=>({gender:v}),missing:v=>({missing:v}),
+  unityear:v=>{const [u,y]=v.split('|');return {unit:u,year:y};}};
+const SDM_TITLE={all:()=>'Semua karyawan',unit:v=>'Unit '+v,year:v=>'Bergabung tahun '+v,role:v=>'Kelompok '+v,gender:v=>'Gender: '+(v==='kosong'?'tidak diisi':v),
+  missing:v=>'Belum lengkap: '+((SDM.data&&SDM.data.completeness.find(c=>c.key===v)||{}).label||v),unityear:v=>v.replace('|',' · tahun ')};
+async function sdmDrill(kind,v){
+  const params=new URLSearchParams(kind==='all'?{}:SDM_DRILL[kind](v)), title=SDM_TITLE[kind](v);
+  const box=document.getElementById('sdmModalBox'), scr=document.getElementById('sdmModal');
+  box.innerHTML='<div class="modal-head"><div class="modal-title-row"><div class="modal-ic" style="color:var(--c1);background:var(--c1-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6M17 11a3 3 0 100-6M22 21c0-3-2-5-5-5"/></svg></div><div class="modal-title"><b>'+esc(title)+'</b><span id="sdmMSub">memuat…</span></div><button class="modal-close" data-x title="Tutup (Esc)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>'
+    +'<div class="modal-search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="sdmMQ" placeholder="Saring nama, unit, jabatan…"></div></div><div class="modal-list" id="sdmMList"></div>';
+  scr.classList.add('show');
+  try{const r=await fetch('/api/sdm/people?'+params,{credentials:'include'});const j=await r.json();if(!r.ok)throw new Error(j.error);
+    const draw=()=>{const q=document.getElementById('sdmMQ').value.trim().toLowerCase();const list=j.people.filter(p=>!q||(p.nama+' '+p.unit+' '+p.jabatan).toLowerCase().includes(q));
+      document.getElementById('sdmMSub').textContent=fmt(j.total)+' karyawan'+(q?' · '+list.length+' cocok':'')+' · nama, unit & jabatan saja';
+      document.getElementById('sdmMList').innerHTML=list.slice(0,600).map(p=>'<div class="sdm-prow"><span class="av">'+esc((p.nama||'?').replace(/^(prof|dr|ust|ustadz|ustadzah|h|hj)\.?\s+/i,'').split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase())+'</span><div><b>'+esc(p.nama)+'</b><span>'+esc(p.jabatan)+'</span></div><em>'+esc(p.unit)+'</em></div>').join('')
+        +(list.length>600?'<div class="mt-empty">Menampilkan 600 dari '+list.length+' — persempit dengan saringan.</div>':'')+(!list.length?'<div class="mt-empty">Tidak ada data.</div>':'');};
+    document.getElementById('sdmMQ').oninput=draw;draw();setTimeout(()=>document.getElementById('sdmMQ').focus(),50);
+  }catch(e){document.getElementById('sdmMList').innerHTML='<div class="mt-empty">Gagal memuat: '+esc(e.message||'')+'</div>';document.getElementById('sdmMSub').textContent='';}
+}
+(function(){
+  const root=document.getElementById('sdmRoot');
+  root.addEventListener('click',e=>{const m=e.target.closest('#sdmMode [data-m]');if(m){SDM.mode=m.dataset.m;return sdmRender();}
+    const t=e.target.closest('[data-drill]');if(t&&!t.disabled)sdmDrill(t.dataset.drill,t.dataset.v);});
+  document.getElementById('sdmRefresh').addEventListener('click',()=>sdmLoad(true));
+  const scr=document.getElementById('sdmModal');scr.addEventListener('click',e=>{if(e.target===scr||e.target.closest('[data-x]'))scr.classList.remove('show');});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&scr.classList.contains('show'))scr.classList.remove('show');});
+})();
 
 loadData(false);
 loadProgress();
