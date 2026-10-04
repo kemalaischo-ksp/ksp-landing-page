@@ -652,3 +652,14 @@ Commit baru:
 File yang berubah:
 
     - `ksp-dashboard/docker-compose.yml`
+
+### Update otomatis — 04 Oct 2026 09:39
+
+Commit baru:
+
+    **`4c09faa fix(security): tutup akses index.html tanpa login, hapus data asli dari frontend, perketat esc()`**
+
+File yang berubah:
+
+    - `ksp-dashboard/public/index.html`
+    - `ksp-dashboard/server/server.js`
