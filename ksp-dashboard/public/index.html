@@ -1327,20 +1327,13 @@ const SNAPSHOT={
   totals:{total:374,complete:169,inProgress:20,todo:185,overdue:102,dueNext7d:23},
   weekly:[{w:"29 Jun",updates:6,done:2},{w:"06 Jul",updates:7,done:3},{w:"13 Jul",updates:8,done:3},{w:"20 Jul",updates:9,done:4},{w:"27 Jul",updates:8,done:3},{w:"03 Ags",updates:10,done:5},{w:"10 Ags",updates:12,done:5},{w:"17 Ags",updates:15,done:7},{w:"24 Ags",updates:26,done:14},{w:"31 Ags",updates:20,done:10},{w:"07 Sep",updates:22,done:11},{w:"14 Sep",updates:29,done:15},{w:"21 Sep*",updates:34,done:9}],
   heat:[[0,0,1,5,7,6,4,2],[0,0,1,6,8,7,5,3],[1,0,1,5,7,6,4,2],[0,0,2,7,9,8,6,3],[0,0,1,4,6,5,3,2],[1,0,0,3,4,3,2,3],[1,1,1,2,4,4,3,4]],
-  workstreams:[{name:"Legal, Visa &amp; Imigrasi (TKA)",count:48},{name:"HRIS-KSP (SIM-HR AISCHO)",count:25},{name:"IT Recruitment KSP",count:24},{name:"Marketing — Content Plan Sept",count:23},{name:"MEKARI Omnichannel/CRM",count:18},{name:"MLF EXPO",count:17},{name:"AW28 / AW32 Rekening BSI",count:15},{name:"AW28 Legal &amp; BPJS",count:14},{name:"Open House 32",count:12},{name:"Tes Bersama SPMB",count:10},{name:"Lainnya",count:168}],
+  /* Data contoh (dummy) untuk pratinjau tanpa server. Jangan isi data asli: file ini terkirim ke browser. */
+  workstreams:[{name:"Workstream A",count:60},{name:"Workstream B",count:45},{name:"Workstream C",count:38},{name:"Workstream D",count:30},{name:"Workstream E",count:24},{name:"Lainnya",count:177}],
   recent:[
-    {cat:"Open House 32",name:"Evaluasi & Tindak Lanjut Pasca Acara",status:"todo",time:"17 jam lalu",url:"https://app.clickup.com/t/z8ygbxp46h"},
-    {cat:"Open House 32",name:"PUNCAK — Soft Opening + Tabligh Akbar bersama Ustad Dr. Firanda Andirja",status:"todo",time:"17 jam lalu",url:"https://app.clickup.com/t/z8ygbxp46g"},
-    {cat:"Open House 32",name:"Gladi Bersih (H-1)",status:"todo",time:"17 jam lalu",url:"https://app.clickup.com/t/z8ygbxp46f"},
-    {cat:"HR3.0",name:"[M2] Integrasi UI-API + hardening tampilan — selesai dipercepat",status:"done",time:"21 jam lalu",url:"https://app.clickup.com/t/z8ygbxp223"},
-    {cat:"HR3.0",name:"[M3] Keamanan data backend — selesai dipercepat",status:"done",time:"1 hari lalu",url:"https://app.clickup.com/t/z8ygbxp224"},
-    {cat:"HR3.0",name:"[M1] Backend inti & auth — selesai 21 Sep",status:"done",time:"1 hari lalu",url:"https://app.clickup.com/t/z8ygbxp222"},
-    {cat:"HR3.0",name:"[M6] Go-live + hypercare (26 Okt–2 Nov)",status:"todo",time:"1 hari lalu",url:"https://app.clickup.com/t/z8ygbxp227"},
-    {cat:"HR3.0",name:"[M5] Pre-launch & freeze — sebagian siap",status:"progress",time:"1 hari lalu",url:"https://app.clickup.com/t/z8ygbxp226"},
-    {cat:"HR3.0",name:"[M4] UAT + data riil AW3 — menunggu manusia",status:"progress",time:"1 hari lalu",url:"https://app.clickup.com/t/z8ygbxp225"},
-    {cat:"IT Recruitment",name:"Kirim undangan resmi briefing ke 3 kandidat",status:"done",time:"4 hari lalu",url:"https://app.clickup.com/t/86eyw9xty"},
-    {cat:"BPJS / SIPP",name:"Input data individual tenaga kerja AL WILDAN 29 ke SIPP Online",status:"done",time:"4 hari lalu",url:"https://app.clickup.com/t/86eytvpxt"},
-    {cat:"Imigrasi",name:"Alih Penjamin — Pengajuan Alih Sponsor ke Kantor Imigrasi",status:"done",time:"5 hari lalu",url:"https://app.clickup.com/t/86eyttaz4"}
+    {cat:"Workstream A",name:"Contoh tugas 1",status:"todo",time:"1 jam lalu",url:"#"},
+    {cat:"Workstream A",name:"Contoh tugas 2",status:"progress",time:"3 jam lalu",url:"#"},
+    {cat:"Workstream B",name:"Contoh tugas 3",status:"done",time:"1 hari lalu",url:"#"},
+    {cat:"Workstream C",name:"Contoh tugas 4",status:"todo",time:"2 hari lalu",url:"#"}
   ]
 };
 const WS_COLORS=['var(--c1)','var(--c2)'];
@@ -1361,7 +1354,7 @@ const SMETA={
 };
 const normWs=s=>(s||'').replace(/&amp;/g,'&').trim().toLowerCase();
 const sameWs=(a,b)=>normWs(a)===normWs(b);
-function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 /* daftar tugas lengkap — sumber untuk kartu klik, sidebar, & pencarian */
 let ALLTASKS=[];
 function buildAllTasks(data){
@@ -1815,8 +1808,8 @@ async function loadData(isRefresh){
   document.getElementById('previewToggle').classList.add('show');
   applyRole('admin'); // pratinjau default admin
   renderUsers([
-    {id:'1',name:'Kemal Prabowo',email:'kemal@alwildan.id',role:'admin'},
-    {id:'2',name:'Direktur (Atasan)',email:'atasan@alwildan.id',role:'viewer'}
+    {id:'1',name:'Contoh Admin',email:'admin@contoh.test',role:'admin'},
+    {id:'2',name:'Contoh Viewer',email:'viewer@contoh.test',role:'viewer'}
   ]);
 }
 document.querySelectorAll('#previewToggle button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#previewToggle button').forEach(x=>x.classList.remove('active'));b.classList.add('active');applyRole(b.dataset.role);}));

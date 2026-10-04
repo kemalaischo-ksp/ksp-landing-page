@@ -660,8 +660,9 @@ app.get('/api/progress', requireAuth, async (req, res) => {
 // Halaman dashboard — DIKUNCI.
 app.get(['/', '/index.html'], requireAuth, (req, res) => res.sendFile(path.join(PUB, 'index.html')));
 
-// Aset statis lain (tanpa index otomatis, agar index.html tidak lolos guard).
-app.use(express.static(PUB, { index: false }));
+// Aset publik — daftar eksplisit. JANGAN pakai express.static(PUB): ia men-decode
+// URL sehingga /%69ndex.html atau //index.html menyajikan index.html tanpa login.
+app.get('/kaldik.js', requireAuth, (req, res) => res.sendFile(path.join(PUB, 'kaldik.js')));
 
 app.listen(PORT, () => {
   console.log(`[ksp-dashboard] server berjalan di http://localhost:${PORT}`);
